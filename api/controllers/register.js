@@ -28,7 +28,7 @@ const handleRegister = (db, bcrypt) => (req, res) => {
         })
         .then(trx.commit)
         .catch(err => {
-          console.log(err);
+          console.log("Could not finish changes to database");
           trx.rollback();
         });
     }).catch(err => {

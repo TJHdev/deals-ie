@@ -8,7 +8,7 @@ import Modal from 'react-modal';
 import Button from '../styled-components/Button';
 
 const ModalContainer = styled.div`
-  background-color: greenyellow;
+  background-color: gray;
   color: white;
   width: 30rem;
   outline: none;

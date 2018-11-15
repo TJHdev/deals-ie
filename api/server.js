@@ -7,13 +7,15 @@ const morgan = require("morgan");
 
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
+const signout = require("./controllers/signout");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
+const auth = require("./controllers/authorization");
 
 const PORT = process.env.PORT || 5000;
 
-// const redis = require("redis");
-// const redisClient = redis.createClient(process.env.REDIS_URI);
+const redis = require("redis");
+const redisC = redis.createClient(process.env.REDIS_URI);
 
 // const db =
 //   process.env.NODE_ENV === "production"
@@ -87,10 +89,11 @@ app.get("/test", (req, res) => {
     );
 });
 
-app.post("/signin", signin.handleSignin(db, bcrypt));
+app.post("/signin", signin.signinAuthentication(redisC, db, bcrypt));
 app.post("/register", register.handleRegister(db, bcrypt));
-app.get("/profile/:userId", profile.handleProfileGet(db));
-app.put("/image", image.handleImage(db));
+app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
+app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
+app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
 
 app.listen(PORT, () => {
   console.log(`Server is up on port ${PORT}`);
