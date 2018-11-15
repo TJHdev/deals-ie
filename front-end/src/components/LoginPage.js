@@ -29,6 +29,7 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal }) => (
       <Button>Login with Google</Button>
       <p>or</p>
       <hr />
+      <hr />
       <Formik
         initialValues={{ email: '', username: '', password: '' }}
         validationSchema={yup.object().shape({
@@ -50,6 +51,7 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal }) => (
       >
         {({ isSubmitting }) => (
           <Form>
+            <div>test</div>
             <Field type="text" name="username" />
             <ErrorMessage name="username" component="div" />
             <Field type="password" name="password" />
@@ -62,7 +64,7 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal }) => (
       </Formik>
       <hr />
       <button onClick={switchModal} type="button">
-        Already a member?
+        Not already a member?
       </button>
     </ModalContainer>
   </Modal>
