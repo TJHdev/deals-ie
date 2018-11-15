@@ -63,6 +63,20 @@ app.get("/", (req, res) => {
 //     );
 // });
 
+app.get("/test", (req, res) => {
+  db.select("*")
+    .from("role")
+    .then(
+      roles => {
+        res.json(roles);
+      },
+      err => {
+        res.json("Couldn't retrieve users");
+      }
+    );
+});
+a;
+
 app.post("/signin", signin.handleSignin(db, bcrypt));
 app.post("/register", register.handleRegister(db, bcrypt));
 app.get("/profile/:userId", profile.handleProfileGet(db));
