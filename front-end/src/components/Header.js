@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import RegisterModal from './RegisterPage';
 import LoginModal from './LoginPage';
@@ -40,9 +41,13 @@ const NavSearch = styled.button``;
 
 const NavAnchor = styled(Link)``;
 
-export default class Header extends React.Component {
-  constructor(props) {
-    super(props);
+class Header extends React.Component {
+  static propTypes = {
+    history: PropTypes.object.isRequired
+  };
+
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       isRegisterModal: false,
       isLoginModal: false
@@ -52,6 +57,42 @@ export default class Header extends React.Component {
     this.handleOpenLoginModal = this.handleOpenLoginModal.bind(this);
     this.handleCloseLoginModal = this.handleCloseLoginModal.bind(this);
     this.switchModal = this.switchModal.bind(this);
+    this.onSubmitLogin = this.onSubmitLogin.bind(this);
+  }
+
+  onSubmitLogin(values) {
+    const { history } = this.props;
+    fetch(`${window.BACKEND_PATH}/signin`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values)
+    })
+      .then(response => response.json())
+      .then(data => {
+        window.sessionStorage.setItem('token', data.token);
+        if (!data.userId || data.success !== 'true') {
+          console.log('Problem logging in');
+          return null;
+        }
+        return fetch(`${window.BACKEND_PATH}/profile/${data.userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: data.token
+          }
+        })
+          .then(resp => resp.json())
+          .then(user => {
+            console.log(user);
+            if (user && user.email) {
+              this.handleCloseLoginModal(); // if login succesful close the
+              // loadUser(user);
+              history.push('/');
+              // onRouteChange('home');
+            }
+          })
+          .catch(console.log);
+      });
   }
 
   handleOpenRegisterModal() {
@@ -112,11 +153,14 @@ export default class Header extends React.Component {
           isLoginModal={isLoginModal}
           handleCloseLoginModal={this.handleCloseLoginModal}
           switchModal={this.switchModal}
+          onSubmitLogin={this.onSubmitLogin}
         />
       </NavbarHeader>
     );
   }
 }
+
+export default withRouter(Header);
 
 // <NavLink to="/create" activeClassName="is-active">Create expense</NavLink>
 // <NavLink to="/help" activeClassName="is-active">Help</NavLink>

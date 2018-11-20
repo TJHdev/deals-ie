@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -17,93 +16,59 @@ const ModalContainer = styled.div`
   text-align: center;
 `;
 
-const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal }) => {
-  const onSubmitLogin = values => {
-    fetch(`${window.BACKEND_PATH}/signin`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values)
-    })
-      .then(response => response.json())
-      .then(data => {
-        window.sessionStorage.setItem('token', data.token);
-        if (!data.userId || data.success !== 'true') {
-          console.log('Problem logging in');
-          return null;
-        }
-        return fetch(`${window.BACKEND_PATH}/profile/${data.userId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: data.token
-          }
-        })
-          .then(resp => resp.json())
-          .then(user => {
-            console.log(user);
-            if (user && user.email) {
-              handleCloseLoginModal(); // if login succesful close the
-              // loadUser(user);
-              // onRouteChange('home');
-            }
-          })
-          .catch(console.log);
-      });
-  };
-
-  return (
-    <Modal
-      isOpen={isLoginModal}
-      onRequestClose={handleCloseLoginModal}
-      contentLabel="Login Modal"
-      closeTimeoutMS={200}
-      className="modal"
-      ariaHideApp={false}
-    >
-      <ModalContainer>
-        <h2>Login Vote, share and comment to earn points!</h2>
-        <Formik
-          initialValues={{ email: '', password: '' }}
-          validationSchema={yup.object().shape({
-            email: yup
-              .string()
-              .email('E-mail is not valid!')
-              .required('E-mail is required!'),
-            password: yup
-              .string()
-              .min(6, 'Password has to be longer than 6 characters!')
-              .required('Password is required!')
-          })}
-          onSubmit={(values, { setSubmitting }) => {
-            onSubmitLogin(values);
-            setSubmitting(false);
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <Field type="text" name="email" />
-              <ErrorMessage name="email" component="div" />
-              <Field type="password" name="password" />
-              <ErrorMessage name="password" component="div" />
-              <button type="submit" disabled={isSubmitting}>
-                Submit
-              </button>
-            </Form>
-          )}
-        </Formik>
-        <hr />
-        <button onClick={switchModal} type="button">
-          Not already a member?
-        </button>
-      </ModalContainer>
-    </Modal>
-  );
-};
+const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmitLogin }) => (
+  <Modal
+    isOpen={isLoginModal}
+    onRequestClose={handleCloseLoginModal}
+    contentLabel="Login Modal"
+    closeTimeoutMS={200}
+    className="modal"
+    ariaHideApp={false}
+  >
+    <ModalContainer>
+      <h2>Login Vote, share and comment to earn points!</h2>
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        validationSchema={yup.object().shape({
+          email: yup
+            .string()
+            .email('E-mail is not valid!')
+            .required('E-mail is required!'),
+          password: yup
+            .string()
+            .min(6, 'Password has to be longer than 6 characters!')
+            .required('Password is required!')
+        })}
+        onSubmit={(values, { setSubmitting }) => {
+          onSubmitLogin(values);
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Field type="text" name="email" />
+            <ErrorMessage name="email" component="div" />
+            <Field type="password" name="password" />
+            <ErrorMessage name="password" component="div" />
+            <button type="submit" disabled={isSubmitting}>
+              Submit
+            </button>
+          </Form>
+        )}
+      </Formik>
+      <hr />
+      <button onClick={switchModal} type="button">
+        Not already a member?
+      </button>
+    </ModalContainer>
+  </Modal>
+);
 
 LoginModal.propTypes = {
   isLoginModal: PropTypes.bool.isRequired,
   handleCloseLoginModal: PropTypes.func.isRequired,
-  switchModal: PropTypes.func.isRequired
+  switchModal: PropTypes.func.isRequired,
+  onSubmitLogin: PropTypes.func.isRequired
 };
 
 export default LoginModal;
