@@ -4,8 +4,6 @@ import createHistory from 'history/createBrowserHistory';
 
 import HomePage from '../components/Home';
 import SubmitDealPage from '../components/SubmitDealPage';
-import LoginPage from '../components/LoginPage';
-import RegisterPage from '../components/RegisterPage';
 import Header from '../components/Header';
 
 // import DashboardPage from '../components/DashboardPage';

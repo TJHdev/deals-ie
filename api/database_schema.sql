@@ -7,11 +7,14 @@ CREATE TABLE login (
 
 CREATE TABLE users (
   id serial PRIMARY KEY,
-  username VARCHAR(100) NOT NULL,
+  username VARCHAR(100) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL, 
   admin BOOLEAN NOT NULL DEFAULT false, 
   trusted BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
+
+-- retrospectively adding a unique constaint to a column 'ALTER TABLE users ADD UNIQUE (username);'
 
 CREATE TABLE deals (
   id serial PRIMARY KEY,

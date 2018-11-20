@@ -1,11 +1,12 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import Modal from 'react-modal';
 
-import Button from '../styled-components/Button';
+// import Button from '../styled-components/Button';
 
 const ModalContainer = styled.div`
   background-color: gray;
@@ -16,57 +17,88 @@ const ModalContainer = styled.div`
   text-align: center;
 `;
 
-const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal }) => (
-  <Modal
-    isOpen={isLoginModal}
-    onRequestClose={handleCloseLoginModal}
-    contentLabel="Confirm Remove Expense"
-    closeTimeoutMS={200}
-    className="modal"
-    ariaHideApp={false}
-  >
-    <ModalContainer>
-      <Button>Login with Google</Button>
-      <p>or</p>
-      <hr />
-      <Formik
-        initialValues={{ email: '', username: '', password: '' }}
-        validationSchema={yup.object().shape({
-          email: yup
-            .string()
-            .email('E-mail is not valid!')
-            .required('E-mail is required!'),
-          password: yup
-            .string()
-            .min(6, 'Password has to be longer than 6 characters!')
-            .required('Password is required!')
-        })}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
+const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal }) => {
+  const onSubmitLogin = values => {
+    fetch(`${window.BACKEND_PATH}/signin`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values)
+    })
+      .then(response => response.json())
+      .then(data => {
+        window.sessionStorage.setItem('token', data.token);
+        if (!data.userId || data.success !== 'true') {
+          console.log('Problem logging in');
+          return null;
+        }
+        return fetch(`${window.BACKEND_PATH}/profile/${data.userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: data.token
+          }
+        })
+          .then(resp => resp.json())
+          .then(user => {
+            console.log(user);
+            if (user && user.email) {
+              handleCloseLoginModal(); // if login succesful close the
+              // loadUser(user);
+              // onRouteChange('home');
+            }
+          })
+          .catch(console.log);
+      });
+  };
+
+  return (
+    <Modal
+      isOpen={isLoginModal}
+      onRequestClose={handleCloseLoginModal}
+      contentLabel="Login Modal"
+      closeTimeoutMS={200}
+      className="modal"
+      ariaHideApp={false}
+    >
+      <ModalContainer>
+        <h2>Login Vote, share and comment to earn points!</h2>
+        <Formik
+          initialValues={{ email: '', password: '' }}
+          validationSchema={yup.object().shape({
+            email: yup
+              .string()
+              .email('E-mail is not valid!')
+              .required('E-mail is required!'),
+            password: yup
+              .string()
+              .min(6, 'Password has to be longer than 6 characters!')
+              .required('Password is required!')
+          })}
+          onSubmit={(values, { setSubmitting }) => {
+            onSubmitLogin(values);
             setSubmitting(false);
-          }, 400);
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <Field type="text" name="username" />
-            <ErrorMessage name="username" component="div" />
-            <Field type="password" name="password" />
-            <ErrorMessage name="password" component="div" />
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
-          </Form>
-        )}
-      </Formik>
-      <hr />
-      <button onClick={switchModal} type="button">
-        Not already a member?
-      </button>
-    </ModalContainer>
-  </Modal>
-);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <Field type="text" name="email" />
+              <ErrorMessage name="email" component="div" />
+              <Field type="password" name="password" />
+              <ErrorMessage name="password" component="div" />
+              <button type="submit" disabled={isSubmitting}>
+                Submit
+              </button>
+            </Form>
+          )}
+        </Formik>
+        <hr />
+        <button onClick={switchModal} type="button">
+          Not already a member?
+        </button>
+      </ModalContainer>
+    </Modal>
+  );
+};
 
 LoginModal.propTypes = {
   isLoginModal: PropTypes.bool.isRequired,
