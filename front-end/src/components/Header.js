@@ -58,6 +58,7 @@ class Header extends React.Component {
     this.handleCloseLoginModal = this.handleCloseLoginModal.bind(this);
     this.switchModal = this.switchModal.bind(this);
     this.onSubmitLogin = this.onSubmitLogin.bind(this);
+    this.onSubmitRegister = this.onSubmitRegister.bind(this);
   }
 
   onSubmitLogin(values) {
@@ -88,10 +89,26 @@ class Header extends React.Component {
               this.handleCloseLoginModal(); // if login succesful close the
               // loadUser(user);
               history.push('/');
-              // onRouteChange('home');
             }
           })
           .catch(console.log);
+      });
+  }
+
+  onSubmitRegister(values) {
+    fetch(`${window.BACKEND_PATH}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values)
+    })
+      .then(response => response.json())
+      .then(user => {
+        console.log(user);
+        if (user && user.name) {
+          // loadUser(user);
+          this.handleCloseLoginModal();
+          history.push('/');
+        }
       });
   }
 
@@ -148,6 +165,7 @@ class Header extends React.Component {
           isRegisterModal={isRegisterModal}
           handleCloseRegisterModal={this.handleCloseRegisterModal}
           switchModal={this.switchModal}
+          onSubmitRegister={this.onSubmitRegister}
         />
         <LoginModal
           isLoginModal={isLoginModal}
