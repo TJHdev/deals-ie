@@ -61,6 +61,23 @@ class Header extends React.Component {
     this.onSubmitRegister = this.onSubmitRegister.bind(this);
   }
 
+  onSubmitRegister(values) {
+    fetch(`${window.BACKEND_PATH}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values)
+    })
+      .then(response => response.json())
+      .then(user => {
+        console.log(user);
+        if (user && user.name) {
+          // loadUser(user);
+          this.handleCloseLoginModal();
+          history.push('/');
+        }
+      });
+  }
+
   onSubmitLogin(values) {
     const { history } = this.props;
     fetch(`${window.BACKEND_PATH}/signin`, {
@@ -92,23 +109,6 @@ class Header extends React.Component {
             }
           })
           .catch(console.log);
-      });
-  }
-
-  onSubmitRegister(values) {
-    fetch(`${window.BACKEND_PATH}/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values)
-    })
-      .then(response => response.json())
-      .then(user => {
-        console.log(user);
-        if (user && user.name) {
-          // loadUser(user);
-          this.handleCloseLoginModal();
-          history.push('/');
-        }
       });
   }
 
@@ -151,7 +151,7 @@ class Header extends React.Component {
                 <SearchField />
                 <NavSearch>Search</NavSearch>
               </SearchContainer>
-              <NavAnchor to="submit">
+              <NavAnchor to="deals">
                 <button type="button">Submit Deal</button>
               </NavAnchor>
 

@@ -19,7 +19,7 @@ CREATE TABLE users (
 CREATE TABLE deals (
   id serial PRIMARY KEY,
   deal_link VARCHAR(511),
-  price decimal (19,4) NOT NULL,
+  price decimal (19,4),
   next_best_price decimal (19,4),
   image_url VARCHAR(512),
   camel_url VARCHAR(512),
@@ -29,8 +29,9 @@ CREATE TABLE deals (
   online_deal BOOLEAN NOT NULL,
   deal_NSFW BOOLEAN NOT NULL,
   deal_text VARCHAR(1000) NOT NULL,
+  deal_title VARCHAR(255) NOT NULL,
   deal_reviewed BOOLEAN NOT NULL DEFAULT true,
-  deal_hidden BOOLEAN NOT NULL DEFAULT FALSE,
+  deal_hidden BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   edited_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
@@ -85,4 +86,17 @@ CREATE TABLE comment_reports (
   report_reason VARCHAR(255) NOT NULL,
   false_report BOOLEAN NOT NULL DEFAULT false,
   PRIMARY KEY (user_id, comment_id)
+);
+
+CREATE TABLE groups (
+  id serial PRIMARY KEY,
+  group_name VARCHAR(63) UNIQUE NOT NULL,
+  user_id INT REFERENCES users(id) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW() 
+);
+
+CREATE TABLE deal_groups (
+  deal_id INT REFERENCES deals(id) NOT NULL,
+  group_id INT REFERENCES groups(id) NOT NULL,
+  PRIMARY KEY (deal_id, group_id)
 );

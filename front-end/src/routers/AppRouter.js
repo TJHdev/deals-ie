@@ -20,7 +20,7 @@ const AppRouter = () => (
       <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route path="/submit" component={SubmitDealPage} />
+        <Route path="/deals" component={SubmitDealPage} />
       </Switch>
     </div>
   </Router>
