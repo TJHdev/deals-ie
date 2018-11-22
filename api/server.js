@@ -4,12 +4,14 @@ const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
 const morgan = require("morgan");
+const Joi = require("joi");
 
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const signout = require("./controllers/signout");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
+const deals = require("./controllers/deals");
 const auth = require("./controllers/authorization");
 
 const PORT = process.env.PORT || 5000;
@@ -90,10 +92,11 @@ app.get("/test", (req, res) => {
 });
 
 app.post("/signin", signin.signinAuthentication(redisC, db, bcrypt));
-app.post("/register", register.handleRegister(db, bcrypt));
+app.post("/register", register.handleRegister(db, bcrypt, Joi));
 app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
-app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
+// app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
+app.get("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 
 app.listen(PORT, () => {
   console.log(`Server is up on port ${PORT}`);

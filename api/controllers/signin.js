@@ -4,6 +4,8 @@ const signinAuthentication = (redisClient, db, bcrypt) => (req, res) => {
   const handleSignin = (db, bcrypt, req, res) => {
     const { email, password } = req.body;
 
+    console.log(req.body);
+
     if (!email || !password) {
       return Promise.reject("Must enter a username and password");
     }
@@ -20,20 +22,20 @@ const signinAuthentication = (redisClient, db, bcrypt) => (req, res) => {
             .from("users")
             .where("email", "=", email)
             .then(data => {
-              console.log(data);
               return data[0];
             })
             .catch(err => {
-              console.log(err);
-              Promise.reject("Unable to get user");
+              console.log("Unable to get user:", err);
+              return Promise.reject("Unable to get user");
             });
         } else {
-          Promise.reject("Credentials don't match");
+          console.log("Bcrypt is invalid");
+          return Promise.reject("Credentials don't match");
         }
       })
       .catch(err => {
-        console.log(err);
-        Promise.reject("Credentials don't match");
+        console.log("Promise inside handleSignin:", err);
+        return Promise.reject("Credentials don't match");
       });
   };
 
@@ -73,12 +75,16 @@ const signinAuthentication = (redisClient, db, bcrypt) => (req, res) => {
     ? getAuthTokenId(req, res)
     : handleSignin(db, bcrypt, req, res)
         .then(data => {
-          return data.id && data.email
+          console.log("Data", data);
+          return data && data.id && data.email
             ? createSessions(data)
             : Promise.reject(data);
         })
         .then(session => res.json(session))
-        .catch(err => res.status(400).json(err));
+        .catch(err => {
+          console.log("Last catch: ", err);
+          res.status(400).json({ error: { password: err } });
+        });
 };
 
 module.exports = {

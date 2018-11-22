@@ -13,8 +13,10 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
+    "cloudinary": "^1.13.2",
     "cors": "^2.8.4",
     "express": "^4.16.4",
+    "joi": "^14.1.0",
     "jsonwebtoken": "^8.4.0",
     "knex": "^0.15.2",
     "morgan": "^1.9.1",

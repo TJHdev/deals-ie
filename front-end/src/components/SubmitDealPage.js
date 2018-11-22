@@ -1,19 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 
+import { StyledField, StyledErrorMessage } from '../styled-components/FormikStyles';
 import Label from '../styled-components/Label';
 import ContentContainer from '../styled-components/ContentContainer';
-
-const StyledErrorMessage = styled(ErrorMessage)`
-  color: red;
-`;
-
-const StyledField = styled(Field)`
-  display: block;
-`;
 
 const ErrorSpan = styled.span`
   margin-left: 2rem;
@@ -28,14 +21,14 @@ export default () => {
       body: JSON.stringify(values)
     })
       .then(response => response.json())
-      .then(user => {
-        console.log(user);
-        if (user && user.name) {
-          // loadUser(user);
-          this.handleCloseLoginModal();
-          // history.push('/');
-        }
-      });
+      .then(data => {
+        console.log(data);
+        // if (data && data.name) {
+        //   // loadUser(user);
+        //   history.push('/');
+        // }
+      })
+      .catch(console.log);
   };
 
   return (
@@ -52,7 +45,7 @@ export default () => {
           deal_starts: yup.date().default(() => new Date()),
           deal_ends: yup.date(),
           shipping_from: yup.string(),
-          online_deal: yup.bool().required(),
+          offline_deal: yup.bool().required(),
           deal_NSFW: yup.bool().required(),
           deal_title: yup
             .string()
@@ -135,10 +128,10 @@ export default () => {
               <StyledField type="date" name="deal_ends" />
             </Label>
 
-            <Label htmlFor="online_deal">
+            <Label htmlFor="offline_deal">
               Local deal (instore / offline)
-              <StyledErrorMessage name="online_deal" component="span" />
-              <StyledField type="checkbox" name="online_deal" />
+              <StyledErrorMessage name="offline_deal" component="span" />
+              <StyledField type="checkbox" name="offline_deal" />
             </Label>
 
             <Label htmlFor="deal_NSFW">

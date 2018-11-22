@@ -5,6 +5,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import Modal from 'react-modal';
 
+import { StyledField, StyledErrorMessage } from '../styled-components/FormikStyles';
+import Label from '../styled-components/Label';
 // import Button from '../styled-components/Button';
 
 const ModalContainer = styled.div`
@@ -36,20 +38,27 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
             .required('E-mail is required!'),
           password: yup
             .string()
-            .min(6, 'Password has to be longer than 6 characters!')
+            // .min(8, 'Password must be at least 8 characters long!') // removed for easy login during development
             .required('Password is required!')
         })}
-        onSubmit={(values, { setSubmitting }) => {
-          onSubmitLogin(values);
+        onSubmit={(values, { setSubmitting, setErrors }) => {
+          onSubmitLogin(values, setErrors);
           setSubmitting(false);
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            <Field type="text" name="email" />
-            <ErrorMessage name="email" component="div" />
-            <Field type="password" name="password" />
-            <ErrorMessage name="password" component="div" />
+            <Label htmlFor="email">
+              Email
+              <StyledErrorMessage name="email" component="div" />
+              <StyledField type="text" name="email" placeholder="Enter your email" />
+            </Label>
+
+            <Label htmlFor="password">
+              Password
+              <StyledErrorMessage name="password" component="div" />
+              <StyledField type="password" name="password" placeholder="Enter your password" />
+            </Label>
             <button type="submit" disabled={isSubmitting}>
               Submit
             </button>

@@ -61,24 +61,27 @@ class Header extends React.Component {
     this.onSubmitRegister = this.onSubmitRegister.bind(this);
   }
 
-  onSubmitRegister(values) {
+  onSubmitRegister(values, setErrors) {
     fetch(`${window.BACKEND_PATH}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values)
     })
       .then(response => response.json())
-      .then(user => {
-        console.log(user);
-        if (user && user.name) {
+      .then(data => {
+        console.log(data);
+        if (data && data.name) {
           // loadUser(user);
           this.handleCloseLoginModal();
           history.push('/');
+        } else {
+          setErrors(data.error);
         }
-      });
+      })
+      .catch(console.log);
   }
 
-  onSubmitLogin(values) {
+  onSubmitLogin(values, setErrors) {
     const { history } = this.props;
     fetch(`${window.BACKEND_PATH}/signin`, {
       method: 'POST',
@@ -90,6 +93,7 @@ class Header extends React.Component {
         window.sessionStorage.setItem('token', data.token);
         if (!data.userId || data.success !== 'true') {
           console.log('Problem logging in');
+          setErrors(data.error);
           return null;
         }
         return fetch(`${window.BACKEND_PATH}/profile/${data.userId}`, {
@@ -100,12 +104,12 @@ class Header extends React.Component {
           }
         })
           .then(resp => resp.json())
-          .then(user => {
-            console.log(user);
-            if (user && user.email) {
-              this.handleCloseLoginModal(); // if login succesful close the
-              // loadUser(user);
+          .then(data => {
+            console.log(data);
+            if (data && data.email) {
+              this.handleCloseLoginModal(); // if login succesful close the modal
               history.push('/');
+            } else {
             }
           })
           .catch(console.log);

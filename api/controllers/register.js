@@ -1,9 +1,84 @@
-const handleRegister = (db, bcrypt) => (req, res) => {
-  const { username, email, password } = req.body;
+const handleRegister = (db, bcrypt, Joi) => (req, res) => {
+  // const schema = Joi.object().keys({
+  //   username: Joi.string()
+  //     .alphanum()
+  //     .min(4)
+  //     .max(30)
+  //     .required(),
+  //   password: Joi.string()
+  //     .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
+  //     .required(),
+  //   email: Joi.string()
+  //     .email({ minDomainAtoms: 2 })
+  //     .required()
+  // });
 
-  if (!username || !email || !password) {
-    res.status(400).json({ error: "Must provide all fields" });
+  const usernameSchema = Joi.string()
+    .alphanum()
+    .min(4)
+    .max(30)
+    .required()
+    .label("Username");
+
+  const passwordSchema = Joi.string()
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
+    .required()
+    .label("Password")
+    .error(
+      () =>
+        '"Password" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
+    );
+
+  const emailSchema = Joi.string()
+    .email({ minDomainAtoms: 2 })
+    .required()
+    .label("Email");
+
+  const usernameIsValid = Joi.validate(req.body.username, usernameSchema, {
+    abortEarly: false
+  });
+  const passwordIsValid = Joi.validate(req.body.password, passwordSchema, {
+    abortEarly: false
+  });
+  const emailIsValid = Joi.validate(req.body.email, emailSchema, {
+    abortEarly: false
+  });
+
+  const usernameErrors = usernameIsValid.error
+    ? usernameIsValid.error.details
+        .map(detail => {
+          return detail.message;
+        })
+        .join("\n\u2022")
+    : null;
+
+  const passwordErrors = passwordIsValid.error
+    ? passwordIsValid.error.details
+        .map(detail => {
+          return detail.message;
+        })
+        .join("\n\u2022 ")
+    : null;
+
+  const emailErrors = emailIsValid.error
+    ? emailIsValid.error.details
+        .map(detail => {
+          return detail.message;
+        })
+        .join("\n\u2022 ")
+    : null;
+
+  if (usernameErrors || passwordErrors || emailErrors) {
+    console.log("Register credentials failed schema validation");
+    res.status(400).json({
+      error: {
+        username: usernameErrors,
+        password: passwordErrors,
+        email: emailErrors
+      }
+    });
   } else {
+    const { username, email, password } = req.body;
     const hash = bcrypt.hashSync(password);
 
     db.transaction(trx => {
@@ -29,16 +104,23 @@ const handleRegister = (db, bcrypt) => (req, res) => {
         .then(trx.commit)
         .catch(err => {
           console.log(err);
-          let responseErrorMessage;
+          let errorObject = {
+            error: {
+              username: null,
+              password: null,
+              email: null
+            }
+          };
 
           if (err.constraint === "users_username_key") {
-            responseErrorMessage = "Username is already taken";
+            errorObject.error.username = "Username is already taken";
           } else if (err.constraint === "login_email_key") {
-            responseErrorMessage = "Email is already in use. Try signing in?";
+            errorObject.error.email =
+              "Email is already in use. Try signing in?";
           }
           console.log("Could not finish changes to database");
           trx.rollback();
-          res.status(400).json({ error: responseErrorMessage });
+          res.status(400).json(errorObject);
         });
     }).catch(err => {
       console.log(err);
