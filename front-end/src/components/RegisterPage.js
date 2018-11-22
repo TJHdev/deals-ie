@@ -1,22 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
-import Modal from 'react-modal';
 
 import { StyledField, StyledErrorMessage } from '../styled-components/FormikStyles';
 import Label from '../styled-components/Label';
-// import Button from '../styled-components/Button';
-
-const ModalContainer = styled.div`
-  background-color: gray;
-  color: white;
-  width: 30rem;
-  outline: none;
-  padding: var(--l-size);
-  text-align: center;
-`;
+import { Button, BackgroundButton } from '../styled-components/Button';
+import TitleContainer from '../styled-components/TitleContainer';
+import ModalContainer from '../styled-components/ModalContainer';
+import Modal from '../styled-components/Modal';
+import CentralDiv from '../styled-components/CentralDiv';
 
 const RegisterModal = ({
   isRegisterModal,
@@ -28,12 +22,15 @@ const RegisterModal = ({
     isOpen={isRegisterModal}
     onRequestClose={handleCloseRegisterModal}
     contentLabel="Register Modal"
-    closeTimeoutMS={400}
+    closeTimeoutMS={200}
     className="modal"
     ariaHideApp={false}
   >
     <ModalContainer>
-      <h2>Join our community</h2>
+      <TitleContainer>
+        <h2>Join our community</h2>
+        <h5>Get deals found, shared and rated by real people.</h5>
+      </TitleContainer>
       <Formik
         initialValues={{ email: '', username: '', password: '' }}
         validationSchema={yup.object().shape({
@@ -55,40 +52,43 @@ const RegisterModal = ({
           setSubmitting(false);
         }}
       >
-        {({ errors, touched, isSubmitting }) => {
-          console.log(errors);
-          console.log(touched);
-          return (
-            <Form>
-              <Label htmlFor="email">
-                Email
-                <StyledErrorMessage name="email" component="div" />
-                <StyledField type="email" name="email" />
-              </Label>
+        {({ isSubmitting }) => (
+          <Form>
+            <Label htmlFor="email">
+              <StyledField
+                type="email"
+                name="email"
+                placeholder="Email address"
+                autoComplete="off"
+              />
+              <StyledErrorMessage name="email" component="div" />
+            </Label>
 
-              <Label htmlFor="username">
-                Username
-                <StyledErrorMessage name="username" component="div" />
-                <StyledField type="text" name="username" />
-              </Label>
+            <Label htmlFor="username">
+              <StyledField type="text" name="username" placeholder="Username" autoComplete="off" />
+              <StyledErrorMessage name="username" component="div" />
+            </Label>
 
-              <Label htmlFor="password">
-                Password
-                <StyledErrorMessage name="password" component="div" />
-                <StyledField type="password" name="password" />
-              </Label>
+            <Label htmlFor="password">
+              <StyledField
+                type="password"
+                name="password"
+                placeholder="Password"
+                autoComplete="off"
+              />
+              <StyledErrorMessage name="password" component="div" />
+            </Label>
 
-              <button type="submit" disabled={isSubmitting}>
-                Submit
-              </button>
-            </Form>
-          );
-        }}
+            <Button type="submit" disabled={isSubmitting}>
+              Sign up!
+            </Button>
+          </Form>
+        )}
       </Formik>
       <hr />
-      <button onClick={switchModal} type="button">
-        Already a member?
-      </button>
+      <CentralDiv>
+        <BackgroundButton onClick={switchModal}>Already a member? Login</BackgroundButton>
+      </CentralDiv>
     </ModalContainer>
   </Modal>
 );

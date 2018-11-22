@@ -1,22 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+// import styled from 'styled-components';
+import { Formik, Form } from 'formik';
 import * as yup from 'yup';
-import Modal from 'react-modal';
 
 import { StyledField, StyledErrorMessage } from '../styled-components/FormikStyles';
 import Label from '../styled-components/Label';
-// import Button from '../styled-components/Button';
-
-const ModalContainer = styled.div`
-  background-color: gray;
-  color: white;
-  width: 30rem;
-  outline: none;
-  padding: var(--l-size);
-  text-align: center;
-`;
+import { Button, SmallBackgroundButton, BackgroundButton } from '../styled-components/Button';
+import TitleContainer from '../styled-components/TitleContainer';
+import ModalContainer from '../styled-components/ModalContainer';
+import Modal from '../styled-components/Modal';
+import CentralDiv from '../styled-components/CentralDiv';
 
 const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmitLogin }) => (
   <Modal
@@ -28,7 +22,11 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
     ariaHideApp={false}
   >
     <ModalContainer>
-      <h2>Login Vote, share and comment to earn points!</h2>
+      <TitleContainer>
+        <h2>Login</h2>
+        <h5>Vote, share and comment to earn points!</h5>
+      </TitleContainer>
+
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={yup.object().shape({
@@ -49,26 +47,35 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
         {({ isSubmitting }) => (
           <Form>
             <Label htmlFor="email">
-              Email
+              <StyledField
+                type="text"
+                name="email"
+                placeholder="Enter your email"
+                autoComplete="off"
+              />
               <StyledErrorMessage name="email" component="div" />
-              <StyledField type="text" name="email" placeholder="Enter your email" />
             </Label>
 
             <Label htmlFor="password">
-              Password
+              <StyledField
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                autoComplete="off"
+              />
               <StyledErrorMessage name="password" component="div" />
-              <StyledField type="password" name="password" placeholder="Enter your password" />
             </Label>
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
+            <Button type="submit" disabled={isSubmitting}>
+              Sign in
+            </Button>
+            <SmallBackgroundButton type="button">Forgot Password?</SmallBackgroundButton>
           </Form>
         )}
       </Formik>
       <hr />
-      <button onClick={switchModal} type="button">
-        Not already a member?
-      </button>
+      <CentralDiv>
+        <BackgroundButton onClick={switchModal}>Not joined yet? Sign up</BackgroundButton>
+      </CentralDiv>
     </ModalContainer>
   </Modal>
 );
