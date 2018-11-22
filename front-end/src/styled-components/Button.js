@@ -17,7 +17,7 @@ export const Button = styled.button`
 
   &:hover {
     /* background-color: lighten(var(--blue), 10%); */
-    filter: brightness(120%);
+    filter: brightness(50%);
   }
 `;
 

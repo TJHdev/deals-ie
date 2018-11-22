@@ -1,17 +1,27 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
+import format from 'date-fns/format';
 
-import { StyledField, StyledErrorMessage } from '../styled-components/FormikStyles';
+import {
+  TextField,
+  TextareaField,
+  CurrencyField,
+  CheckboxField,
+  StyledErrorMessage,
+  ErrorSpan
+} from '../styled-components/FormikStyles';
+import {
+  RadioContainer,
+  RadioGroup,
+  RadioInput,
+  RadioLabel,
+  RadioButton
+} from '../styled-components/Radio';
 import Label from '../styled-components/Label';
-import ContentContainer from '../styled-components/ContentContainer';
-
-const ErrorSpan = styled.span`
-  margin-left: 2rem;
-  color: red;
-`;
+import ContentContainer, { ContentContainerHalf } from '../styled-components/ContentContainer';
+import { Button } from '../styled-components/Button';
 
 export default () => {
   const onSubmitDeal = values => {
@@ -35,28 +45,44 @@ export default () => {
     <ContentContainer>
       <h2>Submit a new deal</h2>
       <Formik
-        initialValues={{}}
-        validationSchema={yup.object().shape({
-          deal_link: yup.string(),
-          price: yup.number().positive(),
-          next_best_price: yup.number().positive(),
-          image_url: yup.string(),
-          camel_url: yup.string(),
-          deal_starts: yup.date().default(() => new Date()),
-          deal_ends: yup.date(),
-          shipping_from: yup.string(),
-          offline_deal: yup.bool().required(),
-          deal_NSFW: yup.bool().required(),
-          deal_title: yup
-            .string()
-            .required()
-            .max(140),
-          deal_text: yup
-            .string()
-            .required()
-            .max(1000)
-        })}
+        initialValues={{
+          deal_link: '',
+          currency_pound: false,
+          price: '',
+          next_best_price: '',
+          deal_title: '',
+          deal_text: '',
+          image_url: '',
+          camel_url: '',
+          deal_starts: format(new Date(), 'YYYY-MM-DD'),
+          deal_ends: '',
+          shipping_from: '',
+          offline_deal: false,
+          deal_NSFW: false
+        }}
+        // validationSchema={yup.object().shape({
+        //   deal_link: yup.string(),
+        //   currency_pound: yup.bool().required(),
+        //   price: yup.number().positive(),
+        //   next_best_price: yup.number().positive(),
+        //   image_url: yup.string(),
+        //   camel_url: yup.string(),
+        //   deal_starts: yup.date().default(() => new Date()),
+        //   deal_ends: yup.date(),
+        //   shipping_from: yup.string(),
+        //   offline_deal: yup.bool().required(),
+        //   deal_NSFW: yup.bool().required(),
+        //   deal_title: yup
+        //     .string()
+        //     .required()
+        //     .max(140),
+        //   deal_text: yup
+        //     .string()
+        //     .required()
+        //     .max(1000)
+        // })}
         onSubmit={(values, { setSubmitting }) => {
+          console.log('submit has been called');
           onSubmitDeal(values);
           setSubmitting(false);
         }}
@@ -66,19 +92,52 @@ export default () => {
             <Label htmlFor="deal_link">
               Deal Link
               <StyledErrorMessage name="deal_link" component="span" />
-              <StyledField type="text" name="deal_link" />
+              <TextField autoComplete="off" type="text" name="deal_link" />
+            </Label>
+
+            <Label htmlFor="currency_pound">
+              <div>
+                Currency
+                <RadioContainer>
+                  <RadioGroup>
+                    <RadioInput
+                      type="radio"
+                      id="euro"
+                      name="currency_pound"
+                      value="true"
+                      defaultChecked
+                    />
+                    <RadioLabel htmlFor="euro">
+                      <RadioButton />
+                      &euro;
+                    </RadioLabel>
+                  </RadioGroup>
+                  <RadioGroup>
+                    <RadioInput type="radio" id="pound" name="currency_pound" value="false" />
+                    <RadioLabel htmlFor="pound">
+                      <RadioButton />
+                      &pound;
+                    </RadioLabel>
+                  </RadioGroup>
+                </RadioContainer>
+              </div>
             </Label>
 
             <Label htmlFor="price">
-              Price (&euro;)
+              Price
               <StyledErrorMessage name="price" component="span" />
-              <StyledField type="text" name="price" />
+              <CurrencyField autoComplete="off" type="text" name="price" placeholder="9.99" />
             </Label>
 
             <Label htmlFor="next_best_price">
-              Next best price (&euro;)
+              Next best price
               <StyledErrorMessage name="next_best_price" component="span" />
-              <StyledField type="text" name="next_best_price" />
+              <CurrencyField
+                autoComplete="off"
+                type="text"
+                name="next_best_price"
+                placeholder="15.99"
+              />
             </Label>
 
             <Label htmlFor="deal_title">
@@ -86,7 +145,8 @@ export default () => {
               {errors.deal_title && touched.deal_title ? (
                 <ErrorSpan>Title is required</ErrorSpan>
               ) : null}
-              <StyledField
+              <TextField
+                autoComplete="off"
                 type="text"
                 name="deal_title"
                 placeholder="Please enter a short description of the deal"
@@ -98,10 +158,10 @@ export default () => {
               {errors.deal_text && touched.deal_text ? (
                 <ErrorSpan>Description is required</ErrorSpan>
               ) : null}
-              <StyledErrorMessage name="deal_text" component="ErrorSpan">
+              <StyledErrorMessage name="deal_text" component="span">
                 This is an error message
               </StyledErrorMessage>
-              <StyledField
+              <TextareaField
                 row="4"
                 column="30"
                 component="textarea"
@@ -113,36 +173,36 @@ export default () => {
             <Label htmlFor="image_url">
               Image Url
               <StyledErrorMessage name="image_url" component="span" />
-              <StyledField type="text" name="image_url" />
+              <TextField autoComplete="off" type="text" name="image_url" />
             </Label>
 
             <Label htmlFor="deal_starts">
               Deal starts
               <StyledErrorMessage name="deal_starts" component="span" />
-              <StyledField type="date" name="deal_starts" />
+              <TextField type="date" name="deal_starts" />
             </Label>
 
             <Label htmlFor="deal_ends">
               Deal expires
               <StyledErrorMessage name="deal_ends" component="span" />
-              <StyledField type="date" name="deal_ends" />
+              <TextField type="date" name="deal_ends" />
             </Label>
 
             <Label htmlFor="offline_deal">
+              <CheckboxField type="checkbox" name="offline_deal" value="false" />
               Local deal (instore / offline)
               <StyledErrorMessage name="offline_deal" component="span" />
-              <StyledField type="checkbox" name="offline_deal" />
             </Label>
 
             <Label htmlFor="deal_NSFW">
+              <CheckboxField type="checkbox" name="deal_NSFW" value="false" />
               NSFW deal
               <StyledErrorMessage name="deal_NSFW" component="span" />
-              <StyledField type="checkbox" name="deal_NSFW" />
             </Label>
 
-            <button style={{ display: 'block' }} type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               Submit
-            </button>
+            </Button>
           </Form>
         )}
       </Formik>

@@ -2,11 +2,38 @@ import { Field, ErrorMessage } from 'formik';
 
 import styled from 'styled-components';
 
-export const StyledField = styled(Field)`
+export const TextField = styled(Field)`
+  font-weight: inherit;
   display: block;
   width: 100%;
   padding: 0.5rem;
   margin: 0.6rem 0;
+  border-radius: 5px;
+`;
+
+export const CurrencyField = styled(Field)`
+  font-weight: inherit;
+  display: block;
+  width: 150px;
+  padding: 0.5rem;
+  margin: 0.6rem 0;
+  border-radius: 5px;
+`;
+
+export const TextareaField = styled(Field)`
+  font-weight: inherit;
+  display: block;
+  width: 100%;
+  height: 200px;
+  padding: 0.5rem;
+  margin: 0.6rem 0;
+  border-radius: 5px;
+`;
+
+export const CheckboxField = styled(Field)`
+  padding: 0.5rem;
+  margin: 0.6rem 0;
+  margin-right: 1rem;
   border-radius: 5px;
 `;
 
@@ -15,4 +42,9 @@ export const StyledErrorMessage = styled(ErrorMessage)`
   color: blue;
   padding: 0.5rem;
   font-size: 1.3rem;
+`;
+
+export const ErrorSpan = styled.span`
+  margin-left: 2rem;
+  color: red;
 `;

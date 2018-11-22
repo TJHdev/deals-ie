@@ -19,6 +19,7 @@ CREATE TABLE users (
 CREATE TABLE deals (
   id serial PRIMARY KEY,
   deal_link VARCHAR(511),
+  currency_pound BOOLEAN NOT NULL DEFAULT false;
   price decimal (19,4),
   next_best_price decimal (19,4),
   image_url VARCHAR(512),
@@ -26,12 +27,13 @@ CREATE TABLE deals (
   deal_starts TIMESTAMPTZ DEFAULT NOW(),
   deal_ends TIMESTAMPTZ,
   shipping_from VARCHAR(100),
-  online_deal BOOLEAN NOT NULL,
+  offline_deal BOOLEAN NOT NULL,
   deal_NSFW BOOLEAN NOT NULL,
-  deal_text VARCHAR(1000) NOT NULL,
+  deal_text VARCHAR(1600) NOT NULL,
   deal_title VARCHAR(255) NOT NULL,
-  deal_reviewed BOOLEAN NOT NULL DEFAULT true,
+  deal_reviewed BOOLEAN NOT NULL DEFAULT false,
   deal_hidden BOOLEAN NOT NULL DEFAULT false,
+  deal_expired BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   edited_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );

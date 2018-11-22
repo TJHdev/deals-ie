@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 
-import { StyledField, StyledErrorMessage } from '../styled-components/FormikStyles';
+import { TextField, StyledErrorMessage } from '../styled-components/FormikStyles';
 import Label from '../styled-components/Label';
 import { Button, BackgroundButton } from '../styled-components/Button';
 import TitleContainer from '../styled-components/TitleContainer';
@@ -55,22 +55,17 @@ const RegisterModal = ({
         {({ isSubmitting }) => (
           <Form>
             <Label htmlFor="email">
-              <StyledField
-                type="email"
-                name="email"
-                placeholder="Email address"
-                autoComplete="off"
-              />
+              <TextField type="email" name="email" placeholder="Email address" autoComplete="off" />
               <StyledErrorMessage name="email" component="div" />
             </Label>
 
             <Label htmlFor="username">
-              <StyledField type="text" name="username" placeholder="Username" autoComplete="off" />
+              <TextField type="text" name="username" placeholder="s" autoComplete="off" />
               <StyledErrorMessage name="username" component="div" />
             </Label>
 
             <Label htmlFor="password">
-              <StyledField
+              <TextField
                 type="password"
                 name="password"
                 placeholder="Password"

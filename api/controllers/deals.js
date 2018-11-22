@@ -4,14 +4,21 @@ cloudinary.config();
 
 const handleDealSubmit = (db, Joi) => (req, res) => {
   const schema = Joi.object().keys({
-    deal_link: Joi.string(),
-    price: Joi.number().positive(),
-    next_best_price: Joi.number().positive(),
-    image_url: Joi.string(),
-    camel_url: Joi.string(),
-    deal_starts: Joi.date().default(() => new Date()),
-    deal_ends: Joi.date(),
-    shipping_from: Joi.string(),
+    deal_link: Joi.string().allow(""),
+    currency_pound: Joi.bool(),
+    price: Joi.number()
+      .positive()
+      .precision(2)
+      .allow(""),
+    next_best_price: Joi.number()
+      .positive()
+      .precision(2)
+      .allow(""),
+    image_url: Joi.string().allow(""),
+    camel_url: Joi.string().allow(""),
+    deal_starts: Joi.date(),
+    deal_ends: Joi.date().allow(""),
+    shipping_from: Joi.string().allow(""),
     offline_deal: Joi.bool().required(),
     deal_NSFW: Joi.bool().required(),
     deal_title: Joi.string()
@@ -19,32 +26,21 @@ const handleDealSubmit = (db, Joi) => (req, res) => {
       .max(140),
     deal_text: Joi.string()
       .required()
-      .max(1000)
+      .max(1200)
   });
 
-  // validationSchema={yup.object().shape({
-  //   deal_link: yup.string(),
-  //   price: yup.number().positive(),
-  //   next_best_price: yup.number().positive(),
-  //   image_url: yup.string(),
-  //   camel_url: yup.string(),
-  //   deal_starts: yup.date().default(() => new Date()),
-  //   deal_ends: yup.date(),
-  //   shipping_from: yup.string(),
-  //   offline_deal: yup.bool().required(),
-  //   deal_NSFW: yup.bool().required(),
-  //   deal_title: yup
-  //     .string()
-  //     .required()
-  //     .max(140),
-  //   deal_text: yup
-  //     .string()
-  //     .required()
-  //     .max(1000)
-  // })}
+  Joi.validate(req.body, schema, { abortEarly: false }, function(err, value) {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      console.log("value: ", value);
+      res.status(200).json(value);
+    }
+  });
 
   const {
     deal_link,
+    currency_pound,
     price,
     next_best_price,
     image_url,
@@ -61,7 +57,7 @@ const handleDealSubmit = (db, Joi) => (req, res) => {
   console.log(req.body);
 
   const uploadImage = () => {};
-  res.status(200).json(req.body);
+  // res.status(200).json(req.body);
 };
 
 module.exports = {

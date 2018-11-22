@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 
-import { StyledField, StyledErrorMessage } from '../styled-components/FormikStyles';
+import { TextField, StyledErrorMessage } from '../styled-components/FormikStyles';
 import Label from '../styled-components/Label';
 import { Button, SmallBackgroundButton, BackgroundButton } from '../styled-components/Button';
 import TitleContainer from '../styled-components/TitleContainer';
@@ -47,7 +47,7 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
         {({ isSubmitting }) => (
           <Form>
             <Label htmlFor="email">
-              <StyledField
+              <TextField
                 type="text"
                 name="email"
                 placeholder="Enter your email"
@@ -57,7 +57,7 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
             </Label>
 
             <Label htmlFor="password">
-              <StyledField
+              <TextField
                 type="password"
                 name="password"
                 placeholder="Enter your password"

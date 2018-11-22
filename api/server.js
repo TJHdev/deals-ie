@@ -96,7 +96,13 @@ app.post("/register", register.handleRegister(db, bcrypt, Joi));
 app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
 // app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
-app.get("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
+
+app.post("/deals", deals.handleDealSubmit(db, Joi));
+// app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
+
+// app.get("/deals", auth.reqAuth(redisC), deals.handleGetAllDeals(db, Joi));
+// app.get("/deals/:id", auth.reqAuth(redisC), deals.handleGetDeals(db, Joi));
+// app.put("/deals/:id", auth.reqAuth(redisC), deals.handleEditDeal(db, Joi));
 
 app.listen(PORT, () => {
   console.log(`Server is up on port ${PORT}`);

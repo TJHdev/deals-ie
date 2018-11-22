@@ -1,9 +1,9 @@
 import React from 'react';
 
-import ContentContainter from '../styled-components/ContentContainer';
+import ContentContainer from '../styled-components/ContentContainer';
 
 export default () => (
-  <ContentContainter>
+  <ContentContainer>
     <div>This is the home page</div>
-  </ContentContainter>
+  </ContentContainer>
 );
