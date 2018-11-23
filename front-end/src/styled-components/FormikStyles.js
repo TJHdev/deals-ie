@@ -51,12 +51,12 @@ export const CheckboxField = styled(Field)`
 
 export const StyledErrorMessage = styled(ErrorMessage)`
   white-space: pre-line;
-  color: blue;
+  color: var(--red);
   padding: 0.5rem;
   font-size: 1.3rem;
 `;
 
 export const ErrorSpan = styled.span`
   margin-left: 2rem;
-  color: red;
+  color: var(--red);
 `;

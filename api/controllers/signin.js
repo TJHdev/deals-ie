@@ -49,8 +49,8 @@ const signinAuthentication = (redisClient, db, bcrypt) => (req, res) => {
     });
   };
 
-  const signToken = email => {
-    const jwtPayload = { email };
+  const signToken = id => {
+    const jwtPayload = { userId: id };
     return jwt.sign(jwtPayload, process.env.POSTGRES_PASSWORD_SECRET, {
       expiresIn: "2 days"
     });
@@ -61,8 +61,8 @@ const signinAuthentication = (redisClient, db, bcrypt) => (req, res) => {
   };
 
   const createSessions = user => {
-    const { email, id } = user;
-    const token = signToken(email);
+    const { id } = user;
+    const token = signToken(id);
     return setToken(token, id)
       .then(() => {
         return { success: "true", userId: id, token };

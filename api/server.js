@@ -97,7 +97,7 @@ app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
 // app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
 
-app.post("/deals", deals.handleDealSubmit(db, Joi));
+app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 // app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 
 // app.get("/deals", auth.reqAuth(redisC), deals.handleGetAllDeals(db, Joi));

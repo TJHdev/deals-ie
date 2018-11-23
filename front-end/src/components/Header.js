@@ -90,6 +90,7 @@ class Header extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         window.sessionStorage.setItem('token', data.token);
         if (!data.userId || data.success !== 'true') {
           console.log('Problem logging in');

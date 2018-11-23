@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import format from 'date-fns/format';
 
@@ -20,14 +20,19 @@ import {
   RadioButton
 } from '../styled-components/Radio';
 import Label from '../styled-components/Label';
-import ContentContainer, { ContentContainerForm } from '../styled-components/ContentContainer';
+import { ContentContainerForm } from '../styled-components/ContentContainer';
 import { Button } from '../styled-components/Button';
 
 export default () => {
   const onSubmitDeal = values => {
+    const token = window.sessionStorage.getItem('token');
+
     fetch(`${window.BACKEND_PATH}/deals`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token
+      },
       body: JSON.stringify(values)
     })
       .then(response => response.json())
@@ -54,8 +59,8 @@ export default () => {
           deal_text: '',
           image_url: '',
           camel_url: '',
-          deal_starts: new Date(),
-          // deal_starts: format(new Date(), 'YYYY-MM-DD'),
+          // deal_starts: new Date(),
+          deal_starts: format(new Date(), 'YYYY-MM-DD'),
           deal_ends: '',
           shipping_from: '',
           offline_deal: false,
@@ -73,7 +78,7 @@ export default () => {
           deal_text: yup
             .string()
             .required()
-            .max(1000),
+            .max(1200),
           image_url: yup.string(),
           camel_url: yup.string(),
           deal_starts: yup.date(),
@@ -83,7 +88,6 @@ export default () => {
           deal_nsfw: yup.bool().required()
         })}
         onSubmit={(values, { setSubmitting }) => {
-          console.log('submit has been called');
           onSubmitDeal(values);
           setSubmitting(false);
         }}

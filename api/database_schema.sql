@@ -18,6 +18,7 @@ CREATE TABLE users (
 
 CREATE TABLE deals (
   id serial PRIMARY KEY,
+  user_id INT REFERENCES users(id) NOT NULL,
   deal_link VARCHAR(511),
   currency_pound BOOLEAN NOT NULL DEFAULT false;
   price decimal (19,4),

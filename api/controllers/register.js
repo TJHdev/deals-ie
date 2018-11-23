@@ -1,18 +1,4 @@
 const handleRegister = (db, bcrypt, Joi) => (req, res) => {
-  // const schema = Joi.object().keys({
-  //   username: Joi.string()
-  //     .alphanum()
-  //     .min(4)
-  //     .max(30)
-  //     .required(),
-  //   password: Joi.string()
-  //     .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
-  //     .required(),
-  //   email: Joi.string()
-  //     .email({ minDomainAtoms: 2 })
-  //     .required()
-  // });
-
   const usernameSchema = Joi.string()
     .alphanum()
     .min(4)
