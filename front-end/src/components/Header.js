@@ -62,6 +62,7 @@ class Header extends React.Component {
   }
 
   onSubmitRegister(values, setErrors) {
+    const { loadUser } = this.props;
     fetch(`${window.BACKEND_PATH}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -70,8 +71,8 @@ class Header extends React.Component {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        if (data && data.name) {
-          // loadUser(user);
+        if (data && data.email) {
+          loadUser(data);
           this.handleCloseLoginModal();
           history.push('/');
         } else {
@@ -82,7 +83,7 @@ class Header extends React.Component {
   }
 
   onSubmitLogin(values, setErrors) {
-    const { history } = this.props;
+    const { history, loadUser } = this.props;
     fetch(`${window.BACKEND_PATH}/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -97,6 +98,7 @@ class Header extends React.Component {
           setErrors(data.error);
           return null;
         }
+        loadUser(data);
         return fetch(`${window.BACKEND_PATH}/profile/${data.userId}`, {
           method: 'GET',
           headers: {
