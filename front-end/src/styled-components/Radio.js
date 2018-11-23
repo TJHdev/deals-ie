@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-// import { Field, ErrorMessage } from 'formik';
+import { Field, ErrorMessage } from 'formik';
 
 export const RadioContainer = styled.div`
   display: block;
@@ -10,7 +10,7 @@ export const RadioGroup = styled.div`
   width: 70px;
 `;
 
-export const RadioInput = styled.input`
+export const RadioInput = styled(Field)`
   display: none;
 
   &:checked ~ label span::after {

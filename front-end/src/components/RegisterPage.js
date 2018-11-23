@@ -60,7 +60,7 @@ const RegisterModal = ({
             </Label>
 
             <Label htmlFor="username">
-              <TextField type="text" name="username" placeholder="s" autoComplete="off" />
+              <TextField type="text" name="username" placeholder="Username" autoComplete="off" />
               <StyledErrorMessage name="username" component="div" />
             </Label>
 

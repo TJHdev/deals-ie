@@ -9,15 +9,23 @@ export const TextField = styled(Field)`
   padding: 0.5rem;
   margin: 0.6rem 0;
   border-radius: 5px;
+
+  &::placeholder {
+    color: rgb(200, 200, 200);
+  }
 `;
 
-export const CurrencyField = styled(Field)`
+export const NumericField = styled(Field)`
   font-weight: inherit;
   display: block;
-  width: 150px;
+  width: 165px;
   padding: 0.5rem;
   margin: 0.6rem 0;
   border-radius: 5px;
+
+  &::placeholder {
+    color: rgb(200, 200, 200);
+  }
 `;
 
 export const TextareaField = styled(Field)`
@@ -28,6 +36,10 @@ export const TextareaField = styled(Field)`
   padding: 0.5rem;
   margin: 0.6rem 0;
   border-radius: 5px;
+
+  &::placeholder {
+    color: rgb(200, 200, 200);
+  }
 `;
 
 export const CheckboxField = styled(Field)`

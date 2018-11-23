@@ -7,6 +7,13 @@ export default styled.div`
   max-width: 135rem;
 `;
 
+export const ContentContainerForm = styled.div`
+  font-weight: 600;
+  margin: 0 auto;
+  padding: 0 2rem; /* m-size */
+  max-width: 70rem;
+`;
+
 export const ContentContainerHalf = styled.div`
   /* margin-right:  */
   display: inline-block;
