@@ -41,7 +41,8 @@ const redisC = redis.createClient(process.env.REDIS_URI);
 
 const db = knex({
   client: "pg",
-  connection: process.env.POSTGRES_URI
+  connection: process.env.POSTGRES_URI,
+  debug: true
 });
 
 // const whiltelist = ["http://example1.com", "http://example2.com"];
@@ -97,7 +98,10 @@ app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
 // app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
 
+app.get("/deals/:dealId", deals.handleGetDeal(db));
+app.get("/deals", deals.handleGetAllDeals(db));
 app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
+
 // app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 
 // app.get("/deals", auth.reqAuth(redisC), deals.handleGetAllDeals(db, Joi));

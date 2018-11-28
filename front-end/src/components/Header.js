@@ -158,7 +158,7 @@ class Header extends React.Component {
                 <SearchField />
                 <NavSearch>Search</NavSearch>
               </SearchContainer>
-              <NavAnchor to="deals">
+              <NavAnchor to="/deals">
                 <button type="button">Submit Deal</button>
               </NavAnchor>
 

@@ -8,7 +8,7 @@ const handleDealSubmit = (db, Joi) => (req, res) => {
   const { authorization } = req.headers;
   const payload = jwt.decode(authorization);
 
-  console.log("JWT payload: ", payload);
+  // console.log("JWT payload: ", payload);
 
   const user_id = payload.userId;
   if (!user_id) {
@@ -99,7 +99,7 @@ const handleDealSubmit = (db, Joi) => (req, res) => {
       .returning("*")
       .then(data => {
         console.log(data);
-        res.status(200).json(data);
+        res.status(200).json(data[0]);
       })
       .catch(err => {
         console.log(err);
@@ -111,6 +111,57 @@ const handleDealSubmit = (db, Joi) => (req, res) => {
   // res.status(200).json(req.body);
 };
 
+const getDeal = db => {};
+
+const handleGetDeal = db => (req, res) => {
+  const deal_id = req.params.dealId;
+
+  const countLikesSubquery = db
+    .count("*")
+    .from("deal_likes")
+    .where("deal_id", "=", deal_id)
+    .as("likes");
+
+  const countDislikesSubquery = db
+    .count("*")
+    .from("deal_dislikes")
+    .where("deal_id", "=", deal_id)
+    .as("dislikes");
+
+  db.select(
+    "image_url",
+    "deal_title",
+    "price",
+    "next_best_price",
+    "username",
+    "deal_link",
+    "deal_starts",
+    "deal_ends",
+    "deals.edited_at",
+    "deals.created_at",
+    "deal_expired",
+    "deal_text",
+    countLikesSubquery,
+    countDislikesSubquery,
+    "currency_pound"
+  )
+    .from("deals")
+    .innerJoin("users", "users.id", "=", "deals.user_id")
+    .where("deals.id", "=", deal_id)
+    .then(
+      deal => {
+        res.json(deal[0]);
+      },
+      err => {
+        res.json(err);
+      }
+    );
+};
+
+const handleGetAllDeals = db => (req, res) => {};
+
 module.exports = {
-  handleDealSubmit
+  handleDealSubmit,
+  handleGetDeal,
+  handleGetAllDeals
 };
