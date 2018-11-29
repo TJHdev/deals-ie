@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Button = styled.button`
+export const FacebookPostButton = styled.button`
   background-color: var(--blue);
   color: white;
   font-size: var(--font-size-large);
@@ -9,6 +9,7 @@ export const Button = styled.button`
   border-radius: 5px;
   padding: var(--s-size);
   margin: var(--xs-size) 0;
+  margin-right: 1rem;
 
   display: inline-block;
   text-decoration: none;
@@ -29,36 +30,13 @@ export const Button = styled.button`
   }
 `;
 
-export const SmallButton = styled(Button)`
-  font-size: var(--font-size-medium);
-`;
-
-export const LargeButton = styled(Button)`
-  font-size: var(--font-size-large);
-`;
-
-export const BackgroundButton = styled.button`
-  background-color: white;
-  color: grey;
-  font-size: var(--font-size-large);
-  font-weight: 300;
-  border: none;
-  border-radius: 5px;
-  padding: var(--s-size);
-  margin: var(--xs-size) 0;
-
-  display: inline-block;
-  text-decoration: none;
-  line-height: 1; // dictates the height of a button
-  transition: all 0.2s;
+export const TwitterPostButton = styled(FacebookPostButton)`
+  background-color: var(--twitter-blue);
 
   &:hover {
     /* background-color: lighten(var(--blue), 10%); */
-    /* filter: brightness(120%); */
-    color: black;
-  }
-`;
+    /* filter: brightness(50%); */
 
-export const SmallBackgroundButton = styled(BackgroundButton)`
-  font-size: var(--font-size-small);
+    background-color: var(--twitter-blue-hover);
+  }
 `;

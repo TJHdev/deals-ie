@@ -96,11 +96,13 @@ app.post("/signin", signin.signinAuthentication(redisC, db, bcrypt));
 app.post("/register", register.handleRegister(db, bcrypt, Joi));
 app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
-// app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
+// app.get("/profile/:username", profile.handleGetProfile(db));
 
 app.get("/deals/:dealId", deals.handleGetDeal(db));
 app.get("/deals", deals.handleGetAllDeals(db));
 app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
+
+// app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
 
 // app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 

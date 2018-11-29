@@ -6,6 +6,7 @@ import HomePage from '../components/Home';
 import DealPage from '../components/DealPage';
 import SubmitDealPage from '../components/SubmitDealPage';
 import Header from '../components/Header';
+import ProfilePage from '../components/ProfilePage';
 
 // import DashboardPage from '../components/DashboardPage';
 // import NotFoundPage from '../components/NotFoundPage';
@@ -74,8 +75,8 @@ class AppRouter extends React.Component {
           <Header loadUser={this.loadUser} />
           <Switch>
             <PublicRoute exact path="/" component={HomePage} />
-
             <PublicRoute path="/deals/:deal_id" component={DealPage} />
+            <PublicRoute path="/profile/:username" component={ProfilePage} />
             <PrivateRoute
               path="/deals"
               component={SubmitDealPage}
