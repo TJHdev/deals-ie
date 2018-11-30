@@ -42,14 +42,11 @@ CREATE TABLE deals (
 CREATE TABLE deal_likes (
   user_id INT REFERENCES users(id) NOT NULL,
   deal_id INT REFERENCES deals(id) NOT NULL,
-  PRIMARY KEY (user_id, deal_id)
+  PRIMARY KEY (user_id, deal_id),
+  is_like BOOLEAN NOT NULL
 );
 
-CREATE TABLE deal_dislikes (
-  user_id INT REFERENCES users(id) NOT NULL,
-  deal_id INT REFERENCES deals(id) NOT NULL,
-  PRIMARY KEY (user_id, deal_id)
-);
+
 
 CREATE TABLE deal_reports (
   user_id INT REFERENCES users(id) NOT NULL,
@@ -73,14 +70,11 @@ CREATE TABLE comments (
 CREATE TABLE comment_likes (
   user_id INT REFERENCES users(id) NOT NULL,
   comment_id INT REFERENCES comments(id) NOT NULL,
-  PRIMARY KEY (user_id, comment_id)
+  PRIMARY KEY (user_id, comment_id),
+  is_like BOOLEAN NOT NULL
 );
 
-CREATE TABLE comment_dislikes (
-  user_id INT REFERENCES users(id) NOT NULL,
-  comment_id INT REFERENCES comments(id) NOT NULL,
-  PRIMARY KEY (user_id, comment_id)
-);
+
 
 CREATE TABLE comment_reports (
   user_id INT REFERENCES users(id) NOT NULL,
