@@ -36,9 +36,9 @@ class DealPage extends React.Component {
       .catch(console.log);
   }
 
-  // onSubmitComment() {}
+  onSubmitComment() {}
 
-  // onVisitDeal() {}
+  onVisitDeal() {}
 
   render() {
     console.log(this.state);
@@ -147,7 +147,7 @@ const DealPageContainer = styled.div`
   font-weight: 400;
   margin: 1rem auto;
   padding: 2rem; /* m-size */
-  max-width: 135rem;
+  max-width: 124rem;
   background-color: var(--light-grey);
   border-radius: 5px;
 `;

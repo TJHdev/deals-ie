@@ -151,7 +151,7 @@ class Header extends React.Component {
         <ContentContainer>
           <HeaderContent>
             <HeaderTitle to="/">
-              <HeaderText>Bargain Republic</HeaderText>
+              <HeaderText>&euro;ireDeals</HeaderText>
             </HeaderTitle>
             <NavContent>
               <SearchContainer>

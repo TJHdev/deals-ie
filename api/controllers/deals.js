@@ -120,12 +120,14 @@ const handleGetDeal = db => (req, res) => {
     .count("*")
     .from("deal_likes")
     .where("deal_id", "=", deal_id)
+    .andWhere("is_like", "=", true)
     .as("likes");
 
   const countDislikesSubquery = db
     .count("*")
-    .from("deal_dislikes")
+    .from("deal_likes")
     .where("deal_id", "=", deal_id)
+    .andWhere("is_like", "=", false)
     .as("dislikes");
 
   db.select(
@@ -158,7 +160,10 @@ const handleGetDeal = db => (req, res) => {
     );
 };
 
-const handleGetAllDeals = db => (req, res) => {};
+const handleGetAllDeals = db => (req, res) => {
+  console.log(req.query);
+  res.status(200).json(req.query);
+};
 
 module.exports = {
   handleDealSubmit,
