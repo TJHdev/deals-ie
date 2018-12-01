@@ -176,10 +176,11 @@ const handleGetAllDeals = db => (req, res) => {
     .as("dislikes");
 
   const pageNumber = req.query.page ? req.query.page - 1 : 0;
-  const numberPerPage = 5;
+  const numberPerPage = 40;
   const offset = pageNumber * numberPerPage;
 
   db.select(
+    "deals.id",
     "image_url",
     "deal_title",
     "price",

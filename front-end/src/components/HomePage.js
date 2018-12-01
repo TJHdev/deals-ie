@@ -41,6 +41,7 @@ class HomePage extends React.Component {
       dealsArray && dealsArray[0]
         ? dealsArray.map(deal => {
             const {
+              id: dealId,
               image_url: imageUrl,
               likes: dealLikes,
               dislikes: dealDislikes,
@@ -62,13 +63,14 @@ class HomePage extends React.Component {
             const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
 
             const userNameUrl = `/profile/${userName}`;
+            const dealPageUrl = `/deals/${dealId}`;
 
             return (
               <DealsContainer>
                 <DealsDealContainer>
-                  <a href={dealLink} target="_blank" rel="noopener noreferrer">
+                  <Link to={dealPageUrl}>
                     <DealsImage src={imageUrl} />
-                  </a>
+                  </Link>
                   <DealsDetailsContainer>
                     <DealsHeatContainer>
                       <VoteDivCold>-</VoteDivCold>
@@ -111,10 +113,6 @@ class HomePage extends React.Component {
                     </DealsUserAndDealButtonContainer>
                   </DealsDetailsContainer>
                 </DealsDealContainer>
-
-                <DealsTextContainer>
-                  <DealsText>{dealText}</DealsText>
-                </DealsTextContainer>
               </DealsContainer>
             );
           })
@@ -136,8 +134,8 @@ const DealsGridContainer = styled.div`
   // grid-template-columns: 50% 1fr 2fr;
   grid-template-columns: repeat(5, 1fr);
   // grid-row-gap: 30px;
-  // grid-column-gap: 50px;
-  grid-gap: 30px;
+  // grid-column-gap: 40px;
+  grid-gap: 20px;
 `;
 
 const DealsContainer = styled.div`
@@ -151,6 +149,7 @@ const DealsContainer = styled.div`
 
 const DealsDealContainer = styled.div`
   display: flex;
+  flex-direction: column;
 `;
 
 const DealsImage = styled.img`
