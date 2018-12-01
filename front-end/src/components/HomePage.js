@@ -35,91 +35,110 @@ class HomePage extends React.Component {
 
   render() {
     console.log('renderState: ', this.state);
-    const {
-      image_url: imageUrl,
-      likes: dealLikes,
-      dislikes: dealDislikes,
-      deal_title: dealTitle,
-      price,
-      next_best_price: nextBestPrice,
-      username: userName,
-      deal_link: dealLink,
-      deal_starts: dealStarts,
-      deal_ends: dealEnds,
-      deal_text: dealText,
-      created_at: createdAt,
-      edited_at: editedAt,
-      currency_pound: currencyPound,
-      deal_expired: dealExpired
-    } = this.state;
+    const { dealsArray } = this.state;
 
-    const fixedPrice = price ? Math.round(price * 100) / 100 : null;
-    const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
+    const dealsElement =
+      dealsArray && dealsArray[0]
+        ? dealsArray.map(deal => {
+            const {
+              image_url: imageUrl,
+              likes: dealLikes,
+              dislikes: dealDislikes,
+              deal_title: dealTitle,
+              price,
+              next_best_price: nextBestPrice,
+              username: userName,
+              deal_link: dealLink,
+              deal_starts: dealStarts,
+              deal_ends: dealEnds,
+              deal_text: dealText,
+              created_at: createdAt,
+              edited_at: editedAt,
+              currency_pound: currencyPound,
+              deal_expired: dealExpired
+            } = deal;
 
-    const userNameUrl = `/profile/${userName}`;
+            const fixedPrice = price ? Math.round(price * 100) / 100 : null;
+            const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
+
+            const userNameUrl = `/profile/${userName}`;
+
+            return (
+              <DealsContainer>
+                <DealsDealContainer>
+                  <a href={dealLink} target="_blank" rel="noopener noreferrer">
+                    <DealsImage src={imageUrl} />
+                  </a>
+                  <DealsDetailsContainer>
+                    <DealsHeatContainer>
+                      <VoteDivCold>-</VoteDivCold>
+                      <DealHeat>
+                        {dealLikes - dealDislikes}
+                        &#186;
+                      </DealHeat>
+                      <VoteDivHot>+</VoteDivHot>
+                    </DealsHeatContainer>
+
+                    <DealsTitleContainer>{dealTitle}</DealsTitleContainer>
+
+                    {fixedPrice ? (
+                      <DealsPriceContainer>
+                        <DealsPrice>
+                          {currencyPound && fixedPrice ? (
+                            <span>&pound; </span>
+                          ) : (
+                            <span>&euro; </span>
+                          )}
+                          {fixedPrice}
+                        </DealsPrice>
+                        {fixedNextBestPrice ? (
+                          <DealsNextBestPrice>
+                            {currencyPound ? <span>&pound; </span> : <span>&euro; </span>}
+                            {fixedNextBestPrice}
+                          </DealsNextBestPrice>
+                        ) : null}
+                      </DealsPriceContainer>
+                    ) : null}
+
+                    <DealsUserAndDealButtonContainer>
+                      <DealsUsernameLink to={userNameUrl}>
+                        <UsernameImg src="/images/icons8-user-50.png" alt="username logo" />
+                        <DealsUsernameSpan>{userName}</DealsUsernameSpan>
+                      </DealsUsernameLink>
+                      <a href={dealLink} target="_blank" rel="noopener noreferrer">
+                        <GoToDealButton>Go to deal &#10148;</GoToDealButton>
+                      </a>
+                    </DealsUserAndDealButtonContainer>
+                  </DealsDetailsContainer>
+                </DealsDealContainer>
+
+                <DealsTextContainer>
+                  <DealsText>{dealText}</DealsText>
+                </DealsTextContainer>
+              </DealsContainer>
+            );
+          })
+        : null;
 
     return (
       <div>
-        <DealsContainer>
-          <DealsDealContainer>
-            <a href={dealLink} target="_blank" rel="noopener noreferrer">
-              <DealsImage src={imageUrl} />
-            </a>
-            <DealsDetailsContainer>
-              <DealsHeatContainer>
-                <VoteDivCold>-</VoteDivCold>
-                <DealHeat>
-                  {dealLikes - dealDislikes}
-                  &#186;
-                </DealHeat>
-                <VoteDivHot>+</VoteDivHot>
-              </DealsHeatContainer>
-
-              <DealsTitleContainer>{dealTitle}</DealsTitleContainer>
-
-              {fixedPrice ? (
-                <DealsPriceContainer>
-                  <DealsPrice>
-                    {currencyPound && fixedPrice ? <span>&pound; </span> : <span>&euro; </span>}
-                    {fixedPrice}
-                  </DealsPrice>
-                  {fixedNextBestPrice ? (
-                    <DealsNextBestPrice>
-                      {currencyPound ? <span>&pound; </span> : <span>&euro; </span>}
-                      {fixedNextBestPrice}
-                    </DealsNextBestPrice>
-                  ) : null}
-                </DealsPriceContainer>
-              ) : null}
-
-              <DealsUserAndDealButtonContainer>
-                <DealsUsernameLink to={userNameUrl}>
-                  <UsernameImg src="/images/icons8-user-50.png" alt="username logo" />
-                  <DealsUsernameSpan>{userName}</DealsUsernameSpan>
-                </DealsUsernameLink>
-                <a href={dealLink} target="_blank" rel="noopener noreferrer">
-                  <GoToDealButton>Go to deal &#10148;</GoToDealButton>
-                </a>
-              </DealsUserAndDealButtonContainer>
-            </DealsDetailsContainer>
-          </DealsDealContainer>
-
-          <DealsTextContainer>
-            <DealsText>{dealText}</DealsText>
-          </DealsTextContainer>
-        </DealsContainer>
+        <DealsGridContainer>{dealsElement}</DealsGridContainer>
       </div>
     );
   }
 }
 
-// <DealsContainer>
-//   <DealsCommentsContainer>
-//     <div>
-//       <p>Placeholder comment</p>
-//     </div>
-//   </DealsCommentsContainer>
-// </DealsContainer>
+const DealsGridContainer = styled.div`
+  display: grid;
+  // grid-template-rows: 150px 150px; // 1st value 1st row, 2nd value 2nd row
+  grid-template-rows: repeat(5, 1fr);
+  // grid-template-columns: repeat(2, 150px) 1fr;
+  // grid-template-columns: 50% 1fr 2fr;
+  grid-template-columns: repeat(5, 1fr);
+  // grid-row-gap: 30px;
+  // grid-column-gap: 50px;
+  grid-gap: 30px;
+`;
 
 const DealsContainer = styled.div`
   font-weight: 400;
