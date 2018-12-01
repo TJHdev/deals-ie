@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route, Switch, NavLink } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 
-import HomePage from '../components/Home';
+import HomePage from '../components/HomePage';
 import DealPage from '../components/DealPage';
 import SubmitDealPage from '../components/SubmitDealPage';
 import Header from '../components/Header';

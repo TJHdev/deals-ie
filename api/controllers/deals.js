@@ -161,8 +161,53 @@ const handleGetDeal = db => (req, res) => {
 };
 
 const handleGetAllDeals = db => (req, res) => {
-  console.log(req.query);
-  res.status(200).json(req.query);
+  const countLikesSubquery = db
+    .count("*")
+    .from("deal_likes")
+    .whereRaw("deal_id=deals.id")
+    .andWhere("is_like", "=", true)
+    .as("likes");
+
+  const countDislikesSubquery = db
+    .count("*")
+    .from("deal_likes")
+    .whereRaw("deal_id=deals.id")
+    .andWhere("is_like", "=", false)
+    .as("dislikes");
+
+  const pageNumber = req.query.page ? req.query.page - 1 : 0;
+  const numberPerPage = 5;
+  const offset = pageNumber * numberPerPage;
+
+  db.select(
+    "image_url",
+    "deal_title",
+    "price",
+    "next_best_price",
+    "username",
+    "deal_link",
+    "deal_starts",
+    "deal_ends",
+    "deals.edited_at",
+    "deals.created_at",
+    "deal_expired",
+    "deal_text",
+    countLikesSubquery,
+    countDislikesSubquery,
+    "currency_pound"
+  )
+    .from("deals")
+    .innerJoin("users", "users.id", "=", "deals.user_id")
+    .limit(numberPerPage)
+    .offset(offset)
+    .then(
+      deals => {
+        res.status(200).json(deals);
+      },
+      err => {
+        res.status(400).json("Could not retrieve deals from the database");
+      }
+    );
 };
 
 module.exports = {
