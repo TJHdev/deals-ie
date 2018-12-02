@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import format from 'date-fns/format';
 
 // import ContentContainer from '../styled-components/ContentContainer';
 import { Button } from '../styled-components/Button';
@@ -64,9 +65,10 @@ class HomePage extends React.Component {
 
             const userNameUrl = `/profile/${userName}`;
             const dealPageUrl = `/deals/${dealId}`;
+            const foundDate = format(createdAt, 'Do MMM');
 
             return (
-              <DealsCardContainer>
+              <DealsCardContainer key={dealId}>
                 <DealsDealContainer>
                   <DealsTopFlexContainer>
                     <DealsHeatContainer>
@@ -77,6 +79,12 @@ class HomePage extends React.Component {
                       </DealHeat>
                       <VoteDivHot>+</VoteDivHot>
                     </DealsHeatContainer>
+
+                    <OptionsContainer>
+                      <OptionsCircle />
+                      <OptionsCircle />
+                      <OptionsCircle />
+                    </OptionsContainer>
                   </DealsTopFlexContainer>
 
                   <DealsImageContainer to={dealPageUrl}>
@@ -84,10 +92,12 @@ class HomePage extends React.Component {
                       <DealsImage src={imageUrl} />
                     </DealsImageStretchContainer>
                   </DealsImageContainer>
+
                   <DealsDetailsMiddleContainer>
                     <DealsTitleContainer>{dealTitle}</DealsTitleContainer>
                     <DealsText>{dealText}</DealsText>
                   </DealsDetailsMiddleContainer>
+
                   <DealsDetailsBottomContainer>
                     <UserAndReadMoreFlexContainer>
                       <DealsUsernameLink to={userNameUrl}>
@@ -96,6 +106,7 @@ class HomePage extends React.Component {
                       </DealsUsernameLink>
                       <ReadMoreAnchor to={dealPageUrl}>Read more</ReadMoreAnchor>
                     </UserAndReadMoreFlexContainer>
+
                     <PriceDateFoundFlexContainer>
                       {fixedPrice ? (
                         <DealsPriceContainer>
@@ -107,6 +118,7 @@ class HomePage extends React.Component {
                             )}
                             {fixedPrice}
                           </DealsPrice>
+
                           {fixedNextBestPrice ? (
                             <DealsNextBestPrice>
                               {currencyPound ? <span>&pound;</span> : <span>&euro;</span>}
@@ -117,9 +129,10 @@ class HomePage extends React.Component {
                       ) : null}
                       <DealFoundDateContainer>
                         <DealFoundImg src="/images/icons8-search-48.png" alt="dealfound logo" />
-                        <DealsFoundTextSpan>Nov 15th</DealsFoundTextSpan>
+                        <DealsFoundTextSpan>{foundDate}</DealsFoundTextSpan>
                       </DealFoundDateContainer>
                     </PriceDateFoundFlexContainer>
+
                     <GoToDealAnchorTag href={dealLink} target="_blank" rel="noopener noreferrer">
                       <GoToDealButton>Go to deal &#10148;</GoToDealButton>
                     </GoToDealAnchorTag>
@@ -146,17 +159,38 @@ const DealsContainer = styled.div`
 `;
 
 const DealsGridContainer = styled.div`
+  margin: 0.5rem;
   font-size: 100%;
   display: grid;
   /* grid-template-rows: 150px 150px; // 1st value 1st row, 2nd value 2nd row */
-  grid-template-rows: repeat(5, 1fr);
+  /* grid-template-rows: repeat(5, 1fr); */
   /* grid-template-columns: repeat(2, 150px) 1fr; */
   /* grid-template-columns: 50% 1fr 2fr; */
   grid-template-columns: repeat(5, 1fr);
   /* grid-row-gap: 30px; */
   /* grid-column-gap: 40px; */
-  grid-gap: 20px;
+  grid-gap: 15px;
+
+  @media only screen and (max-width: 85rem) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media only screen and (max-width: 63rem) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media only screen and (max-width: 45rem) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media only screen and (max-width: 30rem) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  /* @media only screen and (max-width: 50em) {
+    grid-template-rows: 6rem calc(100vh - 6rem) repeat(6, min-content);
+  } */
 `;
+
+// **************
+// Card Container
+// **************
 
 const DealsCardContainer = styled.div`
   background-color: var(--light-grey);
@@ -186,7 +220,8 @@ const DealsDealContainer = styled.div`
 const DealsTopFlexContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: space-between;
+  align-items: stretch;
   width: 100%;
 `;
 
@@ -199,7 +234,7 @@ const DealsHeatContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 5px;
   flex-shrink: 1;
 `;
 
@@ -227,7 +262,7 @@ const VoteDivHot = styled.span`
 
   vertical-align: middle;
   line-height: 1.05;
-  border-radius: 50px;
+  border-radius: 5px;
 
   transition: background-color 0.4s;
 
@@ -252,7 +287,7 @@ const VoteDivCold = styled.span`
 
   vertical-align: middle;
   line-height: 0.87;
-  border-radius: 50px;
+  border-radius: 5px;
 
   transition: background-color 0.4s;
 
@@ -262,40 +297,31 @@ const VoteDivCold = styled.span`
   }
 `;
 
-// **********************
-// DealFoundDateContainer
-// **********************
+// **************
+// Options button
+// **************
 
-const DealFoundDateContainer = styled.div`
-  position: relative;
-  color: black;
+const OptionsContainer = styled.div`
+  cursor: pointer;
+  border: solid 1px var(--medium-grey);
   display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
   align-items: center;
-
-  background-color: white;
   border-radius: 5px;
-  padding: 0.5rem 0.75rem;
-  margin: 0;
+  width: 34px;
+  height: 19px;
 
-  font-weight: 600;
-  font-size: 80%;
-  transition: all 0.2s;
-  text-decoration: none;
-
-  flex: 0 1 auto;
-  overflow: hidden;
+  &:hover div {
+    background-color: black;
+  }
 `;
 
-const DealFoundImg = styled.img`
-  height: 1.5rem;
-`;
-
-const DealsFoundTextSpan = styled.p`
-  flex: 1 1 auto;
-  font-size: 1.1rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+const OptionsCircle = styled.div`
+  background-color: grey;
+  height: 4px;
+  width: 4px;
+  border-radius: 4px;
 `;
 
 // *********************
@@ -400,7 +426,7 @@ const DealsText = styled.p`
     bottom: 0;
     left: 0;
     right: 0;
-    background-image: linear-gradient(rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 1) 100%);
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 85%, rgba(255, 255, 255, 1) 100%);
   }
 `;
 
@@ -465,7 +491,7 @@ const UsernameImg = styled.img`
 `;
 
 const DealsUsernameSpan = styled.p`
-  flex: 1 1 auto;
+  /* flex: 1 1 auto; */
   font-size: 1.1rem;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -477,9 +503,9 @@ const DealsUsernameSpan = styled.p`
 // *********
 
 const ReadMoreAnchor = styled(Link)`
-  /* width: 40%; */
   flex-shrink: 0;
   flex-grow: 0;
+
   cursor: pointer;
   color: var(--blue);
   font-weight: 600;
@@ -497,23 +523,34 @@ const ReadMoreAnchor = styled(Link)`
   }
 `;
 
+// *********************
+// Price Date Found Flex
+// *********************
+
+const PriceDateFoundFlexContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%;
+`;
+
 // ***************
 // Price Container
 // ***************
 
-const PriceDateFoundFlexContainer = styled.div`
-  /* display: flex;
-  justify-content: space-between; */
-`;
-
 const DealsPriceContainer = styled.div`
+  display: flex;
+  flex: 0 1 auto;
+  overflow: hidden;
+
   font-size: 1.8rem;
+  font-weight: 600;
+
   background-color: white;
   border-radius: 5px;
-  padding: 0 1rem;
+  padding: 0 0.75rem;
   margin: 0.5rem 0;
-
-  font-weight: 600;
+  margin-right: 0.5rem;
 `;
 
 const DealsPrice = styled.span`
@@ -524,6 +561,42 @@ const DealsNextBestPrice = styled.span`
   color: var(--light-grey);
   text-decoration: line-through;
   margin-left: 0.6rem;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+// **********************
+// DealFoundDateContainer
+// **********************
+
+const DealFoundDateContainer = styled.div`
+  position: relative;
+  color: black;
+  display: flex;
+  align-items: center;
+
+  background-color: white;
+  border-radius: 5px;
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0;
+
+  font-weight: 600;
+  font-size: 80%;
+  transition: all 0.2s;
+  text-decoration: none;
+
+  flex: 0 0 auto;
+  overflow: hidden;
+`;
+
+const DealFoundImg = styled.img`
+  height: 1.5rem;
+`;
+
+const DealsFoundTextSpan = styled.p`
+  font-size: 1.1rem;
 `;
 
 // ***********
