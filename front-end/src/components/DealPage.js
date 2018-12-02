@@ -74,13 +74,19 @@ class DealPage extends React.Component {
 
     const userNameUrl = `/profile/${userName}`;
 
+    //   <a href={dealLink} target="_blank" rel="noopener noreferrer">
+    //   <DealPageImage src={imageUrl} />
+    // </a>
+
     return (
       <div>
         <DealPageContainer>
           <DealPageDealContainer>
-            <a href={dealLink} target="_blank" rel="noopener noreferrer">
-              <DealPageImage src={imageUrl} />
-            </a>
+            <DealPageImageContainer href={dealLink} target="_blank">
+              <DealPageImageStretchContainer>
+                <DealPageImage src={imageUrl} />
+              </DealPageImageStretchContainer>
+            </DealPageImageContainer>
             <DealPageDetailsContainer>
               <DealPageHeatContainer>
                 <VoteDivCold>-</VoteDivCold>
@@ -158,10 +164,41 @@ const DealPageDealContainer = styled.div`
   display: flex;
 `;
 
-const DealPageImage = styled.img`
-  display: inline-block;
+// const DealPageImage = styled.img`
+//   display: inline-block;
+//   width: 200px;
+//   height: 200px;
+//   border-radius: 5px;
+
+//   transition: all 0.2s;
+
+//   &:hover {
+//     transform: scale(1.03);
+//     box-shadow: 1px 2px 8px 0 rgba(0, 0, 0, 0.7);
+//   }
+// `;
+
+const DealPageImageContainer = styled.a`
+  margin: 0;
+  position: relative;
   width: 200px;
-  height: 200px;
+
+  &:before {
+    content: '';
+    display: block;
+    padding: 50%;
+  }
+`;
+
+const DealPageImageStretchContainer = styled.div`
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  background: white;
   border-radius: 5px;
 
   transition: all 0.2s;
@@ -170,6 +207,18 @@ const DealPageImage = styled.img`
     transform: scale(1.03);
     box-shadow: 1px 2px 8px 0 rgba(0, 0, 0, 0.7);
   }
+`;
+
+const DealPageImage = styled.img`
+  margin: auto;
+  display: flex;
+  max-height: 100%;
+  max-width: 100%;
+  /* transform: translate(50%, 50%); */
+
+  overflow: hidden;
+
+  border-radius: 5px;
 `;
 
 const DealPageDetailsContainer = styled.div`
