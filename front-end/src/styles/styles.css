@@ -23,6 +23,7 @@ body {
   --l-size: 3.2rem;
   --xl-size: 4.8rem;
 
+  --medium-grey: rgb(170, 151, 151);
   --light-grey: rgb(230, 211, 211);
   --light-green: rgb(212, 246, 67);
   --green: rgb(145, 231, 63);
@@ -31,7 +32,7 @@ body {
   --twitter-blue: rgb(29, 161, 242);
   --twitter-blue-hover: rgb(55, 187, 255);
   --yellow: rgb(255, 235, 87);
-  --red: rgb(227, 62, 118);
+  --red: rgb(215, 50, 50);
   --purple: rgb(179, 49, 168);
 }
 

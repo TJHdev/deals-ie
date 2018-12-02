@@ -19,7 +19,7 @@ export const Button = styled.button`
     /* background-color: lighten(var(--blue), 10%); */
     /* filter: brightness(50%); */
     transform: translateY(-2px);
-    background-color: var(--blue-lightened);
+    /* background-color: var(--blue-lightened); */
     box-shadow: 1px 2px 8px 0 rgba(0, 0, 0, 0.7);
   }
 
