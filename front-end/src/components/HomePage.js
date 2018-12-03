@@ -11,12 +11,16 @@ class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.onSubmitChangeDealLike = this.onSubmitChangeDealLike.bind(this);
+    this.handleDealLikeSubmit = this.handleDealLikeSubmit.bind(this);
+    this.handleDealLikeUpdate = this.handleDealLikeUpdate.bind(this);
+    this.handleDealLikeDelete = this.handleDealLikeDelete.bind(this);
   }
 
   componentDidMount() {
     const { location } = this.props;
     const { search } = location;
-    console.log('props: ', this.props);
+    // console.log('props: ', this.props);
     fetch(`${window.BACKEND_PATH}/deals${search}`, {
       method: 'GET',
       headers: {
@@ -25,11 +29,73 @@ class HomePage extends React.Component {
     })
       .then(resp => resp.json())
       .then(data => {
-        console.log('data: ', data);
         if (data && data.constructor === Array && data[0].deal_title) {
-          console.log('data before setState:', data);
           this.setState({ dealsArray: data });
         }
+      })
+      .catch(console.log);
+  }
+
+  onSubmitChangeDealLike(dealId, isLike) {
+    const { is_voted, is_like } = this.state.dataArray.user_specific;
+  }
+
+  handleDealLikeSubmit(dealId, isLike) {
+    const token = window.sessionStorage.getItem('token');
+
+    fetch(`${window.BACKEND_PATH}/deals/${dealId}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token
+      },
+      body: JSON.stringify({
+        is_like: isLike
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('***** returned like data: ', data);
+      })
+      .catch(console.log);
+  }
+
+  handleDealLikeUpdate(dealId, isLike) {
+    const token = window.sessionStorage.getItem('token');
+
+    fetch(`${window.BACKEND_PATH}/deals/${dealId}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token
+      },
+      body: JSON.stringify({
+        is_like: isLike
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('***** returned like data: ', data);
+      })
+      .catch(console.log);
+  }
+
+  handleDealLikeDelete(dealId, isLike) {
+    const token = window.sessionStorage.getItem('token');
+
+    fetch(`${window.BACKEND_PATH}/deals/${dealId}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token
+      },
+      body: JSON.stringify({
+        is_like: isLike
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('***** returned like data: ', data);
       })
       .catch(console.log);
   }
@@ -72,12 +138,14 @@ class HomePage extends React.Component {
                 <DealsDealContainer>
                   <DealsTopFlexContainer>
                     <DealsHeatContainer>
-                      <VoteDivCold>-</VoteDivCold>
+                      <VoteDivCold onClick={() => this.onSubmitDealLike(dealId, false)}>
+                        -
+                      </VoteDivCold>
                       <DealHeat>
                         {dealLikes - dealDislikes}
                         &#186;
                       </DealHeat>
-                      <VoteDivHot>+</VoteDivHot>
+                      <VoteDivHot onClick={() => this.onSubmitDealLike(dealId, true)}>+</VoteDivHot>
                     </DealsHeatContainer>
 
                     <OptionsContainer>

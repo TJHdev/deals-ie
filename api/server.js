@@ -99,7 +99,7 @@ app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
 
 app.get("/deals/:dealId", deals.handleGetDeal(db));
-app.get("/deals", deals.handleGetAllDeals(db));
+app.get("/deals", auth.checkAuth(redisC), deals.handleGetAllDeals(db));
 app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 
 // like end points

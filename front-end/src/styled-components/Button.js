@@ -20,7 +20,7 @@ export const Button = styled.button`
     /* filter: brightness(50%); */
     transform: translateY(-2px);
     /* background-color: var(--blue-lightened); */
-    box-shadow: 1px 2px 8px 0 rgba(0, 0, 0, 0.7);
+    box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.7);
   }
 
   &:active {
