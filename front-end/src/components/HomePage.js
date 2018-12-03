@@ -37,7 +37,7 @@ class HomePage extends React.Component {
   }
 
   onSubmitChangeDealLike(dealId, isLike) {
-    const { is_voted, is_like } = this.state.dataArray.user_specific;
+    // const { is_voted, is_like } = this.state.dataArray;
   }
 
   handleDealLikeSubmit(dealId, isLike) {

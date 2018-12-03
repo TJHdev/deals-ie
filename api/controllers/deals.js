@@ -111,8 +111,6 @@ const handleDealSubmit = (db, Joi) => (req, res) => {
   // res.status(200).json(req.body);
 };
 
-const getDeal = db => {};
-
 const handleGetDeal = db => (req, res) => {
   const deal_id = req.params.dealId;
 
@@ -161,6 +159,11 @@ const handleGetDeal = db => (req, res) => {
 };
 
 const handleGetAllDeals = db => (req, res) => {
+  console.log(
+    "******* Authpassed to handleGetDeal: ",
+    res.locals.authorization
+  );
+
   const countLikesSubquery = db
     .count("*")
     .from("deal_likes")
