@@ -12,6 +12,7 @@ const signout = require("./controllers/signout");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
 const deals = require("./controllers/deals");
+const deal_likes = require("./controllers/deal_likes");
 const auth = require("./controllers/authorization");
 
 const PORT = process.env.PORT || 5000;
@@ -96,11 +97,33 @@ app.post("/signin", signin.signinAuthentication(redisC, db, bcrypt));
 app.post("/register", register.handleRegister(db, bcrypt, Joi));
 app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
-// app.get("/profile/:username", profile.handleGetProfile(db));
 
 app.get("/deals/:dealId", deals.handleGetDeal(db));
 app.get("/deals", deals.handleGetAllDeals(db));
 app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
+
+// like end points
+
+app.get(
+  "/deals/:dealId/like",
+  auth.reqAuth(redisC),
+  deal_likes.handleDealLikeGet(db)
+);
+app.post(
+  "/deals/:dealId/like",
+  auth.reqAuth(redisC),
+  deal_likes.handleDealLikeSubmit(db)
+);
+app.patch(
+  "/deals/:dealId/like",
+  auth.reqAuth(redisC),
+  deal_likes.handleDealLikeUpdate(db)
+);
+app.delete(
+  "/deals/:dealId/like",
+  auth.reqAuth(redisC),
+  deal_likes.handleDealLikeDelete(db)
+);
 
 // app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
 
@@ -116,8 +139,3 @@ app.listen(PORT, () => {
 
 // signin.testFunction();
 // console.log("redisClient:", redisClient);
-
-// module.exports = {
-//   redis,
-//   redisClient
-// };

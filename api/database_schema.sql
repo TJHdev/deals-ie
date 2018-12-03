@@ -29,7 +29,7 @@ CREATE TABLE deals (
   deal_ends TIMESTAMPTZ,
   shipping_from VARCHAR(100),
   offline_deal BOOLEAN NOT NULL,
-  deal_NSFW BOOLEAN NOT NULL,
+  deal_nsfw BOOLEAN NOT NULL,
   deal_text VARCHAR(1600) NOT NULL,
   deal_title VARCHAR(255) NOT NULL,
   deal_reviewed BOOLEAN NOT NULL DEFAULT false,
