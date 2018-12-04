@@ -62,6 +62,18 @@ button:disabled {
   font-weight: bold;
 }
 
+/* active heat buttons */
+
+.active_hot {
+  color: white;
+  background-color: var(--red);
+}
+
+.active_cold {
+  color: white;
+  background-color: var(--blue);
+}
+
 /* modal styling */
 
 .ReactModalPortal > div {

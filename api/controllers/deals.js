@@ -159,10 +159,13 @@ const handleGetDeal = db => (req, res) => {
 };
 
 const handleGetAllDeals = db => (req, res) => {
-  console.log(
-    "******* Authpassed to handleGetDeal: ",
-    res.locals.authorization
-  );
+  // console.log(
+  //   "******* Authpassed to handleGetDeal: ",
+  //   res.locals.authorization
+  // );
+  const { authorization } = res.locals;
+  const payload = jwt.decode(authorization);
+  const user_id = payload ? payload.userId : null;
 
   const countLikesSubquery = db
     .count("*")
@@ -177,6 +180,13 @@ const handleGetAllDeals = db => (req, res) => {
     .whereRaw("deal_id=deals.id")
     .andWhere("is_like", "=", false)
     .as("dislikes");
+
+  const isLikeSubquery = db
+    .select("is_like")
+    .from("deal_likes")
+    .whereRaw("deal_id=deals.id")
+    .andWhere("user_id", "=", user_id)
+    .as("is_like");
 
   const pageNumber = req.query.page ? req.query.page - 1 : 0;
   const numberPerPage = 40;
@@ -198,10 +208,12 @@ const handleGetAllDeals = db => (req, res) => {
     "deal_text",
     countLikesSubquery,
     countDislikesSubquery,
+    isLikeSubquery,
     "currency_pound"
   )
     .from("deals")
     .innerJoin("users", "users.id", "=", "deals.user_id")
+    .leftJoin("deal_likes", "deals.id", "=", "deal_likes.deal_id")
     .limit(numberPerPage)
     .offset(offset)
     .then(

@@ -18,13 +18,16 @@ class HomePage extends React.Component {
   }
 
   componentDidMount() {
+    const token = window.sessionStorage.getItem('token');
+
     const { location } = this.props;
     const { search } = location;
     // console.log('props: ', this.props);
     fetch(`${window.BACKEND_PATH}/deals${search}`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        authorization: token
       }
     })
       .then(resp => resp.json())
@@ -123,8 +126,14 @@ class HomePage extends React.Component {
               created_at: createdAt,
               edited_at: editedAt,
               currency_pound: currencyPound,
-              deal_expired: dealExpired
+              deal_expired: dealExpired,
+              is_like: isLike
             } = deal;
+
+            console.log('**********');
+            console.log('dealId: ', dealId);
+            console.log('isLiked: ', isLike);
+            console.log('**********');
 
             const fixedPrice = price ? Math.round(price * 100) / 100 : null;
             const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
@@ -138,14 +147,22 @@ class HomePage extends React.Component {
                 <DealsDealContainer>
                   <DealsTopFlexContainer>
                     <DealsHeatContainer>
-                      <VoteDivCold onClick={() => this.onSubmitDealLike(dealId, false)}>
+                      <VoteDivCold
+                        isLike={isLike}
+                        onClick={() => this.handleDealLikeSubmit(dealId, false)}
+                      >
                         -
                       </VoteDivCold>
                       <DealHeat>
                         {dealLikes - dealDislikes}
                         &#186;
                       </DealHeat>
-                      <VoteDivHot onClick={() => this.onSubmitDealLike(dealId, true)}>+</VoteDivHot>
+                      <VoteDivHot
+                        isLike={isLike}
+                        onClick={() => this.handleDealLikeSubmit(dealId, true)}
+                      >
+                        +
+                      </VoteDivHot>
                     </DealsHeatContainer>
 
                     <OptionsContainer>
@@ -326,7 +343,19 @@ const VoteDivHot = styled.span`
 
   margin: 0.3rem;
 
-  color: var(--red);
+  color: ${props => (props.isLike === true ? 'white' : 'var(--red)')};
+  background-color: ${props => (props.isLike === true ? 'var(--red)' : 'white')};
+
+  /* color: ${props => (props.isLike === true ? 'white' : 'var(--red)')}; */
+  /* background-color: ${props => (props.isLike === true ? 'var(--red)' : 'white')}; */
+  /* ${props => (props.primary ? 'white' : 'palevioletred')}; */
+  /* color: var(--red); */
+
+    /* ${props =>
+      props.isLike && {
+        background: 'red',
+        color: 'blue'
+      }} */
 
   vertical-align: middle;
   line-height: 1.05;
