@@ -62,7 +62,9 @@ const handleDealLikeSubmit = db => (req, res) => {
             .returning("is_like")
             .then(deal_like => {
               console.log(deal_like);
-              res.status(200).json({ is_like: deal_like[0] });
+              res.status(200).json({
+                is_like: deal_like[0]
+              });
             })
             .catch(err => {
               console.log(err);
@@ -112,7 +114,9 @@ const handleDealLikeUpdate = db => (req, res) => {
             .returning("is_like")
             .then(deal_like => {
               console.log(deal_like);
-              res.status(200).json({ is_like: deal_like[0] });
+              res.status(200).json({
+                is_like: deal_like[0]
+              });
             })
             .catch(err => {
               console.log(err);

@@ -5,6 +5,12 @@ import styled from 'styled-components';
 
 // import ContentContainer from '../styled-components/ContentContainer';
 import { Button } from '../styled-components/Button';
+import {
+  DealsHeatContainer,
+  VoteDivCold,
+  DealHeat,
+  VoteDivHot
+} from '../styled-components/deals-components/DealsHeatContainer';
 import { FacebookPostButton, TwitterPostButton } from '../styled-components/SocialMediaPosts';
 
 class DealPage extends React.Component {
@@ -14,13 +20,18 @@ class DealPage extends React.Component {
 
     this.onSubmitComment = this.onSubmitComment.bind(this);
     this.onVisitDeal = this.onVisitDeal.bind(this);
+
+    // Deal heat
+    this.onSubmitChangeDealLikeHot = this.onSubmitChangeDealLikeHot.bind(this);
+    this.onSubmitChangeDealLikeCold = this.onSubmitChangeDealLikeCold.bind(this);
+    this.handleDealLikeSubmit = this.handleDealLikeSubmit.bind(this);
+    this.handleDealLikeUpdate = this.handleDealLikeUpdate.bind(this);
+    this.handleDealLikeDelete = this.handleDealLikeDelete.bind(this);
   }
 
   componentDidMount() {
     const { location } = this.props;
     const { pathname } = location;
-    // console.log('pathname: ', pathname);
-    // console.log('props: ', this.props);
     fetch(`${window.BACKEND_PATH}${pathname}`, {
       method: 'GET',
       headers: {
@@ -32,7 +43,7 @@ class DealPage extends React.Component {
         if (data && data.deal_title) {
           console.log(this.props);
           console.log(data);
-          this.setState({ ...data });
+          this.setState({ dealsArray: [data] });
         }
       })
       .catch(console.log);
@@ -73,10 +84,7 @@ class DealPage extends React.Component {
     )}&text=${encodeURIComponent(dealTitle)}&via=deals-ie`;
 
     const userNameUrl = `/profile/${userName}`;
-
-    //   <a href={dealLink} target="_blank" rel="noopener noreferrer">
-    //   <DealPageImage src={imageUrl} />
-    // </a>
+    const dealLikesTotal = dealLikes - dealDislikes;
 
     return (
       <div>
@@ -88,14 +96,24 @@ class DealPage extends React.Component {
               </DealPageImageStretchContainer>
             </DealPageImageContainer>
             <DealPageDetailsContainer>
-              <DealPageHeatContainer>
-                <VoteDivCold>-</VoteDivCold>
-                <DealHeat>
-                  {dealLikes - dealDislikes}
+              <DealsHeatContainer>
+                <VoteDivCold
+                  isLike={isLike}
+                  onClick={() => this.onSubmitChangeDealLikeCold(dealId, isLike)}
+                >
+                  -
+                </VoteDivCold>
+                <DealHeat dealLikesTotal={dealLikesTotal}>
+                  {dealLikesTotal}
                   &#186;
                 </DealHeat>
-                <VoteDivHot>+</VoteDivHot>
-              </DealPageHeatContainer>
+                <VoteDivHot
+                  isLike={isLike}
+                  onClick={() => this.onSubmitChangeDealLikeHot(dealId, isLike)}
+                >
+                  +
+                </VoteDivHot>
+              </DealsHeatContainer>
 
               <DealPageTitleContainer>{dealTitle}</DealPageTitleContainer>
 
@@ -139,7 +157,7 @@ class DealPage extends React.Component {
           </a>
         </DealPageContainer>
       </div>
-    );
+    ) : null;
   }
 }
 
@@ -204,7 +222,6 @@ const DealPageImageStretchContainer = styled.div`
   transition: all 0.2s;
 
   &:hover {
-    transform: scale(1.03);
     box-shadow: 1px 2px 8px 0 rgba(0, 0, 0, 0.7);
   }
 `;
@@ -229,73 +246,6 @@ const DealPageDetailsContainer = styled.div`
   flex-grow: 1;
   height: 200px;
   padding: 0 1rem;
-`;
-
-const DealPageHeatContainer = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border-radius: 10px;
-  flex-shrink: 1;
-`;
-
-const VoteDivHot = styled.span`
-  cursor: pointer;
-  display: inline-block;
-  font-size: 3rem;
-
-  height: 3rem;
-  width: 3rem;
-  padding-left: 0.65rem;
-
-  margin: 0 1rem;
-
-  color: red;
-
-  vertical-align: middle;
-  line-height: 1.05;
-  border-radius: 50px;
-
-  transition: background-color 0.4s;
-
-  &:hover {
-    color: white;
-    background-color: red;
-  }
-`;
-
-const VoteDivCold = styled.span`
-  cursor: pointer;
-  display: inline-block;
-  font-size: 3rem;
-
-  height: 3rem;
-  width: 3rem;
-  padding-left: 0.97rem;
-
-  margin: 0 1rem;
-
-  color: blue;
-
-  vertical-align: middle;
-  line-height: 0.87;
-  border-radius: 50px;
-
-  transition: background-color 0.4s;
-
-  &:hover {
-    color: white;
-    background-color: blue;
-  }
-`;
-
-const DealHeat = styled.span`
-  font-size: 3rem;
-  font-weight: 600;
-  border-radius: 3px;
-  margin: 0.5rem 0;
-  padding: 0.2rem;
-  line-height: 1;
 `;
 
 const DealPageTitleContainer = styled.div`

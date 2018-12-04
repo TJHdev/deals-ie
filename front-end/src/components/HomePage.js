@@ -7,6 +7,12 @@ import cloneDeep from 'lodash/cloneDeep';
 
 // import ContentContainer from '../styled-components/ContentContainer';
 import { Button } from '../styled-components/Button';
+import {
+  DealsHeatContainer,
+  VoteDivCold,
+  DealHeat,
+  VoteDivHot
+} from '../styled-components/deals-components/DealsHeatContainer';
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -42,36 +48,46 @@ class HomePage extends React.Component {
   }
 
   onSubmitChangeDealLikeHot(dealId, isLike) {
+    const token = window.sessionStorage.getItem('token');
+    if (!token) {
+      console.log('No token, therefore redirect to signin modal');
+      return;
+    }
     if (isLike === null) {
       // submit isLike: true
-      this.handleDealLikeSubmit(dealId, true);
+      this.handleDealLikeSubmit(dealId, true, true);
     } else if (isLike === false) {
       // patch deal_id in deal_likes to be true
-      this.handleDealLikeUpdate(dealId, true);
+      this.handleDealLikeUpdate(dealId, true, true);
     } else if (isLike === true) {
       // delete deal_id from deal_likes
-      this.handleDealLikeDelete(dealId);
+      this.handleDealLikeDelete(dealId, true);
     } else {
       console.log('isLike: Not set to a valid data type');
     }
   }
 
   onSubmitChangeDealLikeCold(dealId, isLike) {
+    const token = window.sessionStorage.getItem('token');
+    if (!token) {
+      console.log('No token, therefore redirect to signin modal');
+      return;
+    }
     if (isLike === null) {
       // submit isLike: false
-      this.handleDealLikeSubmit(dealId, false);
+      this.handleDealLikeSubmit(dealId, false, false);
     } else if (isLike === true) {
       // patch deal_id in deal_likes to be false
-      this.handleDealLikeUpdate(dealId, false);
+      this.handleDealLikeUpdate(dealId, false, false);
     } else if (isLike === false) {
       // delete deal_id from deal_likes
-      this.handleDealLikeDelete(dealId);
+      this.handleDealLikeDelete(dealId, false);
     } else {
       console.log('isLike: Not set to a valid data type');
     }
   }
 
-  handleDealLikeSubmit(dealId, isLike) {
+  handleDealLikeSubmit(dealId, isLike, isHot) {
     const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/deals/${dealId}/like`, {
@@ -89,12 +105,18 @@ class HomePage extends React.Component {
         const clonedState = cloneDeep(this.state);
         const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
         clonedState.dealsArray[index].is_like = data.is_like;
+        if (isHot) {
+          clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) + 1;
+        } else {
+          clonedState.dealsArray[index].dislikes =
+            Number(clonedState.dealsArray[index].dislikes) + 1;
+        }
         this.setState(clonedState);
       })
       .catch(console.log);
   }
 
-  handleDealLikeUpdate(dealId, isLike) {
+  handleDealLikeUpdate(dealId, isLike, isHot) {
     const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/deals/${dealId}/like`, {
@@ -111,13 +133,20 @@ class HomePage extends React.Component {
       .then(data => {
         const clonedState = cloneDeep(this.state);
         const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
+
         clonedState.dealsArray[index].is_like = data.is_like;
+        if (isHot) {
+          clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) + 2;
+        } else {
+          clonedState.dealsArray[index].dislikes =
+            Number(clonedState.dealsArray[index].dislikes) + 2;
+        }
         this.setState(clonedState);
       })
       .catch(console.log);
   }
 
-  handleDealLikeDelete(dealId) {
+  handleDealLikeDelete(dealId, hot) {
     const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/deals/${dealId}/like`, {
@@ -132,6 +161,13 @@ class HomePage extends React.Component {
         const clonedState = cloneDeep(this.state);
         const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
         clonedState.dealsArray[index].is_like = data.is_like;
+        if (hot) {
+          clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) - 1;
+        } else {
+          clonedState.dealsArray[index].dislikes =
+            Number(clonedState.dealsArray[index].dislikes) - 1;
+        }
+
         this.setState(clonedState);
       })
       .catch(console.log);
@@ -147,8 +183,8 @@ class HomePage extends React.Component {
             const {
               id: dealId,
               image_url: imageUrl,
-              likes: dealLikes,
               is_like: isLike,
+              likes: dealLikes,
               dislikes: dealDislikes,
               deal_title: dealTitle,
               price,
@@ -338,83 +374,6 @@ const DealsTopFlexContainer = styled.div`
   justify-content: space-between;
   align-items: stretch;
   width: 100%;
-`;
-
-// **************
-// Heat Container
-// **************
-
-const DealsHeatContainer = styled.div`
-  border: solid 1px var(--medium-grey);
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border-radius: 5px;
-  flex-shrink: 1;
-`;
-
-const DealHeat = styled.span`
-  font-size: 2.2rem;
-  font-weight: 600;
-  border-radius: 3px;
-  margin: 0.5rem 0;
-  padding: 0 0.35rem;
-  line-height: 1;
-
-  color: ${props => (Number(props.dealLikesTotal) >= 0 ? 'var(--red)' : 'var(--blue)')};
-  /* background-color: ${props => (Number(props.dealLikes) >= 0 ? 'red' : 'blue')}; */
-`;
-
-const VoteDivHot = styled.span`
-  cursor: pointer;
-  display: inline-block;
-  font-size: 3rem;
-
-  height: 3rem;
-  width: 3rem;
-  padding-left: 0.65rem;
-
-  margin: 0.3rem;
-
-  color: ${props => (props.isLike === true ? 'white' : 'var(--red)')};
-  background-color: ${props => (props.isLike === true ? 'var(--red)' : 'white')};
-
-  vertical-align: middle;
-  line-height: 1.05;
-  border-radius: 5px;
-
-  transition: background-color 0.4s;
-
-  &:hover {
-    color: white;
-    background-color: var(--red);
-  }
-`;
-
-const VoteDivCold = styled.span`
-  cursor: pointer;
-  display: inline-block;
-  font-size: 3rem;
-
-  height: 3rem;
-  width: 3rem;
-  padding-left: 0.97rem;
-
-  margin: 0.3rem;
-
-  color: ${props => (props.isLike === false ? 'white' : 'var(--blue)')};
-  background-color: ${props => (props.isLike === false ? 'var(--blue)' : 'white')};
-
-  vertical-align: middle;
-  line-height: 0.87;
-  border-radius: 5px;
-
-  transition: background-color 0.4s;
-
-  &:hover {
-    color: white;
-    background-color: var(--blue);
-  }
 `;
 
 // **************
