@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import format from 'date-fns/format';
+import cloneDeep from 'lodash/cloneDeep';
 
 // import ContentContainer from '../styled-components/ContentContainer';
 import { Button } from '../styled-components/Button';
@@ -11,7 +12,8 @@ class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onSubmitChangeDealLike = this.onSubmitChangeDealLike.bind(this);
+    this.onSubmitChangeDealLikeHot = this.onSubmitChangeDealLikeHot.bind(this);
+    this.onSubmitChangeDealLikeCold = this.onSubmitChangeDealLikeCold.bind(this);
     this.handleDealLikeSubmit = this.handleDealLikeSubmit.bind(this);
     this.handleDealLikeUpdate = this.handleDealLikeUpdate.bind(this);
     this.handleDealLikeDelete = this.handleDealLikeDelete.bind(this);
@@ -39,8 +41,34 @@ class HomePage extends React.Component {
       .catch(console.log);
   }
 
-  onSubmitChangeDealLike(dealId, isLike) {
-    // const { is_voted, is_like } = this.state.dataArray;
+  onSubmitChangeDealLikeHot(dealId, isLike) {
+    if (isLike === null) {
+      // submit isLike: true
+      this.handleDealLikeSubmit(dealId, true);
+    } else if (isLike === false) {
+      // patch deal_id in deal_likes to be true
+      this.handleDealLikeUpdate(dealId, true);
+    } else if (isLike === true) {
+      // delete deal_id from deal_likes
+      this.handleDealLikeDelete(dealId);
+    } else {
+      console.log('isLike: Not set to a valid data type');
+    }
+  }
+
+  onSubmitChangeDealLikeCold(dealId, isLike) {
+    if (isLike === null) {
+      // submit isLike: false
+      this.handleDealLikeSubmit(dealId, false);
+    } else if (isLike === true) {
+      // patch deal_id in deal_likes to be false
+      this.handleDealLikeUpdate(dealId, false);
+    } else if (isLike === false) {
+      // delete deal_id from deal_likes
+      this.handleDealLikeDelete(dealId);
+    } else {
+      console.log('isLike: Not set to a valid data type');
+    }
   }
 
   handleDealLikeSubmit(dealId, isLike) {
@@ -58,7 +86,10 @@ class HomePage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('***** returned like data: ', data);
+        const clonedState = cloneDeep(this.state);
+        const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
+        clonedState.dealsArray[index].is_like = data.is_like;
+        this.setState(clonedState);
       })
       .catch(console.log);
   }
@@ -67,7 +98,7 @@ class HomePage extends React.Component {
     const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/deals/${dealId}/like`, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         authorization: token
@@ -78,27 +109,30 @@ class HomePage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('***** returned like data: ', data);
+        const clonedState = cloneDeep(this.state);
+        const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
+        clonedState.dealsArray[index].is_like = data.is_like;
+        this.setState(clonedState);
       })
       .catch(console.log);
   }
 
-  handleDealLikeDelete(dealId, isLike) {
+  handleDealLikeDelete(dealId) {
     const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/deals/${dealId}/like`, {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         authorization: token
-      },
-      body: JSON.stringify({
-        is_like: isLike
-      })
+      }
     })
       .then(response => response.json())
       .then(data => {
-        console.log('***** returned like data: ', data);
+        const clonedState = cloneDeep(this.state);
+        const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
+        clonedState.dealsArray[index].is_like = data.is_like;
+        this.setState(clonedState);
       })
       .catch(console.log);
   }
@@ -114,6 +148,7 @@ class HomePage extends React.Component {
               id: dealId,
               image_url: imageUrl,
               likes: dealLikes,
+              is_like: isLike,
               dislikes: dealDislikes,
               deal_title: dealTitle,
               price,
@@ -126,14 +161,8 @@ class HomePage extends React.Component {
               created_at: createdAt,
               edited_at: editedAt,
               currency_pound: currencyPound,
-              deal_expired: dealExpired,
-              is_like: isLike
+              deal_expired: dealExpired
             } = deal;
-
-            console.log('**********');
-            console.log('dealId: ', dealId);
-            console.log('isLiked: ', isLike);
-            console.log('**********');
 
             const fixedPrice = price ? Math.round(price * 100) / 100 : null;
             const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
@@ -141,6 +170,7 @@ class HomePage extends React.Component {
             const userNameUrl = `/profile/${userName}`;
             const dealPageUrl = `/deals/${dealId}`;
             const foundDate = format(createdAt, 'Do MMM');
+            const dealLikesTotal = dealLikes - dealDislikes;
 
             return (
               <DealsCardContainer key={dealId}>
@@ -149,17 +179,17 @@ class HomePage extends React.Component {
                     <DealsHeatContainer>
                       <VoteDivCold
                         isLike={isLike}
-                        onClick={() => this.handleDealLikeSubmit(dealId, false)}
+                        onClick={() => this.onSubmitChangeDealLikeCold(dealId, isLike)}
                       >
                         -
                       </VoteDivCold>
-                      <DealHeat>
-                        {dealLikes - dealDislikes}
+                      <DealHeat dealLikesTotal={dealLikesTotal}>
+                        {dealLikesTotal}
                         &#186;
                       </DealHeat>
                       <VoteDivHot
                         isLike={isLike}
-                        onClick={() => this.handleDealLikeSubmit(dealId, true)}
+                        onClick={() => this.onSubmitChangeDealLikeHot(dealId, isLike)}
                       >
                         +
                       </VoteDivHot>
@@ -328,8 +358,11 @@ const DealHeat = styled.span`
   font-weight: 600;
   border-radius: 3px;
   margin: 0.5rem 0;
-  padding: 0;
+  padding: 0 0.35rem;
   line-height: 1;
+
+  color: ${props => (Number(props.dealLikesTotal) >= 0 ? 'var(--red)' : 'var(--blue)')};
+  /* background-color: ${props => (Number(props.dealLikes) >= 0 ? 'red' : 'blue')}; */
 `;
 
 const VoteDivHot = styled.span`
@@ -345,17 +378,6 @@ const VoteDivHot = styled.span`
 
   color: ${props => (props.isLike === true ? 'white' : 'var(--red)')};
   background-color: ${props => (props.isLike === true ? 'var(--red)' : 'white')};
-
-  /* color: ${props => (props.isLike === true ? 'white' : 'var(--red)')}; */
-  /* background-color: ${props => (props.isLike === true ? 'var(--red)' : 'white')}; */
-  /* ${props => (props.primary ? 'white' : 'palevioletred')}; */
-  /* color: var(--red); */
-
-    /* ${props =>
-      props.isLike && {
-        background: 'red',
-        color: 'blue'
-      }} */
 
   vertical-align: middle;
   line-height: 1.05;
@@ -380,7 +402,8 @@ const VoteDivCold = styled.span`
 
   margin: 0.3rem;
 
-  color: var(--blue);
+  color: ${props => (props.isLike === false ? 'white' : 'var(--blue)')};
+  background-color: ${props => (props.isLike === false ? 'var(--blue)' : 'white')};
 
   vertical-align: middle;
   line-height: 0.87;

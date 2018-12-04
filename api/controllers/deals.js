@@ -213,7 +213,6 @@ const handleGetAllDeals = db => (req, res) => {
   )
     .from("deals")
     .innerJoin("users", "users.id", "=", "deals.user_id")
-    .leftJoin("deal_likes", "deals.id", "=", "deal_likes.deal_id")
     .limit(numberPerPage)
     .offset(offset)
     .then(

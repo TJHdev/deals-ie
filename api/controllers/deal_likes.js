@@ -10,7 +10,7 @@ const handleDealLikeGet = db => (req, res) => {
     return res.status(400).json("No userId in payload");
   }
 
-  db.select("deal_id", "is_like")
+  db.select("is_like")
     .from("deal_likes")
     .where("user_id", "=", user_id)
     .andWhere("deal_id", "=", deal_id)
@@ -59,10 +59,10 @@ const handleDealLikeSubmit = db => (req, res) => {
             is_like: is_like
           })
             .into("deal_likes")
-            .returning("*")
+            .returning("is_like")
             .then(deal_like => {
               console.log(deal_like);
-              res.status(200).json(deal_like[0]);
+              res.status(200).json({ is_like: deal_like[0] });
             })
             .catch(err => {
               console.log(err);
@@ -109,10 +109,10 @@ const handleDealLikeUpdate = db => (req, res) => {
             .where("user_id", "=", user_id)
             .andWhere("deal_id", "=", deal_id)
             .into("deal_likes")
-            .returning("*")
+            .returning("is_like")
             .then(deal_like => {
               console.log(deal_like);
-              res.status(200).json(deal_like[0]);
+              res.status(200).json({ is_like: deal_like[0] });
             })
             .catch(err => {
               console.log(err);
@@ -156,9 +156,9 @@ const handleDealLikeDelete = db => (req, res) => {
             .where("user_id", "=", user_id)
             .andWhere("deal_id", "=", deal_id)
             .into("deal_likes")
-            .returning("*")
+            .returning("is_like")
             .then(deal_like => {
-              res.status(200).json({ deleted: deal_like[0] });
+              res.status(200).json({ is_like: null });
             })
             .catch(err => {
               console.log(err);
