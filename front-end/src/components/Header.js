@@ -119,20 +119,20 @@ class Header extends React.Component {
           <HeaderContent>
             <HeaderTitle to="/">
               <LogoImg src="/images/EireDealsLogo.png" alt="Eiredeals logo" />
-              <HeaderText>&euro;ireDeals</HeaderText>
+              <HeaderText>Éire Deals</HeaderText>
             </HeaderTitle>
             <NavContent>
               <SearchContainer>
-                <SearchField />
-                <NavSearch>Search</NavSearch>
+                <SearchField placeholder="Search for brands, models, products etc" />
+                <HeaderButton>Search</HeaderButton>
               </SearchContainer>
               <NavAnchor to="/deals">
-                <button type="button">Submit Deal</button>
+                <HeaderButton type="button">Submit Deal</HeaderButton>
               </NavAnchor>
 
-              <button type="button" onClick={this.handleOpenRegisterModal}>
+              <HeaderButton type="button" onClick={this.handleOpenRegisterModal}>
                 Join
-              </button>
+              </HeaderButton>
             </NavContent>
           </HeaderContent>
         </ContentContainer>
@@ -166,6 +166,7 @@ const HeaderContent = styled.div`
 
 const LogoImg = styled.img`
   margin-right: 1rem;
+  height: 40px;
 `;
 
 const HeaderTitle = styled(Link)`
@@ -188,11 +189,51 @@ const NavContent = styled.div`
 
 const SearchContainer = styled.div``;
 
-const SearchField = styled.input``;
+const SearchField = styled.input`
+  border: 4px solid var(--green);
+  padding: 0.7rem;
+  border-radius: 15px;
+  outline: none;
+  width: 330px;
+  transition: all 0.4s;
 
-const NavSearch = styled.button``;
+  &:active,
+  &:focus {
+    border: 4px solid var(--red);
+  }
+`;
 
 const NavAnchor = styled(Link)``;
+
+const HeaderButton = styled.button`
+  background-color: var(--red);
+  color: white;
+  font-size: var(--font-size-large);
+  font-weight: 300;
+  border: none;
+  border-radius: 5px;
+  padding: var(--xs-size);
+  /* margin: var(--xs-size) 0; */
+  margin-left: var(--xs-size);
+
+  display: inline-block;
+  text-decoration: none;
+  line-height: 1; // dictates the height of a button
+  transition: all 0.2s;
+
+  &:hover {
+    /* background-color: lighten(var(--green), 10%); */
+    /* filter: brightness(50%); */
+    transform: translateY(-2px);
+    /* background-color: var(--green-lightened); */
+    box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.7);
+  }
+
+  &:active {
+    box-shadow: none;
+    transform: translateY(2px);
+  }
+`;
 
 export default withRouter(Header);
 

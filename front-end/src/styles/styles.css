@@ -27,7 +27,9 @@ body {
   --medium-grey: rgb(170, 151, 151);
   --light-grey: rgb(230, 211, 211);
   --light-green: rgb(212, 246, 67);
-  --green: rgb(0, 158, 96);
+  /* --green: rgb(0, 158, 96); */
+  --green: rgb(104, 135, 27);
+  --irish-orange: rgb(200, 125, 0);
   --blue: rgb(74, 106, 181);
   --blue-lightened: rgb(99, 132, 207);
   --twitter-blue: rgb(29, 161, 242);
