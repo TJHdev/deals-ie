@@ -1,19 +1,40 @@
 import styled from 'styled-components';
 
+export const SocialMediaImg = styled.img`
+  margin-right: 0.5rem;
+  height: var(--ml-size);
+`;
+
+export const SocialMediaAnchorTag = styled.a`
+  display: inline-block;
+  text-decoration: none;
+
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+  }
+`;
+
 export const FacebookPostButton = styled.button`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
   background-color: var(--blue);
   color: white;
   font-size: var(--font-size-large);
   font-weight: 300;
   border: none;
   border-radius: 5px;
-  padding: var(--s-size);
+  padding: var(--xs-size);
   margin: var(--xs-size) 0;
   margin-right: 1rem;
 
-  display: inline-block;
   text-decoration: none;
-  line-height: 1; // dictates the height of a button
+  /* line-height: 1; // dictates the height of a button */
   transition: all 0.2s;
 
   &:hover {

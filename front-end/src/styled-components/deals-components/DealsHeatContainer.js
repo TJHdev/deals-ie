@@ -1,24 +1,5 @@
 import styled from 'styled-components';
 
-// <DealsHeatContainer>
-// <VoteDivCold
-//   isLike={isLike}
-//   onClick={() => this.onSubmitChangeDealLikeCold(dealId, isLike)}
-// >
-//   -
-// </VoteDivCold>
-// <DealHeat dealLikesTotal={dealLikesTotal}>
-//   {dealLikesTotal}
-//   &#186;
-// </DealHeat>
-// <VoteDivHot
-//   isLike={isLike}
-//   onClick={() => this.onSubmitChangeDealLikeHot(dealId, isLike)}
-// >
-//   +
-// </VoteDivHot>
-// </DealsHeatContainer>
-
 // **************
 // Heat Container
 // **************

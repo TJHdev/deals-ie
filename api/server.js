@@ -98,7 +98,7 @@ app.post("/register", register.handleRegister(db, bcrypt, Joi));
 app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
 
-app.get("/deals/:dealId", deals.handleGetDeal(db));
+app.get("/deals/:dealId", auth.checkAuth(redisC), deals.handleGetDeal(db));
 app.get("/deals", auth.checkAuth(redisC), deals.handleGetAllDeals(db));
 app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 

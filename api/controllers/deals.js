@@ -112,6 +112,10 @@ const handleDealSubmit = (db, Joi) => (req, res) => {
 };
 
 const handleGetDeal = db => (req, res) => {
+  const { authorization } = res.locals;
+  const payload = jwt.decode(authorization);
+  const user_id = payload ? payload.userId : null;
+
   const deal_id = req.params.dealId;
 
   const countLikesSubquery = db
@@ -128,7 +132,15 @@ const handleGetDeal = db => (req, res) => {
     .andWhere("is_like", "=", false)
     .as("dislikes");
 
+  const isLikeSubquery = db
+    .select("is_like")
+    .from("deal_likes")
+    .whereRaw("deal_id=deals.id")
+    .andWhere("user_id", "=", user_id)
+    .as("is_like");
+
   db.select(
+    "deals.id",
     "image_url",
     "deal_title",
     "price",
@@ -143,6 +155,7 @@ const handleGetDeal = db => (req, res) => {
     "deal_text",
     countLikesSubquery,
     countDislikesSubquery,
+    isLikeSubquery,
     "currency_pound"
   )
     .from("deals")
