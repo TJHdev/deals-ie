@@ -28,7 +28,7 @@ export const RadioLabel = styled.label`
 export const RadioButton = styled.span`
   height: 2.2rem;
   width: 2.2rem;
-  border: 4px solid var(--blue);
+  border: 4px solid var(--green);
   border-radius: 50%;
   display: inline-block;
   position: absolute;
@@ -45,7 +45,7 @@ export const RadioButton = styled.span`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: var(--blue);
+    background-color: var(--green);
     opacity: 0;
     transition: opacity 0.2s;
   }

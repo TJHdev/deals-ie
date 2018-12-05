@@ -6,40 +6,7 @@ import RegisterModal from './RegisterPage';
 import LoginModal from './LoginPage';
 
 import ContentContainer from '../styled-components/ContentContainer';
-
-const NavbarHeader = styled.header`
-  background-color: var(--blue);
-`;
-
-const HeaderContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0; /* was $s-sizeS */
-`;
-
-const HeaderTitle = styled(Link)`
-  color: white;
-  text-decoration: none;
-`;
-
-const HeaderText = styled.h1`
-  margin: 0;
-`;
-
-const NavContent = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`;
-
-const SearchContainer = styled.div``;
-
-const SearchField = styled.input``;
-
-const NavSearch = styled.button``;
-
-const NavAnchor = styled(Link)``;
+// import EireDealsLogo from '../../public/images/EireDealsLogo.png'
 
 class Header extends React.Component {
   static propTypes = {
@@ -151,6 +118,7 @@ class Header extends React.Component {
         <ContentContainer>
           <HeaderContent>
             <HeaderTitle to="/">
+              <LogoImg src="/images/EireDealsLogo.png" alt="Eiredeals logo" />
               <HeaderText>&euro;ireDeals</HeaderText>
             </HeaderTitle>
             <NavContent>
@@ -184,6 +152,47 @@ class Header extends React.Component {
     );
   }
 }
+
+const NavbarHeader = styled.header`
+  background-color: var(--green);
+`;
+
+const HeaderContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0; /* was $s-sizeS */
+`;
+
+const LogoImg = styled.img`
+  margin-right: 1rem;
+`;
+
+const HeaderTitle = styled(Link)`
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+`;
+
+const HeaderText = styled.h1`
+  display: inline-block;
+  margin: 0;
+`;
+
+const NavContent = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const SearchContainer = styled.div``;
+
+const SearchField = styled.input``;
+
+const NavSearch = styled.button``;
+
+const NavAnchor = styled(Link)``;
 
 export default withRouter(Header);
 

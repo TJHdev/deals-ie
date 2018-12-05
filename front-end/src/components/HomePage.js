@@ -586,7 +586,7 @@ const ReadMoreAnchor = styled(Link)`
   flex-grow: 0;
 
   cursor: pointer;
-  color: var(--blue);
+  color: var(--green);
   font-weight: 600;
   font-size: 1.3rem;
   background-color: white;

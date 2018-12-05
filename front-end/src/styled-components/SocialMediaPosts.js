@@ -38,7 +38,7 @@ export const FacebookPostButton = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    /* background-color: lighten(var(--blue), 10%); */
+    /* background-color: lighten(var(--green), 10%); */
     /* filter: brightness(50%); */
     transform: translateY(-2px);
     background-color: var(--blue-lightened);
@@ -55,7 +55,7 @@ export const TwitterPostButton = styled(FacebookPostButton)`
   background-color: var(--twitter-blue);
 
   &:hover {
-    /* background-color: lighten(var(--blue), 10%); */
+    /* background-color: lighten(var(--green), 10%); */
     /* filter: brightness(50%); */
 
     background-color: var(--twitter-blue-hover);

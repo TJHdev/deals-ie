@@ -473,7 +473,7 @@ const DealPageDetailsBottomContainer = styled.div`
 `;
 
 const DealPagePrice = styled.span`
-  color: var(--blue);
+  color: var(--red);
 `;
 
 const DealPageNextBestPrice = styled.span`

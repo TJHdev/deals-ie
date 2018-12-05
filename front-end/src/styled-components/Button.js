@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Button = styled.button`
-  background-color: var(--blue);
+  background-color: var(--green);
   color: white;
   font-size: var(--font-size-large);
   font-weight: 300;
@@ -16,10 +16,10 @@ export const Button = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    /* background-color: lighten(var(--blue), 10%); */
+    /* background-color: lighten(var(--green), 10%); */
     /* filter: brightness(50%); */
     transform: translateY(-2px);
-    /* background-color: var(--blue-lightened); */
+    /* background-color: var(--green-lightened); */
     box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.7);
   }
 
@@ -53,7 +53,7 @@ export const BackgroundButton = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    /* background-color: lighten(var(--blue), 10%); */
+    /* background-color: lighten(var(--green), 10%); */
     /* filter: brightness(120%); */
     color: black;
   }
