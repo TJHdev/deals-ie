@@ -49,9 +49,9 @@ class SubmitDeal extends React.Component {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        if (data && data.title) {
+        if (data && data.deal_title) {
           // loadUser(user);
-          history.push(`/deals/${data.id}`);
+          history.push(`/deals/${data.id}`); // .push is not a function?
         }
       })
       .catch(console.log);

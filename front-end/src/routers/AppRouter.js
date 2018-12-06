@@ -7,6 +7,7 @@ import DealPage from '../components/DealPage';
 import SubmitDealPage from '../components/SubmitDealPage';
 import Header from '../components/Header';
 import ProfilePage from '../components/ProfilePage';
+import PasswordPage from '../components/PasswordPage';
 
 // import DashboardPage from '../components/DashboardPage';
 // import NotFoundPage from '../components/NotFoundPage';
@@ -77,6 +78,8 @@ class AppRouter extends React.Component {
             <PublicRoute exact path="/" component={HomePage} />
             <PublicRoute path="/deals/:deal_id" component={DealPage} />
             <PublicRoute path="/profile/:username" component={ProfilePage} />
+            <PublicRoute path="/reset-password/:token" component={PasswordPage} />
+            <PublicRoute path="/complete-signup/:token" component={PasswordPage} />
             <PrivateRoute
               path="/deals"
               component={SubmitDealPage}
