@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import RegisterModal from './RegisterPage';
-import LoginModal from './LoginPage';
+import RegisterModal from './login-register/RegisterPage';
+import LoginModal from './login-register/LoginPage';
 
 import ContentContainer from '../styled-components/ContentContainer';
 // import EireDealsLogo from '../../public/images/EireDealsLogo.png'
@@ -29,7 +29,7 @@ class Header extends React.Component {
   }
 
   onSubmitRegister(values, setErrors) {
-    const { loadUser } = this.props;
+    const { history, loadUser } = this.props;
     fetch(`${window.BACKEND_PATH}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -39,9 +39,9 @@ class Header extends React.Component {
       .then(data => {
         console.log(data);
         if (data && data.email) {
-          loadUser(data);
-          this.handleCloseLoginModal();
-          history.push('/');
+          // loadUser(data);
+          this.handleCloseRegisterModal();
+          history.push('/complete-signup');
         } else {
           setErrors(data.error);
         }

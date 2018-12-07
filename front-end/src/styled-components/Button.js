@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Button = styled.button`
   background-color: var(--green);
@@ -57,8 +58,26 @@ export const BackgroundButton = styled.button`
     /* filter: brightness(120%); */
     color: black;
   }
+
+  &:hover span {
+    color: black;
+  }
+`;
+
+export const SignUpHighlightSpan = styled.span`
+  color: var(--green);
+  /* color: green; */
+  font-weight: 600;
+  transition: all 0.2s;
 `;
 
 export const SmallBackgroundButton = styled(BackgroundButton)`
+  padding: 0.75rem;
+  display: block;
+  border: 1px solid grey;
   font-size: var(--font-size-small);
+`;
+
+export const StyledLink = styled(Link)`
+  text-decoration: none;
 `;

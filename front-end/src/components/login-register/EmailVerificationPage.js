@@ -13,29 +13,29 @@ import {
   CheckboxField,
   StyledErrorMessage,
   ErrorSpan
-} from '../styled-components/FormikStyles';
+} from '../../styled-components/FormikStyles';
 import {
   RadioContainer,
   RadioGroup,
   RadioInput,
   RadioLabel,
   RadioButton
-} from '../styled-components/Radio';
-import Label from '../styled-components/Label';
-import { ContentContainerPasswordForm } from '../styled-components/ContentContainer';
-import { Button } from '../styled-components/Button';
+} from '../../styled-components/Radio';
+import Label from '../../styled-components/Label';
+import { ContentContainerPasswordForm } from '../../styled-components/ContentContainer';
+import { Button } from '../../styled-components/Button';
 
-class SubmitDeal extends React.Component {
+class EmailVerificationPage extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
-    this.onSubmitDeal = this.onSubmitPassword.bind(this);
+    this.onSubmitEmail = this.onSubmitEmail.bind(this);
   }
 
-  onSubmitPassword(values) {
+  onSubmitEmail(values) {
     // const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/deals`, {
@@ -59,19 +59,38 @@ class SubmitDeal extends React.Component {
   render() {
     return (
       <ContentContainerPasswordForm>
-        <h2>Change Password</h2>
+        <CheckEmailContainer>
+          <h2>Please check your email</h2>
+          <SmallList>
+            <li>
+              <SmallListText> Click on the verify link provided in that email</SmallListText>
+            </li>
+            <li>
+              <SmallListText>
+                {' '}
+                If you did not recieve an email please make sure to check your spam folder
+              </SmallListText>
+            </li>
+            <li>
+              <SmallListText>
+                If there is still no sign of the email, you can request another using the form below
+              </SmallListText>
+            </li>
+          </SmallList>
+        </CheckEmailContainer>
+        <h2>Request another email</h2>
         <Formik
           initialValues={{
-            password: ''
+            email: ''
           }}
           validationSchema={yup.object().shape({
-            new_password: yup
+            email: yup
               .string()
-              .min(8, 'Password has to be longer than 8 characters!')
-              .required('Password is required!')
+              .email('E-mail is not valid!')
+              .required('E-mail is required!')
           })}
           onSubmit={(values, { setSubmitting }) => {
-            this.onSubmitPassword(values);
+            this.onSubmitEmail(values);
             setSubmitting(false);
           }}
         >
@@ -80,24 +99,14 @@ class SubmitDeal extends React.Component {
             console.log(touched);
             return (
               <Form>
-                <Label htmlFor="new-password">
-                  New Password
-                  <StyledErrorMessage name="new-password" component="span" />
+                <Label htmlFor="email">
+                  Email
+                  <StyledErrorMessage name="email" component="span" />
                   <TextField
                     autoComplete="off"
                     type="text"
-                    name="new-password"
-                    placeholder="Please enter new password"
-                  />
-                </Label>
-                <Label htmlFor="repeat-password">
-                  Repeat Password
-                  <StyledErrorMessage name="repeat-password" component="span" />
-                  <TextField
-                    autoComplete="off"
-                    type="text"
-                    name="repeat-password"
-                    placeholder="Please repeat new password"
+                    name="email"
+                    placeholder="Please enter your email address"
                   />
                 </Label>
                 <Button type="submit" disabled={isSubmitting}>
@@ -112,7 +121,20 @@ class SubmitDeal extends React.Component {
   }
 }
 
-export default withRouter(SubmitDeal);
+const CheckEmailContainer = styled.div`
+  margin: 5rem 0;
+`;
+
+const SmallList = styled.ul`
+  margin-left: 1.8rem;
+  /* list-style-position: inside; */
+`;
+
+const SmallListText = styled.p`
+  font-size: 1.3rem;
+`;
+
+export default withRouter(EmailVerificationPage);
 
 // <NavLink to="/create" activeClassName="is-active">Create expense</NavLink>
 // <NavLink to="/help" activeClassName="is-active">Help</NavLink>

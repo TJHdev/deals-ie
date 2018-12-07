@@ -1,16 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 
-import { TextField, StyledErrorMessage } from '../styled-components/FormikStyles';
-import Label from '../styled-components/Label';
-import { Button, SmallBackgroundButton, BackgroundButton } from '../styled-components/Button';
-import TitleContainer from '../styled-components/TitleContainer';
-import ModalContainer from '../styled-components/ModalContainer';
-import Modal from '../styled-components/Modal';
-import CentralDiv from '../styled-components/CentralDiv';
+import { TextField, StyledErrorMessage } from '../../styled-components/FormikStyles';
+import Label from '../../styled-components/Label';
+import {
+  Button,
+  SmallBackgroundButton,
+  BackgroundButton,
+  SignUpHighlightSpan,
+  StyledLink
+} from '../../styled-components/Button';
+import TitleContainer from '../../styled-components/TitleContainer';
+import ModalContainer from '../../styled-components/ModalContainer';
+import Modal from '../../styled-components/Modal';
+import CentralDiv from '../../styled-components/CentralDiv';
 
 const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmitLogin }) => (
   <Modal
@@ -68,13 +75,21 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
             <Button type="submit" disabled={isSubmitting}>
               Sign in
             </Button>
-            <SmallBackgroundButton type="button">Forgot Password?</SmallBackgroundButton>
+            <StyledLink to="/forgot-password-request" onClick={handleCloseLoginModal}>
+              <SmallBackgroundButton type="button">Forgot Password?</SmallBackgroundButton>
+            </StyledLink>
+            <StyledLink to="/complete-signup" onClick={handleCloseLoginModal}>
+              <SmallBackgroundButton type="button">Resend verification email</SmallBackgroundButton>
+            </StyledLink>
           </Form>
         )}
       </Formik>
       <hr />
       <CentralDiv>
-        <BackgroundButton onClick={switchModal}>Not joined yet? Sign up</BackgroundButton>
+        <BackgroundButton onClick={switchModal}>
+          Not joined yet?
+          <SignUpHighlightSpan> Sign up</SignUpHighlightSpan>
+        </BackgroundButton>
       </CentralDiv>
     </ModalContainer>
   </Modal>

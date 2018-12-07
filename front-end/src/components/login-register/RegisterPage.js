@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 
-import { TextField, StyledErrorMessage } from '../styled-components/FormikStyles';
-import Label from '../styled-components/Label';
-import { Button, BackgroundButton } from '../styled-components/Button';
-import TitleContainer from '../styled-components/TitleContainer';
-import ModalContainer from '../styled-components/ModalContainer';
-import Modal from '../styled-components/Modal';
-import CentralDiv from '../styled-components/CentralDiv';
+import { TextField, StyledErrorMessage } from '../../styled-components/FormikStyles';
+import Label from '../../styled-components/Label';
+import { Button, BackgroundButton, SignUpHighlightSpan } from '../../styled-components/Button';
+import TitleContainer from '../../styled-components/TitleContainer';
+import ModalContainer from '../../styled-components/ModalContainer';
+import Modal from '../../styled-components/Modal';
+import CentralDiv from '../../styled-components/CentralDiv';
 
 const RegisterModal = ({
   isRegisterModal,
@@ -82,7 +82,10 @@ const RegisterModal = ({
       </Formik>
       <hr />
       <CentralDiv>
-        <BackgroundButton onClick={switchModal}>Already a member? Login</BackgroundButton>
+        <BackgroundButton onClick={switchModal}>
+          Already a member?
+          <SignUpHighlightSpan> Login</SignUpHighlightSpan>
+        </BackgroundButton>
       </CentralDiv>
     </ModalContainer>
   </Modal>

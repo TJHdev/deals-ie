@@ -174,7 +174,7 @@ class HomePage extends React.Component {
   }
 
   render() {
-    console.log('renderState: ', this.state);
+    // console.log('renderState: ', this.state);
     const { dealsArray } = this.state;
 
     const dealsElement =

@@ -81,7 +81,8 @@ const handleRegister = (db, bcrypt, Joi) => (req, res) => {
             .insert({
               email: loginEmail[0],
               username: username,
-              created_at: new Date()
+              created_at: new Date(),
+              email_verified: false
             })
             .then(user => {
               res.json(user[0]);

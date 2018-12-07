@@ -15,7 +15,7 @@ export const ContentContainerForm = styled.div`
 `;
 
 export const ContentContainerPasswordForm = styled(ContentContainerForm)`
-  max-width: 33rem;
+  max-width: 34rem;
 `;
 
 export const ContentContainerHalf = styled.div`

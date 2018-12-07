@@ -22,10 +22,18 @@ const signinAuthentication = (redisClient, db, bcrypt) => (req, res) => {
             .from("users")
             .where("email", "=", email)
             .then(data => {
+              console.log("***EMAIL_VERIFIED***", data[0].email_verified);
+              if (data[0].email_verified === false) {
+                return Promise.reject({
+                  customErr: "Email not verified.\nTry checking your junk mail."
+                });
+              }
               return data[0];
             })
             .catch(err => {
-              console.log("Unable to get user:", err);
+              if (err.customErr) {
+                return Promise.reject(err.customErr);
+              }
               return Promise.reject("Unable to get user");
             });
         } else {
@@ -35,7 +43,7 @@ const signinAuthentication = (redisClient, db, bcrypt) => (req, res) => {
       })
       .catch(err => {
         console.log("Promise inside handleSignin:", err);
-        return Promise.reject("Credentials don't match");
+        return Promise.reject(err);
       });
   };
 
