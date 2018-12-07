@@ -59,7 +59,26 @@ class EmailVerificationRequestPage extends React.Component {
   render() {
     return (
       <ContentContainerPasswordForm>
-        <h2>Resend Register Email</h2>
+        <CheckEmailContainer>
+          <h2>Please check your email</h2>
+          <SmallList>
+            <li>
+              <SmallListText> Click on the verify link provided in that email</SmallListText>
+            </li>
+            <li>
+              <SmallListText>
+                {' '}
+                If you did not recieve an email please make sure to check your spam folder
+              </SmallListText>
+            </li>
+            <li>
+              <SmallListText>
+                If there is still no sign of the email, you can request another using the form below
+              </SmallListText>
+            </li>
+          </SmallList>
+        </CheckEmailContainer>
+        <h2>Request another email</h2>
         <Formik
           initialValues={{
             email: ''
@@ -101,6 +120,19 @@ class EmailVerificationRequestPage extends React.Component {
     );
   }
 }
+
+const CheckEmailContainer = styled.div`
+  margin: 5rem 0;
+`;
+
+const SmallList = styled.ul`
+  margin-left: 1.8rem;
+  /* list-style-position: inside; */
+`;
+
+const SmallListText = styled.p`
+  font-size: 1.3rem;
+`;
 
 export default withRouter(EmailVerificationRequestPage);
 

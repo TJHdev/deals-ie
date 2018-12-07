@@ -6,6 +6,7 @@ const knex = require("knex");
 const morgan = require("morgan");
 const Joi = require("joi");
 
+const emails = require("./controllers/register_email");
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const signout = require("./controllers/signout");
@@ -93,10 +94,16 @@ app.get("/test", (req, res) => {
     );
 });
 
-app.post("/signin", signin.signinAuthentication(redisC, db, bcrypt));
 app.post("/register", register.handleRegister(db, bcrypt, Joi));
+app.post("/signin", signin.signinAuthentication(redisC, db, bcrypt));
 app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
+
+app.post(
+  "/register/request-verify-email",
+  register.requestVerifyEmail(redisC, db, bcrypt, Joi)
+);
+app.post("/register/verify-email", register.handleRegister(db, bcrypt, Joi));
 
 app.get("/deals/:dealId", auth.checkAuth(redisC), deals.handleGetDeal(db));
 app.get("/deals", auth.checkAuth(redisC), deals.handleGetAllDeals(db));

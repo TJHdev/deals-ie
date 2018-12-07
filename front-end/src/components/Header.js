@@ -41,7 +41,7 @@ class Header extends React.Component {
         if (data && data.email) {
           // loadUser(data);
           this.handleCloseRegisterModal();
-          history.push('/complete-signup');
+          history.push('/complete-signup-request');
         } else {
           setErrors(data.error);
         }

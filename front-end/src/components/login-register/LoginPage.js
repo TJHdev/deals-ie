@@ -78,7 +78,7 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
             <StyledLink to="/forgot-password-request" onClick={handleCloseLoginModal}>
               <SmallBackgroundButton type="button">Forgot Password?</SmallBackgroundButton>
             </StyledLink>
-            <StyledLink to="/complete-signup" onClick={handleCloseLoginModal}>
+            <StyledLink to="/complete-signup-request" onClick={handleCloseLoginModal}>
               <SmallBackgroundButton type="button">Resend verification email</SmallBackgroundButton>
             </StyledLink>
           </Form>

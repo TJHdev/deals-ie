@@ -25,7 +25,7 @@ import Label from '../../styled-components/Label';
 import { ContentContainerPasswordForm } from '../../styled-components/ContentContainer';
 import { Button } from '../../styled-components/Button';
 
-class EmailVerificationPage extends React.Component {
+class EmailVerificationRequestPage extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired
   };
@@ -59,26 +59,7 @@ class EmailVerificationPage extends React.Component {
   render() {
     return (
       <ContentContainerPasswordForm>
-        <CheckEmailContainer>
-          <h2>Please check your email</h2>
-          <SmallList>
-            <li>
-              <SmallListText> Click on the verify link provided in that email</SmallListText>
-            </li>
-            <li>
-              <SmallListText>
-                {' '}
-                If you did not recieve an email please make sure to check your spam folder
-              </SmallListText>
-            </li>
-            <li>
-              <SmallListText>
-                If there is still no sign of the email, you can request another using the form below
-              </SmallListText>
-            </li>
-          </SmallList>
-        </CheckEmailContainer>
-        <h2>Request another email</h2>
+        <h2>Thank you for registering</h2>
         <Formik
           initialValues={{
             email: ''
@@ -121,20 +102,7 @@ class EmailVerificationPage extends React.Component {
   }
 }
 
-const CheckEmailContainer = styled.div`
-  margin: 5rem 0;
-`;
-
-const SmallList = styled.ul`
-  margin-left: 1.8rem;
-  /* list-style-position: inside; */
-`;
-
-const SmallListText = styled.p`
-  font-size: 1.3rem;
-`;
-
-export default withRouter(EmailVerificationPage);
+export default withRouter(EmailVerificationRequestPage);
 
 // <NavLink to="/create" activeClassName="is-active">Create expense</NavLink>
 // <NavLink to="/help" activeClassName="is-active">Help</NavLink>
