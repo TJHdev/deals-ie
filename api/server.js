@@ -101,9 +101,11 @@ app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
 
 app.post(
   "/register/request-verify-email",
-  register.requestVerifyEmail(redisC, db, bcrypt, Joi)
+  emails.requestVerifyEmail(redisC, db, bcrypt, Joi)
 );
-app.post("/register/verify-email", register.handleRegister(db, bcrypt, Joi));
+
+app.post("/emails/test", emails.testMailgunRoute());
+// app.post("/register/verify-email", emails.handleRegister(db, bcrypt, Joi));
 
 app.get("/deals/:dealId", auth.checkAuth(redisC), deals.handleGetDeal(db));
 app.get("/deals", auth.checkAuth(redisC), deals.handleGetAllDeals(db));

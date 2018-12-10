@@ -1,4 +1,21 @@
 const jwt = require("jsonwebtoken");
+const mailgun = require("mailgun-js")({
+  apiKey: process.env.MAILGUN_KEY,
+  domain: process.env.MAILGUN_DOMAIN
+});
+
+const testMailgunRoute = () => (req, res) => {
+  var data = {
+    from: "Excited User <test@mail.eiredeals.com>",
+    to: "thomasjhanna@gmail.com",
+    subject: "Hello",
+    text: "Testing some EireDeals / Mailgun awesomeness!"
+  };
+
+  mailgun.messages().send(data, function(error, body) {
+    console.log(body);
+  });
+};
 
 const requestVerifyEmail = (redisClient, db, bcrypt) => (req, res) => {
   const { email } = req.body;
@@ -42,11 +59,13 @@ const requestVerifyEmail = (redisClient, db, bcrypt) => (req, res) => {
             }
           );
 
-          Promise.resolve(redisClient.set(token, email, "EX", 1800)).then(
-            () => {
+          Promise.resolve(redisClient.set(token, email, "EX", 1800))
+            .then(() => {
               // send the email using the token as part of the link
-            }
-          );
+            })
+            .catch(err => {
+              console.log(err);
+            });
         }
       })
       .catch(err => {
@@ -164,5 +183,6 @@ const requestVerifyEmail = (redisClient, db, bcrypt) => (req, res) => {
 };
 
 module.exports = {
-  requestVerifyEmail
+  requestVerifyEmail,
+  testMailgunRoute
 };
