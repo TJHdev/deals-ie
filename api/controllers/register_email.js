@@ -5,15 +5,26 @@ const mailgun = require("mailgun-js")({
 });
 
 const testMailgunRoute = () => (req, res) => {
+  const token = "1337token";
+
   var data = {
-    from: "Excited User <test@mail.eiredeals.com>",
+    from: "Éire Deals <donotreply@mail.eiredeals.com>",
     to: "thomasjhanna@gmail.com",
-    subject: "Hello",
-    text: "Testing some EireDeals / Mailgun awesomeness!"
+    subject: "Please verify that it's you",
+    text: `Thank you for signing up to ÉireDeals.com\n\nTo verify please click to following link below or paste it into your browser.\n\nwww.eiredeals.com/complete-signup/${token}\n\n You're securely,\nThe Éire Deals Team`
   };
 
   mailgun.messages().send(data, function(error, body) {
+    if (error) {
+      console.log(error);
+      return res
+        .status(200)
+        .json("If email is signed up sent verification email");
+    }
     console.log(body);
+    return res
+      .status(200)
+      .json("If email is signed up sent verification email");
   });
 };
 
@@ -62,6 +73,25 @@ const requestVerifyEmail = (redisClient, db, bcrypt) => (req, res) => {
           Promise.resolve(redisClient.set(token, email, "EX", 1800))
             .then(() => {
               // send the email using the token as part of the link
+              var data = {
+                from: "Éire Deals <donotreply@mail.eiredeals.com>",
+                to: email,
+                subject: "Please verify that it's you",
+                text: `Thank you for signing up to ÉireDeals.com\n\nTo verify your email address please click to following link below or paste it into your browser.\n\nwww.eiredeals.com/complete-signup/${token}\n\n You're securely,\nThe Éire Deals Team.`
+              };
+
+              mailgun.messages().send(data, function(error, body) {
+                if (error) {
+                  console.log(error);
+                  return res
+                    .status(200)
+                    .json("If email is signed up sent verification email");
+                }
+                console.log(body);
+                return res
+                  .status(200)
+                  .json("If email is signed up sent verification email");
+              });
             })
             .catch(err => {
               console.log(err);

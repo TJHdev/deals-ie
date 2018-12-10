@@ -99,12 +99,11 @@ app.post("/signin", signin.signinAuthentication(redisC, db, bcrypt));
 app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
 app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
 
+app.post("/emails/test", emails.testMailgunRoute());
 app.post(
   "/register/request-verify-email",
   emails.requestVerifyEmail(redisC, db, bcrypt, Joi)
 );
-
-app.post("/emails/test", emails.testMailgunRoute());
 // app.post("/register/verify-email", emails.handleRegister(db, bcrypt, Joi));
 
 app.get("/deals/:dealId", auth.checkAuth(redisC), deals.handleGetDeal(db));
@@ -112,7 +111,6 @@ app.get("/deals", auth.checkAuth(redisC), deals.handleGetAllDeals(db));
 app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 
 // like end points
-
 app.get(
   "/deals/:dealId/like",
   auth.reqAuth(redisC),

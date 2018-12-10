@@ -10,7 +10,8 @@ import 'react-dates/lib/css/_datepicker.css';
 import LoadingPage from './components/LoadingPage';
 
 window.BACKEND_PATH =
-  process.env.NODE_ENV === 'production' ? 'http://localhost:5000' : 'http://localhost:5000';
+  process.env.DEPLOYED_ENV === 'production' ? 'www.eiredeals.com:5000' : 'http://localhost:5000';
+// process.env.DEPLOYED_ENV === 'production' ? 'www.eiredeals.com:5000' : 'http://localhost:5000';
 
 const jsx = (
   <BrowserRouter>
