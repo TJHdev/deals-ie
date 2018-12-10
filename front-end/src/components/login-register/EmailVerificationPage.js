@@ -32,7 +32,37 @@ class EmailVerificationPage extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      displayVerified: false
+    };
     this.onSubmitEmail = this.onSubmitEmail.bind(this);
+  }
+
+  componentDidMount() {
+    console.log(this.props);
+    const { location } = this.props;
+
+    const index = location.search.indexOf('=');
+
+    const token = location.search.substring(index + 1);
+    console.log('token: ', token);
+
+    fetch(`${window.BACKEND_PATH}/register/verify-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ token: token })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          this.setState({ displayVerified: true });
+        } else {
+          this.setState({ displayVerified: false });
+        }
+      })
+      .catch(console.log);
   }
 
   onSubmitEmail(values) {

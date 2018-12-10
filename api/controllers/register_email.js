@@ -11,7 +11,7 @@ const testMailgunRoute = () => (req, res) => {
     from: "Éire Deals <donotreply@mail.eiredeals.com>",
     to: "thomasjhanna@gmail.com",
     subject: "Please verify that it's you",
-    text: `Thank you for signing up to ÉireDeals.com\n\nTo verify please click to following link below or paste it into your browser.\n\nwww.eiredeals.com/complete-signup/${token}\n\n You're securely,\nThe Éire Deals Team`
+    text: `Thank you for signing up to ÉireDeals.com\n\nTo verify please click to following link below or paste it into your browser.\n\nwww.eiredeals.com/complete-signup/${token}\n\nYou're securely,\nThe Éire Deals Team`
   };
 
   mailgun.messages().send(data, function(error, body) {
@@ -28,8 +28,9 @@ const testMailgunRoute = () => (req, res) => {
   });
 };
 
-const requestVerifyEmail = (redisClient, db, bcrypt) => (req, res) => {
+const requestVerifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
   const { email } = req.body;
+  console.log("email: ", email);
 
   const emailSchema = Joi.string()
     .email({ minDomainAtoms: 2 })
@@ -61,7 +62,7 @@ const requestVerifyEmail = (redisClient, db, bcrypt) => (req, res) => {
       .where("email", "=", email)
       .then(data => {
         if (data[0].email) {
-          const jwtPayload = { userId: id };
+          const jwtPayload = { email: email };
           const token = jwt.sign(
             jwtPayload,
             process.env.POSTGRES_PASSWORD_SECRET,
@@ -77,7 +78,7 @@ const requestVerifyEmail = (redisClient, db, bcrypt) => (req, res) => {
                 from: "Éire Deals <donotreply@mail.eiredeals.com>",
                 to: email,
                 subject: "Please verify that it's you",
-                text: `Thank you for signing up to ÉireDeals.com\n\nTo verify your email address please click to following link below or paste it into your browser.\n\nwww.eiredeals.com/complete-signup/${token}\n\n You're securely,\nThe Éire Deals Team.`
+                text: `Thank you for signing up to ÉireDeals.com\n\nTo verify your email address please click to following link below or paste it into your browser.\n\nhttp://www.eiredeals.com/complete-signup/${token}\n\n You're securely,\nThe Éire Deals Team.`
               };
 
               mailgun.messages().send(data, function(error, body) {
@@ -96,123 +97,50 @@ const requestVerifyEmail = (redisClient, db, bcrypt) => (req, res) => {
             .catch(err => {
               console.log(err);
             });
+        } else {
+          console.log("Couldn't find the email in the database");
         }
       })
       .catch(err => {
         return Promise.reject("Something went wrong"); // TODO this needs to be removed
       });
   }
+};
 
-  return authorization
-    ? getAuthTokenId(req, res)
-    : handleSignin(db, bcrypt, req, res)
-        .then(data => {
-          console.log("Data", data);
-          return data && data.id && data.email
-            ? createSessions(data)
-            : Promise.reject(data);
-        })
-        .then(session => res.json(session))
-        .catch(err => {
-          console.log("Last catch: ", err);
-          res.status(400).json({ error: { password: err } });
-        });
+const verifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
+  const { token } = req.body;
 
-  const handleSignin = (db, bcrypt, req, res) => {
-    const { email, password } = req.body;
-
-    console.log(req.body);
-
-    if (!email || !password) {
-      return Promise.reject("Must enter a username and password");
+  return redisClient.get(token, (err, reply) => {
+    if (err || !reply) {
+      return res.status(401).json("No token match");
+    }
+    if (!reply.includes("@")) {
+      return res.status(401).json("That token is for login");
     }
 
-    return db
-      .select("email", "hash")
-      .from("login")
+    const email = reply;
+
+    db.update({
+      email_verified: true
+    })
       .where("email", "=", email)
-      .then(data => {
-        const isValid = bcrypt.compareSync(password, data[0].hash);
-        if (isValid) {
-          return db
-            .select("*")
-            .from("users")
-            .where("email", "=", email)
-            .then(data => {
-              console.log("***EMAIL_VERIFIED***", data[0].email_verified);
-              if (data[0].email_verified === false) {
-                return Promise.reject({
-                  customErr: "Email not verified.\nTry checking your junk mail."
-                });
-              }
-              return data[0];
-            })
-            .catch(err => {
-              if (err.customErr) {
-                return Promise.reject(err.customErr);
-              }
-              return Promise.reject("Unable to get user");
-            });
-        } else {
-          console.log("Bcrypt is invalid");
-          return Promise.reject("Credentials don't match");
-        }
+      .into("users")
+      .returning("email", "email_verified")
+      .then(user => {
+        console.log(user);
+        res.status(200).json({
+          is_like: user[0]
+        });
       })
       .catch(err => {
-        console.log("Promise inside handleSignin:", err);
-        return Promise.reject(err);
+        console.log(err);
+        res.status(400).json(err);
       });
-  };
-
-  const getAuthTokenId = (req, res) => {
-    const { authorization } = req.headers;
-    return redisClient.get(authorization, (err, reply) => {
-      if (err || !reply) {
-        return res.status(400).json("Unauthorised");
-      }
-      return res.json({ id: reply });
-    });
-  };
-
-  const signToken = id => {
-    const jwtPayload = { userId: id };
-    return jwt.sign(jwtPayload, process.env.POSTGRES_PASSWORD_SECRET, {
-      expiresIn: "2 days"
-    });
-  };
-
-  const setToken = (key, value) => {
-    return Promise.resolve(redisClient.set(key, value));
-  };
-
-  const createSessions = user => {
-    const { id } = user;
-    const token = signToken(id);
-    return setToken(token, id)
-      .then(() => {
-        return { success: "true", userId: id, token };
-      })
-      .catch(console.log);
-  };
-
-  const { authorization } = req.headers;
-  return authorization
-    ? getAuthTokenId(req, res)
-    : handleSignin(db, bcrypt, req, res)
-        .then(data => {
-          console.log("Data", data);
-          return data && data.id && data.email
-            ? createSessions(data)
-            : Promise.reject(data);
-        })
-        .then(session => res.json(session))
-        .catch(err => {
-          console.log("Last catch: ", err);
-          res.status(400).json({ error: { password: err } });
-        });
+  });
 };
 
 module.exports = {
+  testMailgunRoute,
   requestVerifyEmail,
-  testMailgunRoute
+  verifyEmail
 };
