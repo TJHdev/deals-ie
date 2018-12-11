@@ -14,118 +14,11 @@ class Header extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      isRegisterModal: false,
-      isLoginModal: false
-    };
-    this.handleOpenRegisterModal = this.handleOpenRegisterModal.bind(this);
-    this.handleCloseRegisterModal = this.handleCloseRegisterModal.bind(this);
-    this.handleOpenLoginModal = this.handleOpenLoginModal.bind(this);
-    this.handleCloseLoginModal = this.handleCloseLoginModal.bind(this);
-    this.switchModal = this.switchModal.bind(this);
-    this.onSubmitLogin = this.onSubmitLogin.bind(this);
-    this.onSubmitRegister = this.onSubmitRegister.bind(this);
-  }
-
-  onSubmitRegister(values, setErrors, setSubmitting) {
-    setSubmitting(true);
-    const { history, loadUser } = this.props;
-    fetch(`${window.BACKEND_PATH}/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values)
-    })
-      .then(response => response.json())
-      .then(data => {
-        setSubmitting(false);
-        console.log(data);
-        if (data && data.email) {
-          this.handleCloseRegisterModal();
-          history.push('/complete-signup-request');
-        } else {
-          setErrors(data.error);
-        }
-      })
-      .catch(err => {
-        setSubmitting(false);
-        console.log(err);
-      });
-  }
-
-  onSubmitLogin(values, setErrors, setSubmitting) {
-    setSubmitting(true);
-    const { history, loadUser } = this.props;
-
-    fetch(`${window.BACKEND_PATH}/signin`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values)
-    })
-      .then(response => response.json())
-      .then(data => {
-        setSubmitting(false);
-        console.log(data);
-        window.sessionStorage.setItem('token', data.token);
-        if (!data.userId || data.success !== 'true') {
-          console.log('Problem logging in');
-          setErrors(data.error);
-          return null;
-        }
-        loadUser(data);
-        return fetch(`${window.BACKEND_PATH}/profile/${data.userId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: data.token
-          }
-        })
-          .then(resp => resp.json())
-          .then(data => {
-            setSubmitting(false);
-            if (data && data.email) {
-              this.handleCloseLoginModal(); // if login succesful close the modal
-              history.push('/');
-            } else {
-            }
-          })
-          .catch(err => {
-            setSubmitting(false);
-            console.log(err);
-          });
-      })
-      .catch(err => {
-        setSubmitting(false);
-        console.log(err);
-      });
-  }
-
-  handleOpenRegisterModal() {
-    this.setState(() => ({ isRegisterModal: true }));
-  }
-
-  handleCloseRegisterModal() {
-    this.setState(() => ({ isRegisterModal: false }));
-  }
-
-  handleOpenLoginModal() {
-    this.setState(() => ({ isLoginModal: true }));
-  }
-
-  handleCloseLoginModal() {
-    this.setState(() => ({ isLoginModal: false }));
-  }
-
-  switchModal() {
-    const { isRegisterModal, isLoginModal } = this.state;
-
-    this.setState({
-      isRegisterModal: !isRegisterModal,
-      isLoginModal: !isLoginModal
-    });
   }
 
   render() {
-    const { isRegisterModal, isLoginModal } = this.state;
+    console.log(this.props);
+    const { handleOpenRegisterModal } = this.props;
     return (
       <NavbarHeader>
         <ContentContainer>
@@ -142,25 +35,12 @@ class Header extends React.Component {
               <NavAnchor to="/deals">
                 <HeaderButton type="button">Submit Deal</HeaderButton>
               </NavAnchor>
-
-              <HeaderButton type="button" onClick={this.handleOpenRegisterModal}>
+              <HeaderButton type="button" onClick={handleOpenRegisterModal}>
                 Join
               </HeaderButton>
             </NavContent>
           </HeaderContent>
         </ContentContainer>
-        <RegisterModal
-          isRegisterModal={isRegisterModal}
-          handleCloseRegisterModal={this.handleCloseRegisterModal}
-          switchModal={this.switchModal}
-          onSubmitRegister={this.onSubmitRegister}
-        />
-        <LoginModal
-          isLoginModal={isLoginModal}
-          handleCloseLoginModal={this.handleCloseLoginModal}
-          switchModal={this.switchModal}
-          onSubmitLogin={this.onSubmitLogin}
-        />
       </NavbarHeader>
     );
   }
