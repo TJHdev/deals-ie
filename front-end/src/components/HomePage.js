@@ -49,9 +49,8 @@ class HomePage extends React.Component {
 
   onSubmitChangeDealLikeHot(dealId, isLike) {
     const token = window.sessionStorage.getItem('token');
-    if (!token) {
-      console.log('No token, therefore redirect to signin modal');
-      return;
+    if (token === 'undefined' || !token) {
+      return console.log('No token, therefore redirect to signin modal');
     }
     if (isLike === null) {
       // submit isLike: true
@@ -69,9 +68,8 @@ class HomePage extends React.Component {
 
   onSubmitChangeDealLikeCold(dealId, isLike) {
     const token = window.sessionStorage.getItem('token');
-    if (!token) {
-      console.log('No token, therefore redirect to signin modal');
-      return;
+    if (token === 'undefined' || !token) {
+      return console.log('No token, therefore redirect to signin modal');
     }
     if (isLike === null) {
       // submit isLike: false

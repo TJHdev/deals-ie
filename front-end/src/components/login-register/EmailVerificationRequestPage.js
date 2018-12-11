@@ -35,9 +35,9 @@ class EmailVerificationRequestPage extends React.Component {
     this.onSubmitEmail = this.onSubmitEmail.bind(this);
   }
 
-  onSubmitEmail(values) {
+  onSubmitEmail(values, setSubmitting, resetForm, setFieldValue, setStatus) {
     // const token = window.sessionStorage.getItem('token');
-
+    setSubmitting(true);
     fetch(`${window.BACKEND_PATH}/register/request-verify-email`, {
       method: 'POST',
       headers: {
@@ -47,13 +47,24 @@ class EmailVerificationRequestPage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        // console.log('data: ', data);
+        console.log('values: ', values);
         if (data && data.deal_title) {
           // loadUser(user);
-          history.push(`/deals/${data.id}`); // .push is not a function?
+          history.push(`/deals/${data.id}`);
         }
+        resetForm();
+        setSubmitting(false);
+        setStatus({ success: 'Success: Check your inbox for a reset link!' });
+        setFieldValue('email', '', false);
       })
-      .catch(console.log);
+      .catch(err => {
+        console.log(err);
+        resetForm();
+        setSubmitting(false);
+        setStatus({ success: 'Success: Check your inbox for a reset link!' });
+        setFieldValue('email', '', false);
+      });
   }
 
   render() {
@@ -89,14 +100,20 @@ class EmailVerificationRequestPage extends React.Component {
               .email('E-mail is not valid!')
               .required('E-mail is required!')
           })}
-          onSubmit={(values, { setSubmitting }) => {
-            this.onSubmitEmail(values);
-            setSubmitting(false);
+          onSubmit={(values, actions) => {
+            this.onSubmitEmail(
+              values,
+              actions.setSubmitting,
+              actions.resetForm,
+              actions.setFieldValue,
+              actions.setStatus
+            );
           }}
         >
-          {({ errors, touched, isSubmitting }) => {
-            console.log(errors);
-            console.log(touched);
+          {props => {
+            console.log(props.errors);
+            console.log(props.touched);
+            console.log(props.status);
             return (
               <Form>
                 <Label htmlFor="email">
@@ -109,7 +126,10 @@ class EmailVerificationRequestPage extends React.Component {
                     placeholder="Please enter your email address"
                   />
                 </Label>
-                <Button type="submit" disabled={isSubmitting}>
+                {props.status && props.status.success ? (
+                  <SuccessNotification>{props.status.success}</SuccessNotification>
+                ) : null}
+                <Button type="submit" disabled={props.isSubmitting}>
                   Submit
                 </Button>
               </Form>
@@ -131,6 +151,11 @@ const SmallList = styled.ul`
 `;
 
 const SmallListText = styled.p`
+  font-size: 1.3rem;
+`;
+
+const SuccessNotification = styled.div`
+  color: var(--green);
   font-size: 1.3rem;
 `;
 
