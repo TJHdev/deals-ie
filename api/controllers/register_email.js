@@ -78,7 +78,7 @@ const requestVerifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
                 from: "Éire Deals <donotreply@mail.eiredeals.com>",
                 to: email,
                 subject: "Please verify that it's you",
-                text: `Thank you for signing up to ÉireDeals.com\n\nTo verify your email address please click to following link below or paste it into your browser.\n\nhttp://www.eiredeals.com/complete-signup/${token}\n\n You're securely,\nThe Éire Deals Team.`
+                text: `Thank you for signing up to ÉireDeals.com\n\nTo verify your email address please click to following link below or paste it into your browser.\n\nhttp://www.eiredeals.com/complete-signup?token=${token}\n\n You're securely,\nThe Éire Deals Team.`
               };
 
               mailgun.messages().send(data, function(error, body) {

@@ -113,7 +113,7 @@ app.post(
   "/register/request-verify-email",
   emails.requestVerifyEmail(redisC, db, bcrypt, Joi)
 );
-app.post("/register/verify-email", emails.verifyEmail(db, bcrypt, Joi));
+app.post("/register/verify-email", emails.verifyEmail(redisC, db, bcrypt, Joi));
 
 // ***********
 // deal routes
