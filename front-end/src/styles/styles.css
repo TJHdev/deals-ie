@@ -24,6 +24,7 @@ body {
   --l-size: 3.2rem;
   --xl-size: 4.8rem;
 
+  --grey: rgb(170, 151, 151);
   --medium-grey: rgb(170, 151, 151);
   --light-grey: rgb(230, 211, 211);
   --light-green: rgb(212, 246, 67);

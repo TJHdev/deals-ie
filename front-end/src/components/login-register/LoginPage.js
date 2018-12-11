@@ -47,8 +47,7 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
             .required('Password is required!')
         })}
         onSubmit={(values, { setSubmitting, setErrors }) => {
-          onSubmitLogin(values, setErrors);
-          setSubmitting(false);
+          onSubmitLogin(values, setErrors, setSubmitting);
         }}
       >
         {({ isSubmitting }) => (

@@ -6,7 +6,6 @@ import RegisterModal from './login-register/RegisterPage';
 import LoginModal from './login-register/LoginPage';
 
 import ContentContainer from '../styled-components/ContentContainer';
-// import EireDealsLogo from '../../public/images/EireDealsLogo.png'
 
 class Header extends React.Component {
   static propTypes = {
@@ -28,7 +27,8 @@ class Header extends React.Component {
     this.onSubmitRegister = this.onSubmitRegister.bind(this);
   }
 
-  onSubmitRegister(values, setErrors) {
+  onSubmitRegister(values, setErrors, setSubmitting) {
+    setSubmitting(true);
     const { history, loadUser } = this.props;
     fetch(`${window.BACKEND_PATH}/register`, {
       method: 'POST',
@@ -37,20 +37,25 @@ class Header extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
+        setSubmitting(false);
         console.log(data);
         if (data && data.email) {
-          // loadUser(data);
           this.handleCloseRegisterModal();
           history.push('/complete-signup-request');
         } else {
           setErrors(data.error);
         }
       })
-      .catch(console.log);
+      .catch(err => {
+        setSubmitting(false);
+        console.log(err);
+      });
   }
 
-  onSubmitLogin(values, setErrors) {
+  onSubmitLogin(values, setErrors, setSubmitting) {
+    setSubmitting(true);
     const { history, loadUser } = this.props;
+
     fetch(`${window.BACKEND_PATH}/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -58,6 +63,7 @@ class Header extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
+        setSubmitting(false);
         console.log(data);
         window.sessionStorage.setItem('token', data.token);
         if (!data.userId || data.success !== 'true') {
@@ -75,14 +81,21 @@ class Header extends React.Component {
         })
           .then(resp => resp.json())
           .then(data => {
-            console.log(data);
+            setSubmitting(false);
             if (data && data.email) {
               this.handleCloseLoginModal(); // if login succesful close the modal
               history.push('/');
             } else {
             }
           })
-          .catch(console.log);
+          .catch(err => {
+            setSubmitting(false);
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        setSubmitting(false);
+        console.log(err);
       });
   }
 

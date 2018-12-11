@@ -86,12 +86,12 @@ const requestVerifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
                   console.log(error);
                   return res
                     .status(200)
-                    .json("If email is signed up sent verification email");
+                    .json("If email is signed up, validation email sent");
                 }
                 console.log(body);
                 return res
                   .status(200)
-                  .json("If email is signed up sent verification email");
+                  .json("If email is signed up, validation email sent");
               });
             })
             .catch(err => {

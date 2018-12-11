@@ -48,7 +48,7 @@ const RegisterModal = ({
             .required('Password is required!')
         })}
         onSubmit={(values, { setSubmitting, setErrors }) => {
-          onSubmitRegister(values, setErrors);
+          onSubmitRegister(values, setErrors, setSubmitting);
           setSubmitting(false);
         }}
       >

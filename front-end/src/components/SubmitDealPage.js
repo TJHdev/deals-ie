@@ -35,7 +35,10 @@ class SubmitDeal extends React.Component {
     this.onSubmitDeal = this.onSubmitDeal.bind(this);
   }
 
-  onSubmitDeal(values) {
+  onSubmitDeal(values, setSubmitting) {
+    setSubmitting(true);
+    const { history } = this.props;
+    // console.log(history);
     const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/deals`, {
@@ -48,13 +51,17 @@ class SubmitDeal extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
+        setSubmitting(false);
         console.log(data);
         if (data && data.deal_title) {
           // loadUser(user);
           history.push(`/deals/${data.id}`); // .push is not a function?
         }
       })
-      .catch(console.log);
+      .catch(err => {
+        setSubmitting(false);
+        console.log(err);
+      });
   }
 
   render() {
@@ -100,13 +107,13 @@ class SubmitDeal extends React.Component {
             deal_nsfw: yup.bool().required()
           })}
           onSubmit={(values, { setSubmitting }) => {
-            this.onSubmitDeal(values);
-            setSubmitting(false);
+            this.onSubmitDeal(values, setSubmitting);
           }}
         >
           {({ errors, touched, isSubmitting }) => {
             console.log(errors);
             console.log(touched);
+            console.log('isSubmitting:', isSubmitting);
             return (
               <Form>
                 <Label htmlFor="deal_link">

@@ -28,6 +28,13 @@ export const Button = styled.button`
     box-shadow: none;
     transform: translateY(2px);
   }
+
+  &:disabled {
+    background-color: var(--grey);
+    color: white;
+    transform: none;
+    box-shadow: none;
+  }
 `;
 
 export const SmallButton = styled(Button)`
@@ -61,6 +68,11 @@ export const BackgroundButton = styled.button`
 
   &:hover span {
     color: black;
+  }
+
+  &:disabled {
+    background-color: black;
+    color: white;
   }
 `;
 
