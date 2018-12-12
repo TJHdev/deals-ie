@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Router, Route, Switch, NavLink } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
+
+// modal imports
+import Modal from 'react-modal';
 
 import HomePage from '../components/HomePage';
 import DealPage from '../components/DealPage';
@@ -22,7 +25,34 @@ import LoginModal from '../components/login-register/LoginPage';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 
-export const history = createHistory();
+// modal context imports
+import { ModalProvider, ModalConsumer, ModalRoot } from '../components/Modal/ModalContext';
+// import ModalRoot from '../components/Modal/ModalRoot';
+
+const history = createHistory();
+// const userContext = React.createContext({ isAuthenticated: false });
+// const modalContext = React.createContext({ isRegisterModal: false, isLoginModal: false });
+
+const Modal1 = ({ onRequestClose, ...otherProps }) => (
+  <Modal isOpen onRequestClose={onRequestClose} {...otherProps}>
+    <button type="button" onClick={onRequestClose}>
+      close
+    </button>
+    <div>I am a modal</div>
+  </Modal>
+);
+
+const Modal2 = ({ onRequestClose, foo, ...otherProps }) => (
+  <Modal isOpen onRequestClose={onRequestClose} {...otherProps}>
+    <button type="button" onClick={onRequestClose}>
+      close
+    </button>
+    <div>
+      second modal
+      {foo}
+    </div>
+  </Modal>
+);
 
 class AppRouter extends React.Component {
   constructor(props) {
@@ -196,6 +226,21 @@ class AppRouter extends React.Component {
               loadUser={this.loadUser}
               handleOpenRegisterModal={this.handleOpenRegisterModal}
             />
+            <ModalProvider>
+              <ModalRoot />
+              <ModalConsumer>
+                {({ showModal }) => (
+                  <Fragment>
+                    <button type="button" onClick={() => showModal(Modal1)}>
+                      Open Modal
+                    </button>
+                    <button type="button" onClick={() => showModal(Modal2, { foo: 'bar' })}>
+                      Open Second Modal
+                    </button>
+                  </Fragment>
+                )}
+              </ModalConsumer>
+            </ModalProvider>
             <RegisterModal
               isRegisterModal={isRegisterModal}
               handleCloseRegisterModal={this.handleCloseRegisterModal}
