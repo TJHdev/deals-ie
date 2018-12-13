@@ -2,8 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import RegisterModal from './login-register/RegisterPage';
-import LoginModal from './login-register/LoginPage';
+import RegisterModal from './Modal/RegisterModal';
+import LoginModal from './Modal/LoginModal';
+
+// context api test
+import { ModalConsumer } from './Modal/ModalContext';
+import { Modal1, Modal2 } from './Modal/Modals';
 
 import ContentContainer from '../styled-components/ContentContainer';
 
@@ -17,7 +21,7 @@ class Header extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const { handleOpenRegisterModal } = this.props;
     return (
       <NavbarHeader>
@@ -38,6 +42,24 @@ class Header extends React.Component {
               <HeaderButton type="button" onClick={handleOpenRegisterModal}>
                 Join
               </HeaderButton>
+              <ModalConsumer>
+                {({ showModal }) => (
+                  <div>
+                    <button type="button" onClick={() => showModal(Modal1)}>
+                      Open Modal
+                    </button>
+                    <button type="button" onClick={() => showModal(Modal2, { foo: ' dodo' })}>
+                      Open Second Modal
+                    </button>
+                    <button type="button" onClick={() => showModal(RegisterModal)}>
+                      Register
+                    </button>
+                    <button type="button" onClick={() => showModal(LoginModal)}>
+                      Login
+                    </button>
+                  </div>
+                )}
+              </ModalConsumer>
             </NavContent>
           </HeaderContent>
         </ContentContainer>

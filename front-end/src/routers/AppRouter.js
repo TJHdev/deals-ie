@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import { Router, Route, Switch, NavLink } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 
-// modal imports
-import Modal from 'react-modal';
-
 import HomePage from '../components/HomePage';
 import DealPage from '../components/DealPage';
 import SubmitDealPage from '../components/SubmitDealPage';
@@ -28,31 +25,11 @@ import PrivateRoute from './PrivateRoute';
 // modal context imports
 import { ModalProvider, ModalConsumer, ModalRoot } from '../components/Modal/ModalContext';
 // import ModalRoot from '../components/Modal/ModalRoot';
+import { Modal1, Modal2 } from '../components/Modal/Modals';
 
 const history = createHistory();
 // const userContext = React.createContext({ isAuthenticated: false });
 // const modalContext = React.createContext({ isRegisterModal: false, isLoginModal: false });
-
-const Modal1 = ({ onRequestClose, ...otherProps }) => (
-  <Modal isOpen onRequestClose={onRequestClose} {...otherProps}>
-    <button type="button" onClick={onRequestClose}>
-      close
-    </button>
-    <div>I am a modal</div>
-  </Modal>
-);
-
-const Modal2 = ({ onRequestClose, foo, ...otherProps }) => (
-  <Modal isOpen onRequestClose={onRequestClose} {...otherProps}>
-    <button type="button" onClick={onRequestClose}>
-      close
-    </button>
-    <div>
-      second modal
-      {foo}
-    </div>
-  </Modal>
-);
 
 class AppRouter extends React.Component {
   constructor(props) {
@@ -222,11 +199,12 @@ class AppRouter extends React.Component {
       <div>
         <Router history={history}>
           <div>
-            <Header
-              loadUser={this.loadUser}
-              handleOpenRegisterModal={this.handleOpenRegisterModal}
-            />
             <ModalProvider>
+              <Header
+                loadUser={this.loadUser}
+                handleOpenRegisterModal={this.handleOpenRegisterModal}
+              />
+
               <ModalRoot />
               <ModalConsumer>
                 {({ showModal }) => (
@@ -234,7 +212,7 @@ class AppRouter extends React.Component {
                     <button type="button" onClick={() => showModal(Modal1)}>
                       Open Modal
                     </button>
-                    <button type="button" onClick={() => showModal(Modal2, { foo: 'bar' })}>
+                    <button type="button" onClick={() => showModal(Modal2, { foo: ' bar' })}>
                       Open Second Modal
                     </button>
                   </Fragment>
