@@ -17,7 +17,10 @@ import {
 class HomePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      dealsArray: null
+    };
+
     this.onSubmitChangeDealLikeHot = this.onSubmitChangeDealLikeHot.bind(this);
     this.onSubmitChangeDealLikeCold = this.onSubmitChangeDealLikeCold.bind(this);
     this.handleDealLikeSubmit = this.handleDealLikeSubmit.bind(this);

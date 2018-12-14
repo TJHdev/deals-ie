@@ -30,7 +30,6 @@ class EmailVerificationPage extends React.Component {
 
     const token = location.search.substring(index + 1);
     console.log('token: ', token);
-    ``;
 
     fetch(`${window.BACKEND_PATH}/register/verify-email`, {
       method: 'POST',

@@ -10,8 +10,8 @@ const emails = require("./controllers/register_email");
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const signout = require("./controllers/signout");
+const password = require("./controllers/password");
 const profile = require("./controllers/profile");
-const image = require("./controllers/image");
 const deals = require("./controllers/deals");
 const deal_likes = require("./controllers/deal_likes");
 const auth = require("./controllers/authorization");
@@ -19,7 +19,13 @@ const auth = require("./controllers/authorization");
 const PORT = process.env.PORT || 5000;
 
 const redis = require("redis");
-const redisC = redis.createClient(process.env.REDIS_URI);
+const redisPasswordC = redis.createClient(process.env.REDIS_PASSWORD_URI);
+const redisVerifyEmailC = redis.createClient(
+  process.env.REDIS_VERIFY_EMAIL_URI
+);
+const redisResetPasswordC = redis.createClient(
+  process.env.REDIS_RESET_PASSWORD_URI
+);
 
 // const db =
 //   process.env.NODE_ENV === "production"
@@ -101,52 +107,82 @@ app.get("/test", (req, res) => {
 // signup routes
 // *************
 app.post("/register", register.handleRegister(db, bcrypt, Joi));
-app.post("/signin", signin.signinAuthentication(redisC, db, bcrypt));
-app.post("/signout", auth.reqAuth(redisC), signout.handleSignout(redisC));
-app.get("/profile/:userId", auth.reqAuth(redisC), profile.handleProfileGet(db));
+app.post("/signin", signin.signinAuthentication(redisPasswordC, db, bcrypt));
+app.post(
+  "/signout",
+  auth.reqAuth(redisPasswordC),
+  signout.handleSignout(redisPasswordC)
+);
+app.get(
+  "/profile/:userId",
+  auth.reqAuth(redisPasswordC),
+  profile.handleProfileGet(db)
+);
 
 // ***********************
 // completing registration
 // ***********************
-app.post("/emails/test", emails.testMailgunRoute());
+// app.post("/emails/test", emails.testMailgunRoute());
 app.post(
   "/register/request-verify-email",
-  emails.requestVerifyEmail(redisC, db, bcrypt, Joi)
+  emails.requestVerifyEmail(redisVerifyEmailC, db, bcrypt, Joi)
 );
-app.post("/register/verify-email", emails.verifyEmail(redisC, db, bcrypt, Joi));
+app.post(
+  "/register/verify-email",
+  emails.verifyEmail(redisVerifyEmailC, db, bcrypt, Joi)
+);
+
+// ******************
+// resetting password
+// ******************
+
+app.post(
+  "/profile/request-password",
+  password.requestPasswordReset(redisResetPasswordC, db, bcrypt, Joi)
+);
+app.put(
+  "/profile/password",
+  password.passwordReset(redisResetPasswordC, db, bcrypt, Joi)
+);
 
 // ***********
 // deal routes
 // ***********
-app.get("/deals/:dealId", auth.checkAuth(redisC), deals.handleGetDeal(db));
-app.get("/deals", auth.checkAuth(redisC), deals.handleGetAllDeals(db));
-app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
+app.get(
+  "/deals/:dealId",
+  auth.checkAuth(redisPasswordC),
+  deals.handleGetDeal(db)
+);
+app.get("/deals", auth.checkAuth(redisPasswordC), deals.handleGetAllDeals(db));
+app.post(
+  "/deals",
+  auth.reqAuth(redisPasswordC),
+  deals.handleDealSubmit(db, Joi)
+);
 
 // ***************
 // like end points
 // ***************
 app.get(
   "/deals/:dealId/like",
-  auth.reqAuth(redisC),
+  auth.reqAuth(redisPasswordC),
   deal_likes.handleDealLikeGet(db)
 );
 app.post(
   "/deals/:dealId/like",
-  auth.reqAuth(redisC),
+  auth.reqAuth(redisPasswordC),
   deal_likes.handleDealLikeSubmit(db)
 );
 app.patch(
   "/deals/:dealId/like",
-  auth.reqAuth(redisC),
+  auth.reqAuth(redisPasswordC),
   deal_likes.handleDealLikeUpdate(db)
 );
 app.delete(
   "/deals/:dealId/like",
-  auth.reqAuth(redisC),
+  auth.reqAuth(redisPasswordC),
   deal_likes.handleDealLikeDelete(db)
 );
-
-// app.put("/image", auth.reqAuth(redisC), image.handleImage(db));
 
 // app.post("/deals", auth.reqAuth(redisC), deals.handleDealSubmit(db, Joi));
 

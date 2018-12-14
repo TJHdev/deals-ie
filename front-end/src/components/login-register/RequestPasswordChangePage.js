@@ -38,7 +38,8 @@ class RequestPasswordChangePage extends React.Component {
   onSubmitEmail(values) {
     // const token = window.sessionStorage.getItem('token');
 
-    fetch(`${window.BACKEND_PATH}/deals`, {
+    setSubmitting(true);
+    fetch(`${window.BACKEND_PATH}/profile/request-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -47,13 +48,23 @@ class RequestPasswordChangePage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
-        if (data && data.deal_title) {
-          // loadUser(user);
-          history.push(`/deals/${data.id}`); // .push is not a function?
-        }
+        // console.log('data: ', data);
+        // console.log('values: ', values);
+        // if (data && data.deal_title) {
+        //   // loadUser(user);
+        //   history.push(`/deals/${data.id}`);
+        // }
+        resetForm();
+        setSubmitting(false);
+        setStatus({ success: 'Success: Check your inbox for a reset link!' });
+        setFieldValue('email', '', false);
       })
-      .catch(console.log);
+      .catch(err => {
+        resetForm();
+        setSubmitting(false);
+        setStatus({ success: 'Success: Check your inbox for a reset link!' });
+        setFieldValue('email', '', false);
+      });
   }
 
   render() {

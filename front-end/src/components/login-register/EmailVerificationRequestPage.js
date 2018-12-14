@@ -59,7 +59,6 @@ class EmailVerificationRequestPage extends React.Component {
         setFieldValue('email', '', false);
       })
       .catch(err => {
-        console.log(err);
         resetForm();
         setSubmitting(false);
         setStatus({ success: 'Success: Check your inbox for a reset link!' });

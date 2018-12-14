@@ -4,31 +4,7 @@ const mailgun = require("mailgun-js")({
   domain: process.env.MAILGUN_DOMAIN
 });
 
-const testMailgunRoute = () => (req, res) => {
-  const token = "1337token";
-
-  var data = {
-    from: "Éire Deals <donotreply@mail.eiredeals.com>",
-    to: "thomasjhanna@gmail.com",
-    subject: "Please verify that it's you",
-    text: `Thank you for signing up to ÉireDeals.com\n\nTo verify please click to following link below or paste it into your browser.\n\nwww.eiredeals.com/complete-signup/${token}\n\nYou're securely,\nThe Éire Deals Team`
-  };
-
-  mailgun.messages().send(data, function(error, body) {
-    if (error) {
-      console.log(error);
-      return res
-        .status(200)
-        .json("If email is signed up sent verification email");
-    }
-    console.log(body);
-    return res
-      .status(200)
-      .json("If email is signed up sent verification email");
-  });
-};
-
-const requestVerifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
+const requestPasswordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
   const { email } = req.body;
   console.log("email: ", email);
 
@@ -71,14 +47,14 @@ const requestVerifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
             }
           );
 
-          Promise.resolve(redisClient.set(token, email, "EX", 1800))
+          Promise.resolve(redisClient.set(token, email, "EX", 600))
             .then(() => {
               // send the email using the token as part of the link
               var data = {
                 from: "Éire Deals <donotreply@mail.eiredeals.com>",
                 to: email,
-                subject: "Please verify that it's you",
-                text: `Thank you for signing up to ÉireDeals.com\n\nTo verify your email address please click to following link below or paste it into your browser.\n\nhttp://www.eiredeals.com/complete-signup?token=${token}\n\n You're securely,\nThe Éire Deals Team.`
+                subject: "Please change your password",
+                text: `Thank you for reseting your ÉireDeals.com password\n\nPlease click the link to change your password.\n\nhttp://www.eiredeals.com/reset-password?token=${token}\n\n You're securely,\nThe Éire Deals Team.`
               };
 
               mailgun.messages().send(data, function(error, body) {
@@ -107,7 +83,7 @@ const requestVerifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
   }
 };
 
-const verifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
+const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
   const { token } = req.body;
 
   return redisClient.get(token, (err, reply) => {
@@ -117,16 +93,48 @@ const verifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
 
     const email = reply;
 
+    const passwordSchema = Joi.string()
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
+      .required()
+      .label("Password")
+      .error(
+        () =>
+          '"Password" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
+      );
+
+    const passwordIsValid = Joi.validate(req.body.password, passwordSchema, {
+      abortEarly: false
+    });
+
+    const passwordErrors = passwordIsValid.error
+      ? passwordIsValid.error.details
+          .map(detail => {
+            return detail.message;
+          })
+          .join("\n\u2022 ")
+      : null;
+
+    if (passwordErrors) {
+      console.log("Register credentials failed schema validation");
+      res.status(400).json({
+        error: {
+          password: passwordErrors
+        }
+      });
+    }
+
+    const hash = bcrypt.hashSync(password);
+
     db.update({
-      email_verified: true
+      hash: hash
     })
       .where("email", "=", email)
-      .into("users")
-      .returning("email", "email_verified")
+      .into("login")
+      .returning("email")
       .then(user => {
         console.log(user);
         res.status(200).json({
-          is_like: user[0]
+          email: user[0]
         });
       })
       .catch(err => {
@@ -137,7 +145,6 @@ const verifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
 };
 
 module.exports = {
-  testMailgunRoute,
-  requestVerifyEmail,
-  verifyEmail
+  requestPasswordReset,
+  passwordReset
 };

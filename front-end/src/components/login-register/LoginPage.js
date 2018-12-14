@@ -74,7 +74,7 @@ const LoginModal = ({ isLoginModal, handleCloseLoginModal, switchModal, onSubmit
             <Button type="submit" disabled={isSubmitting}>
               Sign in
             </Button>
-            <StyledLink to="/forgot-password-request" onClick={handleCloseLoginModal}>
+            <StyledLink to="/password-request" onClick={handleCloseLoginModal}>
               <SmallBackgroundButton type="button">Forgot Password?</SmallBackgroundButton>
             </StyledLink>
             <StyledLink to="/complete-signup-request" onClick={handleCloseLoginModal}>

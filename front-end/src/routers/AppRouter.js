@@ -55,11 +55,9 @@ class AppRouter extends React.Component {
                     component={EmailVerificationRequestPage}
                   />
                   <PublicRoute path="/complete-signup/" component={EmailVerificationPage} />
-                  <PublicRoute
-                    path="/forgot-password-request"
-                    component={RequestPasswordChangePage}
-                  />
-                  <PublicRoute path="/reset-password/:token" component={PasswordChangePage} />
+
+                  <PublicRoute path="/password-request" component={RequestPasswordChangePage} />
+                  <PublicRoute path="/reset-password" component={PasswordChangePage} />
                   <PrivateRoute path="/deals" component={SubmitDealPage} userState={userState} />
                 </Switch>
               </Fragment>

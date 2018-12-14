@@ -32,25 +32,37 @@ class PasswordChangePage extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onSubmitDeal = this.onSubmitPassword.bind(this);
+    this.onSubmitPassword = this.onSubmitPassword.bind(this);
+
+    this.state = {
+      displayVerified: false
+    };
   }
 
   onSubmitPassword(values) {
-    // const token = window.sessionStorage.getItem('token');
+    const { location, history } = this.props;
 
-    fetch(`${window.BACKEND_PATH}/deals`, {
-      method: 'POST',
+    const index = location.search.indexOf('=');
+
+    const token = location.search.substring(index + 1);
+    console.log('token: ', token);
+
+    fetch(`${window.BACKEND_PATH}/profile/password`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify({
+        token: token,
+        password: password
+      })
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
-        if (data && data.deal_title) {
-          // loadUser(user);
-          history.push(`/deals/${data.id}`); // .push is not a function?
+        if (data.success) {
+          this.setState({ displayVerified: true });
+        } else {
+          this.setState({ displayVerified: false });
         }
       })
       .catch(console.log);

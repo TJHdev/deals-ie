@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 export default ({ userState, component: Component, ...rest }) => {
@@ -9,9 +9,9 @@ export default ({ userState, component: Component, ...rest }) => {
       {...rest}
       component={props =>
         userState.email ? (
-          <div>
+          <Fragment>
             <Component {...props} />
-          </div>
+          </Fragment>
         ) : (
           <Redirect to="/" />
         )
