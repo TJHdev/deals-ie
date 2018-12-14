@@ -1,14 +1,29 @@
 import React, { Component, createContext } from 'react';
+// import { UserConsumer } from '../User/UserContext';
 
 const ModalContext = createContext({
   component: null,
   props: {},
   showModal: () => {},
-  hideModal: () => {}
+  hideModal: () => {},
+  onSubmitRegister: () => {},
+  onSubmitLogin: () => {}
 });
 
 export class ModalProvider extends Component {
-  // shows the modal
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      component: null,
+      props: {},
+      showModal: this.showModal,
+      hideModal: this.hideModal,
+      onSubmitRegister: this.onSubmitRegister,
+      onSubmitLogin: this.onSubmitLogin
+    };
+  }
+
   showModal = (component, props = {}) => {
     this.setState({
       component,
@@ -16,17 +31,16 @@ export class ModalProvider extends Component {
     });
   };
 
-  // hides the modal
   hideModal = () =>
     this.setState({
       component: null,
       props: {}
     });
 
-  // register
   onSubmitRegister = (values, setErrors, setSubmitting) => {
     setSubmitting(true);
-    const { loadUser } = this.props;
+    const { history } = this.props;
+
     fetch(`${window.BACKEND_PATH}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -37,7 +51,7 @@ export class ModalProvider extends Component {
         setSubmitting(false);
         console.log(data);
         if (data && data.email) {
-          this.handleCloseRegisterModal();
+          this.hideModal();
           history.push('/complete-signup-request');
         } else {
           setErrors(data.error);
@@ -49,8 +63,11 @@ export class ModalProvider extends Component {
       });
   };
 
+  // login
   onSubmitLogin = (values, setErrors, setSubmitting) => {
     setSubmitting(true);
+    const { loadUser } = this.props.userState;
+    const { history } = this.props;
 
     fetch(`${window.BACKEND_PATH}/signin`, {
       method: 'POST',
@@ -67,7 +84,6 @@ export class ModalProvider extends Component {
           setErrors(data.error);
           return null;
         }
-        this.loadUser(data);
         return fetch(`${window.BACKEND_PATH}/profile/${data.userId}`, {
           method: 'GET',
           headers: {
@@ -79,7 +95,8 @@ export class ModalProvider extends Component {
           .then(user => {
             setSubmitting(false);
             if (user && user.email) {
-              this.handleCloseLoginModal(); // if login succesful close the modal
+              loadUser({ ...user });
+              this.hideModal(); // if login succesful close the modal
               history.push('/');
             } else {
             }
@@ -93,16 +110,6 @@ export class ModalProvider extends Component {
         setSubmitting(false);
         console.log(err);
       });
-  };
-
-  // state to inject into the provider
-  state = {
-    component: null,
-    props: {},
-    showModal: this.showModal,
-    hideModal: this.hideModal,
-    onSubmitRegister: this.onSubmitRegister,
-    onSubmitLogin: this.onSubmitLogin
   };
 
   render() {

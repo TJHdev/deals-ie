@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,7 +7,7 @@ import LoginModal from './Modal/LoginModal';
 
 // context api test
 import { ModalConsumer } from './Modal/ModalContext';
-import { Modal1, Modal2 } from './Modal/Modals';
+import { UserConsumer } from './User/UserContext';
 
 import ContentContainer from '../styled-components/ContentContainer';
 
@@ -22,7 +22,7 @@ class Header extends React.Component {
 
   render() {
     // console.log(this.props);
-    const { handleOpenRegisterModal } = this.props;
+
     return (
       <NavbarHeader>
         <ContentContainer>
@@ -39,27 +39,25 @@ class Header extends React.Component {
               <NavAnchor to="/deals">
                 <HeaderButton type="button">Submit Deal</HeaderButton>
               </NavAnchor>
-              <HeaderButton type="button" onClick={handleOpenRegisterModal}>
-                Join
-              </HeaderButton>
               <ModalConsumer>
                 {({ showModal }) => (
-                  <div>
-                    <button type="button" onClick={() => showModal(Modal1)}>
-                      Open Modal
-                    </button>
-                    <button type="button" onClick={() => showModal(Modal2, { foo: ' dodo' })}>
-                      Open Second Modal
-                    </button>
-                    <button type="button" onClick={() => showModal(RegisterModal)}>
-                      Register
-                    </button>
-                    <button type="button" onClick={() => showModal(LoginModal)}>
+                  <Fragment>
+                    <HeaderButton type="button" onClick={() => showModal(LoginModal)}>
                       Login
-                    </button>
-                  </div>
+                    </HeaderButton>
+                    <HeaderButton type="button" onClick={() => showModal(RegisterModal)}>
+                      Register
+                    </HeaderButton>
+                  </Fragment>
                 )}
               </ModalConsumer>
+              <UserConsumer>
+                {({ signOut }) => (
+                  <HeaderButton type="button" onClick={() => signOut()}>
+                    Sign out
+                  </HeaderButton>
+                )}
+              </UserConsumer>
             </NavContent>
           </HeaderContent>
         </ContentContainer>

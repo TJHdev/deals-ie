@@ -1,17 +1,21 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-export default ({ isAuthenticated, component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    component={props =>
-      isAuthenticated ? (
-        <div>
-          <Component {...props} />
-        </div>
-      ) : (
-        <Redirect to="/" />
-      )
-    }
-  />
-);
+export default ({ userState, component: Component, ...rest }) => {
+  console.log('userState: ', userState);
+
+  return (
+    <Route
+      {...rest}
+      component={props =>
+        userState.email ? (
+          <div>
+            <Component {...props} />
+          </div>
+        ) : (
+          <Redirect to="/" />
+        )
+      }
+    />
+  );
+};
