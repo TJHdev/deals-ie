@@ -54,7 +54,7 @@ const requestPasswordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
                 from: "Éire Deals <donotreply@mail.eiredeals.com>",
                 to: email,
                 subject: "Please change your password",
-                text: `Thank you for reseting your ÉireDeals.com password\n\nPlease click the link to change your password.\n\nhttp://www.eiredeals.com/reset-password?token=${token}\n\n You're securely,\nThe Éire Deals Team.`
+                text: `Thank you for reseting your ÉireDeals.com password\n\nPlease click the link to change your password.\n\nhttp://www.eiredeals.com/reset-password?token=${token}\n\nYou're securely,\nThe Éire Deals Team.`
               };
 
               mailgun.messages().send(data, function(error, body) {

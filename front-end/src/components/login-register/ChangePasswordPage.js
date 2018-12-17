@@ -39,7 +39,8 @@ class PasswordChangePage extends React.Component {
     };
   }
 
-  onSubmitPassword(values) {
+  onSubmitPassword(values, setSubmitting) {
+    setSubmitting(true);
     const { location, history } = this.props;
 
     const index = location.search.indexOf('=');
@@ -54,18 +55,23 @@ class PasswordChangePage extends React.Component {
       },
       body: JSON.stringify({
         token: token,
-        password: password
+        new_password: values.new_password,
+        repeat_password: values.repeat_password
       })
     })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {
+        setSubmitting(false);
+        if (data.email) {
           this.setState({ displayVerified: true });
         } else {
           this.setState({ displayVerified: false });
         }
       })
-      .catch(console.log);
+      .catch(err => {
+        console.log(err);
+        setSubmitting(false);
+      });
   }
 
   render() {
@@ -74,7 +80,8 @@ class PasswordChangePage extends React.Component {
         <h2>Change Password</h2>
         <Formik
           initialValues={{
-            password: ''
+            new_password: '',
+            repeat_password: ''
           }}
           validationSchema={yup.object().shape({
             new_password: yup
@@ -88,8 +95,7 @@ class PasswordChangePage extends React.Component {
               .required('Password is required!')
           })}
           onSubmit={(values, { setSubmitting }) => {
-            this.onSubmitPassword(values);
-            setSubmitting(false);
+            this.onSubmitPassword(values, setSubmitting);
           }}
         >
           {({ errors, touched, isSubmitting }) => {

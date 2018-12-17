@@ -124,11 +124,11 @@ app.get(
 // ***********************
 // app.post("/emails/test", emails.testMailgunRoute());
 app.post(
-  "/register/request-verify-email",
+  "/profile/request-verify-email",
   emails.requestVerifyEmail(redisVerifyEmailC, db, bcrypt, Joi)
 );
 app.post(
-  "/register/verify-email",
+  "/profile/verify-email",
   emails.verifyEmail(redisVerifyEmailC, db, bcrypt, Joi)
 );
 

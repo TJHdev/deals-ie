@@ -38,7 +38,7 @@ class EmailVerificationRequestPage extends React.Component {
   onSubmitEmail(values, setSubmitting, resetForm, setFieldValue, setStatus) {
     // const token = window.sessionStorage.getItem('token');
     setSubmitting(true);
-    fetch(`${window.BACKEND_PATH}/register/request-verify-email`, {
+    fetch(`${window.BACKEND_PATH}/profile/request-verify-email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

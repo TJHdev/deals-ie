@@ -35,7 +35,7 @@ class RequestPasswordChangePage extends React.Component {
     this.onSubmitEmail = this.onSubmitEmail.bind(this);
   }
 
-  onSubmitEmail(values) {
+  onSubmitEmail(values, setSubmitting, resetForm, setFieldValue, setStatus) {
     // const token = window.sessionStorage.getItem('token');
 
     setSubmitting(true);
@@ -75,14 +75,20 @@ class RequestPasswordChangePage extends React.Component {
               .email('E-mail is not valid!')
               .required('E-mail is required!')
           })}
-          onSubmit={(values, { setSubmitting }) => {
-            this.onSubmitEmail(values);
-            setSubmitting(false);
+          onSubmit={(values, actions) => {
+            this.onSubmitEmail(
+              values,
+              actions.setSubmitting,
+              actions.resetForm,
+              actions.setFieldValue,
+              actions.setStatus
+            );
           }}
         >
-          {({ errors, touched, isSubmitting }) => {
-            console.log(errors);
-            console.log(touched);
+          {props => {
+            console.log(props.errors);
+            console.log(props.touched);
+            console.log(props.status);
             return (
               <Form>
                 <Label htmlFor="email">
@@ -95,7 +101,10 @@ class RequestPasswordChangePage extends React.Component {
                     placeholder="Please enter your email address"
                   />
                 </Label>
-                <Button type="submit" disabled={isSubmitting}>
+                {props.status && props.status.success ? (
+                  <SuccessNotification>{props.status.success}</SuccessNotification>
+                ) : null}
+                <Button type="submit" disabled={props.isSubmitting}>
                   Submit
                 </Button>
               </Form>
@@ -106,6 +115,11 @@ class RequestPasswordChangePage extends React.Component {
     );
   }
 }
+
+const SuccessNotification = styled.div`
+  color: var(--green);
+  font-size: 1.3rem;
+`;
 
 export default withRouter(RequestPasswordChangePage);
 
