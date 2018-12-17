@@ -136,6 +136,9 @@ app.post(
 // resetting password
 // ******************
 
+// add a test token to the database
+app.post("/profile/test-password", password.testPassword(redisResetPasswordC));
+
 app.post(
   "/profile/request-password",
   password.requestPasswordReset(redisResetPasswordC, db, bcrypt, Joi)

@@ -4,6 +4,23 @@ const mailgun = require("mailgun-js")({
   domain: process.env.MAILGUN_DOMAIN
 });
 
+const testPassword = redisClient => (req, res) => {
+  const email = process.env.TEST_EMAIL;
+  const token = process.env.TEST_TOKEN;
+
+  Promise.resolve(redisClient.set(token, email, "EX", 600))
+    .then(() => {
+      console.log("Added test password change token to the database");
+      res.status(200).json("Added test password change token to the database");
+    })
+    .catch(err => {
+      res
+        .status(400)
+        .json("Could not add test password change token to the database");
+      console.log(err);
+    });
+};
+
 const requestPasswordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
   const { email } = req.body;
   console.log("email: ", email);
@@ -91,88 +108,67 @@ const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
       return res.status(401).json("No token match");
     }
 
-    const newPasswordSchema = Joi.string()
-      .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
-      .required()
-      .label("newPassword")
-      .error(
-        () =>
-          '"newPassword" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
-      );
+    const passwordScehma = Joi.object().keys({
+      new_password: Joi.string()
+        .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
+        .required()
+        .label("new_password")
+        .error(
+          () =>
+            '"New password" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
+        ),
+      repeat_password: Joi.string()
+        .required()
+        .valid(Joi.ref("new_password"))
+    });
 
-    const repeatPasswordSchema = Joi.string()
-      .required()
-      .valid(Joi.ref("newPassword"));
+    const passwords = {
+      new_password: req.body.new_password,
+      repeat_password: req.body.repeat_password
+    };
 
-    const newPasswordIsValid = Joi.validate(
-      req.body.new_password,
-      newPasswordSchema,
-      {
-        abortEarly: false
+    Joi.validate(
+      passwords,
+      passwordScehma,
+      { abortEarly: false },
+      (err, value) => {
+        if (err) {
+          res.status(400).json(err);
+          return null;
+        }
+
+        const email = reply;
+        const hash = bcrypt.hashSync(req.body.new_password);
+
+        db.update({
+          hash: hash
+        })
+          .where("email", "=", email)
+          .into("login")
+          .returning("email")
+          .then(user => {
+            console.log(user);
+
+            redisClient.del(token, (err, reply) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+            res.status(200).json({
+              email: user[0]
+            });
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+          });
       }
     );
-
-    const repeatPasswordIsValid = Joi.validate(
-      req.body.repeat_password,
-      repeatPasswordSchema,
-      { abortEarly: false }
-    );
-
-    const newPasswordErrors = newPasswordIsValid.error
-      ? newPasswordIsValid.error.details
-          .map(detail => {
-            return detail.message;
-          })
-          .join("\n\u2022 ")
-      : null;
-
-    const repeatPasswordErrors = repeatPasswordIsValid.error
-      ? repeatPasswordIsValid.error.details
-          .map(detail => {
-            return detail.message;
-          })
-          .join("\n\u2022 ")
-      : null;
-
-    if (newPasswordErrors || repeatPasswordErrors) {
-      console.log("Register credentials failed schema validation");
-      res.status(400).json({
-        error: {
-          new_password: newPasswordErrors,
-          repeat_password: repeatPasswordErrors
-        }
-      });
-    }
-
-    const email = reply;
-    const hash = bcrypt.hashSync(new_password);
-
-    db.update({
-      hash: hash
-    })
-      .where("email", "=", email)
-      .into("login")
-      .returning("email")
-      .then(user => {
-        console.log(user);
-
-        redisClient.del(authorization, (err, reply) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-        res.status(200).json({
-          email: user[0]
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(400).json(err);
-      });
   });
 };
 
 module.exports = {
+  testPassword,
   requestPasswordReset,
   passwordReset
 };
