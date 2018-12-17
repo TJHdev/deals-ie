@@ -39,7 +39,7 @@ class PasswordChangePage extends React.Component {
     };
   }
 
-  onSubmitPassword(values, setSubmitting) {
+  onSubmitPassword(values, setSubmitting, setErrors) {
     setSubmitting(true);
     const { location, history } = this.props;
 
@@ -65,11 +65,11 @@ class PasswordChangePage extends React.Component {
         if (data.email) {
           this.setState({ displayVerified: true });
         } else {
-          this.setState({ displayVerified: false });
         }
       })
       .catch(err => {
         console.log(err);
+        this.setState({ displayVerified: false });
         setSubmitting(false);
       });
   }
@@ -92,10 +92,11 @@ class PasswordChangePage extends React.Component {
             repeat_password: yup
               .string()
               .min(8, 'Password has to be longer than 8 characters!')
+              .oneOf([yup.ref('new_password'), null], 'Passwords fields must match!')
               .required('Password is required!')
           })}
-          onSubmit={(values, { setSubmitting }) => {
-            this.onSubmitPassword(values, setSubmitting);
+          onSubmit={(values, { setSubmitting, setErrors }) => {
+            this.onSubmitPassword(values, setSubmitting, setErrors);
           }}
         >
           {({ errors, touched, isSubmitting }) => {

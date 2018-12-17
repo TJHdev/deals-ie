@@ -101,44 +101,53 @@ const requestPasswordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
 };
 
 const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
-  const { token } = req.body;
+  const { token, new_password, repeat_password } = req.body;
 
-  return redisClient.get(token, (err, reply) => {
-    if (err || !reply) {
-      return res.status(401).json("No token match");
-    }
+  Promise.resolve(redisClient.get(token))
+    .then(response => {
+      console.log(response);
+      if (response.err || !response.reply) {
+        return res.status(401).json("No token match");
+      }
 
-    const passwordScehma = Joi.object().keys({
-      new_password: Joi.string()
+      const repeatPasswordErrors =
+        new_password !== repeat_password
+          ? "The password fields must match!"
+          : null;
+
+      const passwordSchema = Joi.string()
         .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
         .required()
-        .label("new_password")
+        .label("Password")
         .error(
           () =>
-            '"New password" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
-        ),
-      repeat_password: Joi.string()
-        .required()
-        .valid(Joi.ref("new_password"))
-    });
+            '"Password" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
+        );
 
-    const passwords = {
-      new_password: req.body.new_password,
-      repeat_password: req.body.repeat_password
-    };
+      const passwordIsValid = Joi.validate(new_password, passwordSchema, {
+        abortEarly: false
+      });
 
-    Joi.validate(
-      passwords,
-      passwordScehma,
-      { abortEarly: false },
-      (err, value) => {
-        if (err) {
-          res.status(400).json(err);
-          return null;
-        }
+      const newPasswordErrors = passwordIsValid.error
+        ? passwordIsValid.error.details
+            .map(detail => {
+              return detail.message;
+            })
+            .join("\n\u2022 ")
+        : null;
 
+      if (newPasswordErrors || repeatPasswordErrors) {
+        console.log("New password failed schema validation");
+
+        res.status(400).json({
+          error: {
+            new_password: newPasswordErrors,
+            repeat_password: repeatPasswordErrors
+          }
+        });
+      } else {
         const email = reply;
-        const hash = bcrypt.hashSync(req.body.new_password);
+        const hash = bcrypt.hashSync(new_password);
 
         db.update({
           hash: hash
@@ -163,8 +172,8 @@ const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
             res.status(400).json(err);
           });
       }
-    );
-  });
+    })
+    .catch(err => {});
 };
 
 module.exports = {
