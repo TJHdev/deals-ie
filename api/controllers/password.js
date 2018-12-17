@@ -108,10 +108,6 @@ const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
       return res.status(401).json("No token match");
     }
 
-    if (err || !reply) {
-      return res.status(401).json("No token match");
-    }
-
     const repeatPasswordErrors =
       new_password !== repeat_password
         ? "The password fields must match!"

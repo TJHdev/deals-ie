@@ -12,6 +12,9 @@ import Label from '../../styled-components/Label';
 import { ContentContainerPasswordForm } from '../../styled-components/ContentContainer';
 import { Button } from '../../styled-components/Button';
 
+import { ModalConsumer } from './ModalContext';
+import LoginModal from './LoginModal';
+
 class PasswordChangePage extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired
@@ -51,7 +54,9 @@ class PasswordChangePage extends React.Component {
         setSubmitting(false);
         if (data.email) {
           this.setState({ displayVerified: true });
-        } else {
+        }
+        if (data.error) {
+          setErrors(data.error);
         }
       })
       .catch(err => {
@@ -66,10 +71,17 @@ class PasswordChangePage extends React.Component {
     return (
       <Fragment>
         {displayVerified ? (
-          <div>
-            <h1>Thank you for changing your password.</h1>
-            <p>Please sign in./</p>
-          </div>
+          <CheckEmailContainer>
+            <h2>Thank you for changing your password</h2>
+            <SmallListText>Please sign in.</SmallListText>
+            <ModalConsumer>
+              {({ showModal }) => (
+                <Button type="button" onClick={() => showModal(LoginModal)}>
+                  Login
+                </Button>
+              )}
+            </ModalConsumer>
+          </CheckEmailContainer>
         ) : (
           <ContentContainerPasswordForm>
             <h2>Change Password</h2>
@@ -129,6 +141,20 @@ class PasswordChangePage extends React.Component {
     );
   }
 }
+
+const CheckEmailContainer = styled.div`
+  margin: 5rem 0;
+`;
+
+const SmallList = styled.ul`
+  margin-left: 1.8rem;
+  /* list-style-position: inside; */
+`;
+
+const SmallListText = styled.p`
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+`;
 
 export default withRouter(PasswordChangePage);
 
