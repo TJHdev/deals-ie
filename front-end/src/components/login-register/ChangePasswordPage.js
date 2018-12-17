@@ -6,21 +6,8 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import format from 'date-fns/format';
 
-import {
-  TextField,
-  TextareaField,
-  NumericField,
-  CheckboxField,
-  StyledErrorMessage,
-  ErrorSpan
-} from '../../styled-components/FormikStyles';
-import {
-  RadioContainer,
-  RadioGroup,
-  RadioInput,
-  RadioLabel,
-  RadioButton
-} from '../../styled-components/Radio';
+import { TextField, StyledErrorMessage } from '../../styled-components/FormikStyles';
+
 import Label from '../../styled-components/Label';
 import { ContentContainerPasswordForm } from '../../styled-components/ContentContainer';
 import { Button } from '../../styled-components/Button';

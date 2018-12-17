@@ -103,77 +103,78 @@ const requestPasswordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
 const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
   const { token, new_password, repeat_password } = req.body;
 
-  Promise.resolve(redisClient.get(token))
-    .then(response => {
-      console.log(response);
-      if (response.err || !response.reply) {
-        return res.status(401).json("No token match");
-      }
+  return redisClient.get(token, (err, reply) => {
+    if (err || !reply) {
+      return res.status(401).json("No token match");
+    }
 
-      const repeatPasswordErrors =
-        new_password !== repeat_password
-          ? "The password fields must match!"
-          : null;
+    if (err || !reply) {
+      return res.status(401).json("No token match");
+    }
 
-      const passwordSchema = Joi.string()
-        .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
-        .required()
-        .label("Password")
-        .error(
-          () =>
-            '"Password" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
-        );
-
-      const passwordIsValid = Joi.validate(new_password, passwordSchema, {
-        abortEarly: false
-      });
-
-      const newPasswordErrors = passwordIsValid.error
-        ? passwordIsValid.error.details
-            .map(detail => {
-              return detail.message;
-            })
-            .join("\n\u2022 ")
+    const repeatPasswordErrors =
+      new_password !== repeat_password
+        ? "The password fields must match!"
         : null;
 
-      if (newPasswordErrors || repeatPasswordErrors) {
-        console.log("New password failed schema validation");
+    const passwordSchema = Joi.string()
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
+      .required()
+      .label("Password")
+      .error(
+        () =>
+          '"Password" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
+      );
 
-        res.status(400).json({
-          error: {
-            new_password: newPasswordErrors,
-            repeat_password: repeatPasswordErrors
-          }
-        });
-      } else {
-        const email = reply;
-        const hash = bcrypt.hashSync(new_password);
+    const passwordIsValid = Joi.validate(new_password, passwordSchema, {
+      abortEarly: false
+    });
 
-        db.update({
-          hash: hash
-        })
-          .where("email", "=", email)
-          .into("login")
-          .returning("email")
-          .then(user => {
-            console.log(user);
-
-            redisClient.del(token, (err, reply) => {
-              if (err) {
-                console.log(err);
-              }
-            });
-            res.status(200).json({
-              email: user[0]
-            });
+    const newPasswordErrors = passwordIsValid.error
+      ? passwordIsValid.error.details
+          .map(detail => {
+            return detail.message;
           })
-          .catch(err => {
-            console.log(err);
-            res.status(400).json(err);
+          .join("\n\u2022 ")
+      : null;
+
+    if (newPasswordErrors || repeatPasswordErrors) {
+      console.log("New password failed schema validation");
+
+      res.status(400).json({
+        error: {
+          new_password: newPasswordErrors,
+          repeat_password: repeatPasswordErrors
+        }
+      });
+    } else {
+      const email = reply;
+      const hash = bcrypt.hashSync(new_password);
+
+      db.update({
+        hash: hash
+      })
+        .where("email", "=", email)
+        .into("login")
+        .returning("email")
+        .then(user => {
+          console.log(user);
+
+          redisClient.del(token, (err, reply) => {
+            if (err) {
+              console.log(err);
+            }
           });
-      }
-    })
-    .catch(err => {});
+          res.status(200).json({
+            email: user[0]
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(400).json(err);
+        });
+    }
+  });
 };
 
 module.exports = {

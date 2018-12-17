@@ -7,9 +7,6 @@ const reqAuth = redisClient => (req, res, next) => {
     if (err || !reply) {
       return res.status(401).json("No token match");
     }
-    if (reply.includes("@")) {
-      return res.status(401).json("That token is for verification");
-    }
     console.log("You shall pass");
     // res.locals.userid = token // this should be used if there was no redis database
     return next();
