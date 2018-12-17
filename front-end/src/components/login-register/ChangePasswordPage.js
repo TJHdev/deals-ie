@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
@@ -69,69 +69,76 @@ class PasswordChangePage extends React.Component {
       })
       .catch(err => {
         console.log(err);
-        this.setState({ displayVerified: false });
+        // this.setState({ displayVerified: false });
         setSubmitting(false);
       });
   }
 
   render() {
+    const { displayVerified } = this.state;
     return (
-      <ContentContainerPasswordForm>
-        <h2>Change Password</h2>
-        <Formik
-          initialValues={{
-            new_password: '',
-            repeat_password: ''
-          }}
-          validationSchema={yup.object().shape({
-            new_password: yup
-              .string()
-              .min(8, 'Password has to be longer than 8 characters!')
-              .required('Password is required!'),
+      <Fragment>
+        {displayVerified ? (
+          <div>
+            <h1>Thank you for changing your password.</h1>
+            <p>Please sign in./</p>
+          </div>
+        ) : (
+          <ContentContainerPasswordForm>
+            <h2>Change Password</h2>
+            <Formik
+              initialValues={{
+                new_password: '',
+                repeat_password: ''
+              }}
+              validationSchema={yup.object().shape({
+                new_password: yup
+                  .string()
+                  .min(8, 'Password has to be longer than 8 characters!')
+                  .required('Password is required!'),
 
-            repeat_password: yup
-              .string()
-              .min(8, 'Password has to be longer than 8 characters!')
-              .oneOf([yup.ref('new_password'), null], 'Passwords fields must match!')
-              .required('Password is required!')
-          })}
-          onSubmit={(values, { setSubmitting, setErrors }) => {
-            this.onSubmitPassword(values, setSubmitting, setErrors);
-          }}
-        >
-          {({ errors, touched, isSubmitting }) => {
-            console.log(errors);
-            console.log(touched);
-            return (
-              <Form>
-                <Label htmlFor="new_password">
-                  New Password
-                  <StyledErrorMessage name="new_password" component="span" />
-                  <TextField
-                    autoComplete="off"
-                    type="password"
-                    name="new_password"
-                    placeholder="Please enter new password"
-                  />
-                </Label>
-                <Label htmlFor="repeat_password">
-                  Repeat Password
-                  <StyledErrorMessage name="repeat_password" component="span" />
-                  <TextField
-                    autoComplete="off"
-                    type="password"
-                    name="repeat_password"
-                    placeholder="Please repeat new password"
-                  />
-                </Label>
-                <Button type="submit" disabled={isSubmitting}>
-                  Submit
-                </Button>
-              </Form>
-            );
-          }}
-        </Formik>
-      </ContentContainerPasswordForm>
+                repeat_password: yup.string().required('Confirming password field is required!')
+                // .oneOf([yup.ref('new_password')], 'Passwords fields must match!')
+              })}
+              onSubmit={(values, { setSubmitting, setErrors }) => {
+                this.onSubmitPassword(values, setSubmitting, setErrors);
+              }}
+            >
+              {({ errors, touched, isSubmitting }) => {
+                console.log(errors);
+                console.log(touched);
+                return (
+                  <Form>
+                    <Label htmlFor="new_password">
+                      New Password
+                      <TextField
+                        autoComplete="off"
+                        type="password"
+                        name="new_password"
+                        placeholder="Please enter new password"
+                      />
+                      <StyledErrorMessage name="new_password" component="span" />
+                    </Label>
+                    <Label htmlFor="repeat_password">
+                      Confirm Password
+                      <TextField
+                        autoComplete="off"
+                        type="password"
+                        name="repeat_password"
+                        placeholder="Please repeat new password"
+                      />
+                      <StyledErrorMessage name="repeat_password" component="span" />
+                    </Label>
+                    <Button type="submit" disabled={isSubmitting}>
+                      Submit
+                    </Button>
+                  </Form>
+                );
+              }}
+            </Formik>
+          </ContentContainerPasswordForm>
+        )}
+      </Fragment>
     );
   }
 }
