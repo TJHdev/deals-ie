@@ -12,8 +12,8 @@ import Label from '../../styled-components/Label';
 import { ContentContainerPasswordForm } from '../../styled-components/ContentContainer';
 import { Button } from '../../styled-components/Button';
 
-import { ModalConsumer } from './ModalContext';
-import LoginModal from './LoginModal';
+import { ModalConsumer } from '../Modal/ModalContext';
+import LoginModal from '../Modal/LoginModal';
 
 class PasswordChangePage extends React.Component {
   static propTypes = {
