@@ -145,7 +145,7 @@ const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
     }
 
     const email = reply;
-    const hash = bcrypt.hashSync(password);
+    const hash = bcrypt.hashSync(new_password);
 
     db.update({
       hash: hash
