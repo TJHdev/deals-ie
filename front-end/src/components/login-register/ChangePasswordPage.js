@@ -80,6 +80,11 @@ class PasswordChangePage extends React.Component {
             new_password: yup
               .string()
               .min(8, 'Password has to be longer than 8 characters!')
+              .required('Password is required!'),
+
+            repeat_password: yup
+              .string()
+              .min(8, 'Password has to be longer than 8 characters!')
               .required('Password is required!')
           })}
           onSubmit={(values, { setSubmitting }) => {
@@ -92,23 +97,23 @@ class PasswordChangePage extends React.Component {
             console.log(touched);
             return (
               <Form>
-                <Label htmlFor="new-password">
+                <Label htmlFor="new_password">
                   New Password
-                  <StyledErrorMessage name="new-password" component="span" />
+                  <StyledErrorMessage name="new_password" component="span" />
                   <TextField
                     autoComplete="off"
-                    type="text"
-                    name="new-password"
+                    type="password"
+                    name="new_password"
                     placeholder="Please enter new password"
                   />
                 </Label>
-                <Label htmlFor="repeat-password">
+                <Label htmlFor="repeat_password">
                   Repeat Password
-                  <StyledErrorMessage name="repeat-password" component="span" />
+                  <StyledErrorMessage name="repeat_password" component="span" />
                   <TextField
                     autoComplete="off"
-                    type="text"
-                    name="repeat-password"
+                    type="password"
+                    name="repeat_password"
                     placeholder="Please repeat new password"
                   />
                 </Label>

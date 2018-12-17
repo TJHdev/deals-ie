@@ -48,21 +48,15 @@ class RequestPasswordChangePage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log('data: ', data);
-        // console.log('values: ', values);
-        // if (data && data.deal_title) {
-        //   // loadUser(user);
-        //   history.push(`/deals/${data.id}`);
-        // }
         resetForm();
         setSubmitting(false);
-        setStatus({ success: 'Success: Check your inbox for a reset link!' });
+        setStatus({ success: 'Success: Check your inbox for a password reset link!' });
         setFieldValue('email', '', false);
       })
       .catch(err => {
         resetForm();
         setSubmitting(false);
-        setStatus({ success: 'Success: Check your inbox for a reset link!' });
+        setStatus({ success: 'Success: Check your inbox for password a reset link!' });
         setFieldValue('email', '', false);
       });
   }

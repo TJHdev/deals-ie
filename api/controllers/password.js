@@ -91,38 +91,60 @@ const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
       return res.status(401).json("No token match");
     }
 
-    const email = reply;
-
-    const passwordSchema = Joi.string()
+    const newPasswordSchema = Joi.string()
       .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) // Minimum eight characters, at least one letter, one number and one special character:
       .required()
-      .label("Password")
+      .label("newPassword")
       .error(
         () =>
-          '"Password" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
+          '"newPassword" must have: \n\u2022 Minimum eight characters.\n\u2022 One letter. (abc)\n\u2022 One number. (123)\n\u2022 One special character. (!@#)'
       );
 
-    const passwordIsValid = Joi.validate(req.body.password, passwordSchema, {
-      abortEarly: false
-    });
+    const repeatPasswordSchema = Joi.string()
+      .required()
+      .valid(Joi.ref("newPassword"));
 
-    const passwordErrors = passwordIsValid.error
-      ? passwordIsValid.error.details
+    const newPasswordIsValid = Joi.validate(
+      req.body.new_password,
+      newPasswordSchema,
+      {
+        abortEarly: false
+      }
+    );
+
+    const repeatPasswordIsValid = Joi.validate(
+      req.body.repeat_password,
+      repeatPasswordSchema,
+      { abortEarly: false }
+    );
+
+    const newPasswordErrors = newPasswordIsValid.error
+      ? newPasswordIsValid.error.details
           .map(detail => {
             return detail.message;
           })
           .join("\n\u2022 ")
       : null;
 
-    if (passwordErrors) {
+    const repeatPasswordErrors = repeatPasswordIsValid.error
+      ? repeatPasswordIsValid.error.details
+          .map(detail => {
+            return detail.message;
+          })
+          .join("\n\u2022 ")
+      : null;
+
+    if (newPasswordErrors || repeatPasswordErrors) {
       console.log("Register credentials failed schema validation");
       res.status(400).json({
         error: {
-          password: passwordErrors
+          new_password: newPasswordErrors,
+          repeat_password: repeatPasswordErrors
         }
       });
     }
 
+    const email = reply;
     const hash = bcrypt.hashSync(password);
 
     db.update({
@@ -133,6 +155,12 @@ const passwordReset = (redisClient, db, bcrypt, Joi) => (req, res) => {
       .returning("email")
       .then(user => {
         console.log(user);
+
+        redisClient.del(authorization, (err, reply) => {
+          if (err) {
+            console.log(err);
+          }
+        });
         res.status(200).json({
           email: user[0]
         });
