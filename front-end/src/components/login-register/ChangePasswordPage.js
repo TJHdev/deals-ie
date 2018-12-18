@@ -71,17 +71,10 @@ class PasswordChangePage extends React.Component {
     return (
       <Fragment>
         {displayVerified ? (
-          <CheckEmailContainer>
-            <h2>Thank you for changing your password</h2>
+          <ContentContainerPasswordForm>
+            <h2>Password changed</h2>
             <SmallListText>Please sign in.</SmallListText>
-            <ModalConsumer>
-              {({ showModal }) => (
-                <Button type="button" onClick={() => showModal(LoginModal)}>
-                  Login
-                </Button>
-              )}
-            </ModalConsumer>
-          </CheckEmailContainer>
+          </ContentContainerPasswordForm>
         ) : (
           <ContentContainerPasswordForm>
             <h2>Change Password</h2>
