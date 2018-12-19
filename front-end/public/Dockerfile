@@ -1,6 +1,10 @@
-FROM nginx:alpine
+# FROM nginx:alpine
 
-WORKDIR /usr/src/front-end-public
+# COPY ./ /usr/share/nginx/html
 
-COPY ./ ./
+FROM nginx:stable
 
+COPY ./build/ /var/www
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+CMD ["nginx -g 'daemon off;'"]
