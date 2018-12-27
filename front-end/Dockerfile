@@ -14,7 +14,7 @@ COPY ./ ./
 # RUN npm rebuild node-sass --force
 
 RUN npm install
-RUN npm rebuild node-sass --force
+# RUN npm rebuild node-sass --force
 
 CMD ["/bin/bash"]
 
