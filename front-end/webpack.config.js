@@ -45,7 +45,8 @@ module.exports = env => {
       CSSExtract,
       new webpack.DefinePlugin({
         'process.env.DEPLOYED_ENV': JSON.stringify(process.env.DEPLOYED_ENV),
-        'process.env.MODE': JSON.stringify(process.env.MODE)
+        'process.env.mode': JSON.stringify(process.env.mode),
+        'process.env.NGINX_PRODUCTION': JSON.stringify(process.env.NGINX_PRODUCTION)
       })
     ],
     devtool: isProduction ? 'source-map' : 'inline-source-map',

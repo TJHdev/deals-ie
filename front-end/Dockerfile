@@ -1,22 +1,15 @@
-FROM node:10.4.0
-
+FROM node:10.4.0 AS build-stage
 WORKDIR /usr/src/front-end
-
 COPY ./ ./
-
-# RUN npm cache clean
-# RUN npm rebuild node-sass
-
-
-# RUN rm -r /usr/src/front-end/node_modules/node-sass/vendor/win32-x64-64
-# RUN mkdir -p /usr/src/front-end/node_modules/node-sass/vendor/linux-x64-64
-# RUN curl -L https://github.com/sass/node-sass/releases/download/v4.10.0/linux-x64-64_binding.node -o /usr/src/front-end/node_modules/node-sass/vendor/linux-x64-64/binding.node
-# RUN npm rebuild node-sass --force
-
 RUN npm install
-# RUN npm rebuild node-sass --force
+RUN npm run build:prod
 
-CMD ["/bin/bash"]
+FROM nginx:1.15.8-perl
 
-# https://stackoverflow.com/questions/41942769/issue-to-node-sass-and-docker
-# https://github.com/sass/node-sass/issues/2177
+COPY --from=build-stage /usr/src/front-end/public/ /usr/share/nginx/html
+COPY --from=build-stage /usr/src/front-end/public/nginx.conf /etc/nginx/conf.d/default.conf
+# RUN apt update
+# RUN apt install -y nginx-plus-module-perl
+# RUN apt-get install nginx-plus-module-perl
+
+# CMD ["nginx -g 'daemon off;'"]  

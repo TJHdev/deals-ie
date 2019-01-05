@@ -7,8 +7,8 @@
   "scripts": {
     "start": "node server/server.js",
     "serve": "live-server public/",
-    "build:dev": "webpack --MODE=production",
-    "build:prod": "webpack -p --MODE=production --DEPLOYED_ENV=production --host=0.0.0.0",
+    "build:dev": "webpack --mode=production",
+    "build:prod": "webpack -p --env.mode=production --DEPLOYED_ENV=production --host=0.0.0.0",
     "dev-server": "webpack-dev-server --mode=development --host=0.0.0.0",
     "test": "cross-env NODE_ENV=test jest --config=jest.config.json --watchAll",
     "heroku-postbuild": "yarn run build:prod"

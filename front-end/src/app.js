@@ -8,13 +8,16 @@ import './styles/styles.css';
 import 'react-dates/lib/css/_datepicker.css';
 import LoadingPage from './components/LoadingPage';
 
+// console.log('DEPLOYED_ENV:', process.env.DEPLOYED_ENV);
+// console.log('mode:', process.env.mode);
+// console.log('NGINX_PRODUCTION:', process.env.NGINX_PRODUCTION);
+// console.log('new mode:', window.env.mode);
+
 window.BACKEND_PATH =
   // process.env.DEPLOYED_ENV === 'production'
   // ? 'http://www.eiredeals.com:5000'
   // : 'http://www.eiredeals.com:5000';
-  process.env.DEPLOYED_ENV === 'production'
-    ? 'http://www.eiredeals.com:5000'
-    : 'http://localhost:5000';
+  window.env.mode === 'production' ? 'http://www.eiredeals.com:5000' : 'http://localhost:5000';
 
 const jsx = (
   <BrowserRouter>
