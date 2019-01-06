@@ -3,3 +3,4 @@ public/dist/
 .env.development
 .env.test
 .env.backup
+init-letsencrypt.sh
