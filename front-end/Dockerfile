@@ -7,7 +7,8 @@ RUN npm run build:prod
 FROM nginx:1.15.8-perl
 
 COPY --from=build-stage /usr/src/front-end/public/ /usr/share/nginx/html
-COPY --from=build-stage /usr/src/front-end/public/nginx.conf /etc/nginx/conf.d/default.conf
+# COPY --from=build-stage /usr/src/front-end/public/nginx.conf /etc/nginx/conf.d/default.conf
+
 # RUN apt update
 # RUN apt install -y nginx-plus-module-perl
 # RUN apt-get install nginx-plus-module-perl

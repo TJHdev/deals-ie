@@ -13,6 +13,12 @@ import LoadingPage from './components/LoadingPage';
 // console.log('NGINX_PRODUCTION:', process.env.NGINX_PRODUCTION);
 // console.log('new mode:', window.env.mode);
 
+if (!window.env) {
+  window.env = {
+    mode: 'development'
+  };
+}
+
 window.BACKEND_PATH =
   // process.env.DEPLOYED_ENV === 'production'
   // ? 'http://www.eiredeals.com:5000'

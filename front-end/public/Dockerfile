@@ -12,9 +12,9 @@ FROM nginx:1.15.8
 
 # COPY --from=build-stage ./usr/src/front-end/public/ /var/www
 COPY --from=build-stage ./public /usr/share/nginx/html
-COPY --from=build-stage ./public/nginx.conf /etc/nginx/conf.d/default.conf
+# COPY --from=build-stage ./public/nginx.conf /etc/nginx/conf.d/default.conf
 
 # COPY ./build/ /var/www
 # COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
-CMD ["nginx -g 'daemon off;'"]  
+CMD [nginx-debug, "-g", "daemon off;"]
