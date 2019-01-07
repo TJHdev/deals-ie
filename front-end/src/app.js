@@ -23,7 +23,7 @@ window.BACKEND_PATH =
   // process.env.DEPLOYED_ENV === 'production'
   // ? 'http://www.eiredeals.com:5000'
   // : 'http://www.eiredeals.com:5000';
-  window.env.mode === 'production' ? 'http://www.eiredeals.com:5000' : 'http://localhost:5000';
+  window.env.mode === 'production' ? 'https://www.eiredeals.com:5000' : 'http://localhost:5000';
 
 const jsx = (
   <BrowserRouter>
