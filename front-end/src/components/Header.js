@@ -79,7 +79,7 @@ const HeaderContent = styled.div`
 
 const LogoImg = styled.img`
   margin-right: 1rem;
-  height: 40px;
+  height: 55px;
 `;
 
 const HeaderTitle = styled(Link)`
