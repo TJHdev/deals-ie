@@ -6,4 +6,3 @@ styles.css.map
 .env.development
 .env.test
 .env.backup
-init-letsencrypt.sh
