@@ -13,6 +13,9 @@ import EmailVerificationPage from '../components/login-register/EmailVerificatio
 import PasswordChangePage from '../components/login-register/ChangePasswordPage';
 import RequestPasswordChangePage from '../components/login-register/RequestPasswordChangePage';
 
+import SideDrawer from '../components/Burger-Menu/SideDrawer';
+import Backdrop from '../components/Burger-Menu/Backdrop';
+
 // import DashboardPage from '../components/DashboardPage';
 // import NotFoundPage from '../components/NotFoundPage';
 // import LoginPage from '../components/LoginPage';
@@ -30,11 +33,28 @@ const history = createHistory();
 class AppRouter extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      sideDrawerOpen: false
+    };
   }
 
-  componentDidMount() {}
+  drawerToggleClickHandler = () => {
+    this.setState(prevState => {
+      return { sideDrawerOpen: !prevState.sideDrawerOpen };
+    });
+  };
+
+  backdropClickHandler = () => {
+    this.setState({ sideDrawerOpen: false });
+  };
 
   render() {
+    let backdrop;
+
+    if (this.state.sideDrawerOpen) {
+      backdrop = <Backdrop click={this.backdropClickHandler} />;
+    }
+
     return (
       <Router history={history}>
         <UserProvider>
@@ -42,8 +62,10 @@ class AppRouter extends React.Component {
             {userState => (
               <Fragment>
                 <ModalProvider userState={userState} history={history}>
-                  <Header />
+                  <Header drawerClickHandler={this.drawerToggleClickHandler} />
                   <ModalRoot />
+                  <SideDrawer show={this.state.sideDrawerOpen} />
+                  {backdrop}
                 </ModalProvider>
 
                 <Switch>

@@ -11,6 +11,9 @@ import { UserConsumer } from './User/UserContext';
 
 import ContentContainer from '../styled-components/ContentContainer';
 
+// burger menu
+import DrawerToggleButton from './Burger-Menu/DrawToggleButton';
+
 class Header extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired
@@ -22,6 +25,7 @@ class Header extends React.Component {
 
   render() {
     // console.log(this.props);
+    const { drawerClickHandler } = this.props;
 
     return (
       <NavbarHeader>
@@ -31,6 +35,7 @@ class Header extends React.Component {
               <LogoImg src="/images/EireDealsLogo.png" alt="Eiredeals logo" />
               <HeaderText>Éire Deals</HeaderText>
             </HeaderTitle>
+            <DrawerToggleButton click={drawerClickHandler} />
             <NavContent>
               <SearchContainer>
                 <SearchField placeholder="Search for brands, models, products etc" />
