@@ -25,7 +25,7 @@ class Header extends React.Component {
 
   render() {
     // console.log(this.props);
-    const { drawerClickHandler } = this.props;
+    const { drawerClickHandler, userState } = this.props;
 
     return (
       <NavbarHeader>
@@ -45,24 +45,19 @@ class Header extends React.Component {
                 <HeaderButton type="button">Submit Deal</HeaderButton>
               </NavAnchor>
               <ModalConsumer>
-                {({ showModal }) => (
-                  <Fragment>
-                    <HeaderButton type="button" onClick={() => showModal(LoginModal)}>
-                      Login
-                    </HeaderButton>
+                {({ showModal }) => {
+                  return userState.id ? null : (
                     <HeaderButton type="button" onClick={() => showModal(RegisterModal)}>
                       Register
                     </HeaderButton>
-                  </Fragment>
-                )}
+                  );
+                }}
               </ModalConsumer>
-              <UserConsumer>
-                {({ signOut }) => (
-                  <HeaderButton type="button" onClick={() => signOut()}>
-                    Sign out
-                  </HeaderButton>
-                )}
-              </UserConsumer>
+              {userState.id ? (
+                <HeaderButton type="button" onClick={() => userState.signOut()}>
+                  Sign out
+                </HeaderButton>
+              ) : null}
             </NavContent>
           </HeaderContent>
         </ContentContainer>

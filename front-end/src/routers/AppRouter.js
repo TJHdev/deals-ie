@@ -62,7 +62,10 @@ class AppRouter extends React.Component {
             {userState => (
               <Fragment>
                 <ModalProvider userState={userState} history={history}>
-                  <Header drawerClickHandler={this.drawerToggleClickHandler} />
+                  <Header
+                    userState={userState}
+                    drawerClickHandler={this.drawerToggleClickHandler}
+                  />
                   <ModalRoot />
                   <SideDrawer show={this.state.sideDrawerOpen} />
                   {backdrop}
