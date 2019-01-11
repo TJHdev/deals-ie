@@ -65,11 +65,9 @@ class EmailVerificationPage extends React.Component {
               <SmallListText>Click below to login.</SmallListText>
               <ModalConsumer>
                 {({ showModal }) => {
-                  return userState.id ? null : (
-                    <Button type="button" onClick={() => showModal(LoginModal)}>
-                      Login page
-                    </Button>
-                  );
+                  <Button type="button" onClick={() => showModal(LoginModal)}>
+                    Login page
+                  </Button>;
                 }}
               </ModalConsumer>
             </CheckEmailContainer>
