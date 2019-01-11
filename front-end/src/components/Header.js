@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import RegisterModal from './Modal/RegisterModal';
-import LoginModal from './Modal/LoginModal';
 
 // context api test
 import { ModalConsumer } from './Modal/ModalContext';
-import { UserConsumer } from './User/UserContext';
 
 import ContentContainer from '../styled-components/ContentContainer';
 

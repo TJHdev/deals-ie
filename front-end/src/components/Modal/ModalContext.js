@@ -37,6 +37,7 @@ export class ModalProvider extends Component {
       props: {}
     });
 
+  // register
   onSubmitRegister = (values, setErrors, setSubmitting) => {
     setSubmitting(true);
     const { history } = this.props;

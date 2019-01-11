@@ -6,6 +6,10 @@ import styled from 'styled-components';
 // import * as yup from 'yup';
 // import format from 'date-fns/format';
 
+// context api test
+import LoginModal from '../Modal/LoginModal';
+import { ModalConsumer } from '../Modal/ModalContext';
+
 import Label from '../../styled-components/Label';
 import { ContentContainerPasswordForm } from '../../styled-components/ContentContainer';
 import { Button } from '../../styled-components/Button';
@@ -20,7 +24,6 @@ class EmailVerificationPage extends React.Component {
     this.state = {
       displayVerified: false
     };
-    // this.onSubmitEmail = this.onSubmitEmail.bind(this);
   }
 
   componentDidMount() {
@@ -60,7 +63,15 @@ class EmailVerificationPage extends React.Component {
               <h2>Email Verified Success!</h2>
               <SmallListText>Thank you for verifying your email address.</SmallListText>
               <SmallListText>Click below to login.</SmallListText>
-              <Button type="submit">Login page</Button>
+              <ModalConsumer>
+                {({ showModal }) => {
+                  return userState.id ? null : (
+                    <Button type="button" onClick={() => showModal(LoginModal)}>
+                      Login page
+                    </Button>
+                  );
+                }}
+              </ModalConsumer>
             </CheckEmailContainer>
           </ContentContainerPasswordForm>
         ) : (
