@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import LoginModal from '../Modal/LoginModal';
 import { ModalConsumer } from '../Modal/ModalContext';
 
-import Label from '../../styled-components/Label';
+// import Label from '../../styled-components/Label';
 import { ContentContainerPasswordForm } from '../../styled-components/ContentContainer';
 import { Button } from '../../styled-components/Button';
 
@@ -64,11 +64,11 @@ class EmailVerificationPage extends React.Component {
               <SmallListText>Thank you for verifying your email address.</SmallListText>
               <SmallListText>Click below to login.</SmallListText>
               <ModalConsumer>
-                {({ showModal }) => {
+                {({ showModal }) => (
                   <Button type="button" onClick={() => showModal(LoginModal)}>
                     Login page
-                  </Button>;
-                }}
+                  </Button>
+                )}
               </ModalConsumer>
             </CheckEmailContainer>
           </ContentContainerPasswordForm>
