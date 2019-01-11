@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const mailgun = require("mailgun-js")({
   apiKey: process.env.MAILGUN_KEY,
-  domain: process.env.MAILGUN_DOMAIN
+  domain: process.env.MAILGUN_DOMAIN,
+  host: process.env.MAILGUN_HOST
 });
 
 const testMailgunRoute = () => (req, res) => {
