@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import format from 'date-fns/format';
 import cloneDeep from 'lodash/cloneDeep';
+import isEqual from 'lodash/isEqual';
 
 // import ContentContainer from '../styled-components/ContentContainer';
 import { Button } from '../styled-components/Button';
@@ -44,10 +45,26 @@ class HomePage extends React.Component {
       .then(resp => resp.json())
       .then(data => {
         if (data && data.constructor === Array && data[0].deal_title) {
+          // const stateIsDifferent = isEqual(newData, this.state);
           this.setState({ dealsArray: data });
         }
       })
       .catch(console.log);
+  }
+
+  shouldComponentUpdate() {
+    // this.setState(prevState => {
+    //   const newData = { dealsArray: data };
+    //   const stateIsDifferent = isEqual(newData, prevState);
+    //   console.log('stateIsDifferent:', stateIsDifferent);
+    //   console.log('newData:', newData);
+    //   console.log('oldData:', prevState);
+    //   if (stateIsDifferent) {
+    //     return prevState;
+    //   }
+    //   return newData;
+    // });
+    return true;
   }
 
   onSubmitChangeDealLikeHot(dealId, isLike) {

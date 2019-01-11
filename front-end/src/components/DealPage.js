@@ -51,9 +51,12 @@ class DealPage extends React.Component {
       .then(resp => resp.json())
       .then(data => {
         if (data && data.deal_title) {
+          const newData = { dealsArray: [data] };
+          this.setState(newData);
+
           // console.log(this.props);
           // console.log(data);
-          this.setState({ dealsArray: [data] });
+          // this.setState({ dealsArray: [data] });
         }
       })
       .catch(console.log);
