@@ -52,6 +52,24 @@ export class ModalProvider extends Component {
         console.log(data);
         if (data && data.email) {
           this.hideModal();
+
+          //send request for verification email
+          fetch(`${window.BACKEND_PATH}/profile/request-verify-email`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: values.email })
+          })
+            .then(response => response.json())
+            .then(data => {
+              return;
+            })
+            .catch(err => {
+              console.log('Something went wrong requesting a verification email');
+              return;
+            });
+
           history.push('/complete-signup-request');
         } else {
           setErrors(data.error);
