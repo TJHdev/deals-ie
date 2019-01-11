@@ -59,7 +59,7 @@ export class ModalProvider extends Component {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: values.email })
+            body: JSON.stringify(values)
           })
             .then(response => response.json())
             .then(data => {

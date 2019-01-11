@@ -49,10 +49,10 @@ class EmailVerificationRequestPage extends React.Component {
       .then(data => {
         // console.log('data: ', data);
         console.log('values: ', values);
-        if (data && data.deal_title) {
-          // loadUser(user);
-          history.push(`/deals/${data.id}`);
-        }
+        // if (data && data.deal_title) {
+        //   // loadUser(user);
+        //   history.push(`/deals/${data.id}`);
+        // }
         resetForm();
         setSubmitting(false);
         setStatus({ success: 'Success: Check your inbox for a reset link!' });
