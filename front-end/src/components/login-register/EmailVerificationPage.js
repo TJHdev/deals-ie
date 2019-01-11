@@ -57,26 +57,6 @@ class EmailVerificationPage extends React.Component {
         {displayVerified ? (
           <ContentContainerPasswordForm>
             <CheckEmailContainer>
-              <h2>Please check your email</h2>
-              <SmallList>
-                <li>
-                  <SmallListText> Click on the verify link provided in that email</SmallListText>
-                </li>
-                <li>
-                  <SmallListText>
-                    {' '}
-                    If you did not recieve an email please make sure to check your spam folder
-                  </SmallListText>
-                </li>
-                <li>
-                  <SmallListText>
-                    If there is still no sign of the email, you can request another using the form
-                    below
-                  </SmallListText>
-                </li>
-              </SmallList>
-            </CheckEmailContainer>
-            <CheckEmailContainer>
               <h2>Email Verified Success!</h2>
               <SmallListText>Thank you for verifying your email address.</SmallListText>
               <SmallListText>Click below to login.</SmallListText>
@@ -126,3 +106,24 @@ export default withRouter(EmailVerificationPage);
 //   <StyledErrorMessage name="camel_url" component="span" />
 //   <StyledField type="text" name="camel_url" />
 // </Label>
+
+// <CheckEmailContainer>
+// <h2>Please check your email</h2>
+// <SmallList>
+//   <li>
+//     <SmallListText> Click on the verify link provided in that email</SmallListText>
+//   </li>
+//   <li>
+//     <SmallListText>
+//       {' '}
+//       If you did not recieve an email please make sure to check your spam folder
+//     </SmallListText>
+//   </li>
+//   <li>
+//     <SmallListText>
+//       If there is still no sign of the email, you can request another using the form
+//       below
+//     </SmallListText>
+//   </li>
+// </SmallList>
+// </CheckEmailContainer>

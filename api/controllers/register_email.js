@@ -127,7 +127,8 @@ const verifyEmail = (redisClient, db, bcrypt, Joi) => (req, res) => {
       .then(user => {
         console.log(user);
         res.status(200).json({
-          is_like: user[0]
+          user: user[0],
+          success: true
         });
       })
       .catch(err => {
