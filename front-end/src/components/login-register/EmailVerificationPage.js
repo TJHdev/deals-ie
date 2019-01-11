@@ -7,8 +7,8 @@ import styled from 'styled-components';
 // import format from 'date-fns/format';
 
 // context api test
-import LoginModal from '../Modal/LoginModal';
 import { ModalConsumer } from '../Modal/ModalContext';
+import LoginModal from '../Modal/LoginModal';
 
 // import Label from '../../styled-components/Label';
 import { ContentContainerPasswordForm } from '../../styled-components/ContentContainer';

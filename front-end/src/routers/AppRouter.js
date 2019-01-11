@@ -69,22 +69,22 @@ class AppRouter extends React.Component {
                   <ModalRoot />
                   <SideDrawer show={this.state.sideDrawerOpen} />
                   {backdrop}
+
+                  <Switch>
+                    <PublicRoute exact path="/" component={HomePage} />
+                    <PublicRoute path="/deals/:deal_id" component={DealPage} />
+                    <PublicRoute path="/profile/:username" component={ProfilePage} />
+                    <PublicRoute
+                      path="/complete-signup-request"
+                      component={EmailVerificationRequestPage}
+                    />
+                    <PublicRoute path="/complete-signup/" component={EmailVerificationPage} />
+
+                    <PublicRoute path="/password-request" component={RequestPasswordChangePage} />
+                    <PublicRoute path="/reset-password" component={PasswordChangePage} />
+                    <PrivateRoute path="/deals" component={SubmitDealPage} userState={userState} />
+                  </Switch>
                 </ModalProvider>
-
-                <Switch>
-                  <PublicRoute exact path="/" component={HomePage} />
-                  <PublicRoute path="/deals/:deal_id" component={DealPage} />
-                  <PublicRoute path="/profile/:username" component={ProfilePage} />
-                  <PublicRoute
-                    path="/complete-signup-request"
-                    component={EmailVerificationRequestPage}
-                  />
-                  <PublicRoute path="/complete-signup/" component={EmailVerificationPage} />
-
-                  <PublicRoute path="/password-request" component={RequestPasswordChangePage} />
-                  <PublicRoute path="/reset-password" component={PasswordChangePage} />
-                  <PrivateRoute path="/deals" component={SubmitDealPage} userState={userState} />
-                </Switch>
               </Fragment>
             )}
           </UserConsumer>
