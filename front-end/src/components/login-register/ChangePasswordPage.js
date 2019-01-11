@@ -72,8 +72,14 @@ class PasswordChangePage extends React.Component {
       <Fragment>
         {displayVerified ? (
           <ContentContainerPasswordForm>
-            <h2>Password changed</h2>
-            <SmallListText>Please sign in.</SmallListText>
+            <h2>Password changed success!</h2>
+            <ModalConsumer>
+              {({ showModal }) => (
+                <Button type="button" onClick={() => showModal(LoginModal)}>
+                  Login page
+                </Button>
+              )}
+            </ModalConsumer>
           </ContentContainerPasswordForm>
         ) : (
           <ContentContainerPasswordForm>
