@@ -18,6 +18,7 @@ import TitleContainer from '../../styled-components/TitleContainer';
 import ModalContainer from '../../styled-components/ModalContainer';
 import Modal from '../../styled-components/Modal';
 import CentralDiv from '../../styled-components/CentralDiv';
+import { CelticHeader2 } from '../../styled-components/CelticHeaders';
 
 // context api
 import { ModalConsumer } from './ModalContext';
@@ -34,7 +35,7 @@ const LoginModal = ({ onRequestClose, onSubmitLogin }) => (
   >
     <ModalContainer>
       <TitleContainer>
-        <h2>Login</h2>
+        <CelticHeader2>Login</CelticHeader2>
         <h5>Vote, share and comment to earn points!</h5>
       </TitleContainer>
 

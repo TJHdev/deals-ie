@@ -88,8 +88,18 @@ const HeaderTitle = styled(Link)`
 `;
 
 const HeaderText = styled.h1`
+  font-family: UncialAntiqua;
+  letter-spacing: 1px;
   display: inline-block;
   margin: 0;
+  font-size: 3.2rem;
+
+  @media (max-width: 1000px) {
+    /* background: palevioletred; */
+    font-size: 2.5rem;
+    width: 110px;
+    line-height: 120%;
+  }
 `;
 
 const NavContent = styled.div`

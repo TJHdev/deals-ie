@@ -1,3 +1,18 @@
+/* @font-face {
+  font-family: 'sherwood';
+  src: url('../res/SHERWOOD.ttf');
+} */
+
+@font-face {
+  font-family: 'Dalelands';
+  src: url('../res/DalelandsUncial.otf');
+}
+
+@font-face {
+  font-family: 'UncialAntiqua';
+  src: url('../res/UncialAntiqua-Regular.ttf');
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

@@ -6,3 +6,4 @@ styles.css.map
 .env.development
 .env.test
 .env.backup
+/public/dist/fonts

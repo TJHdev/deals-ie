@@ -11,6 +11,7 @@ import TitleContainer from '../../styled-components/TitleContainer';
 import ModalContainer from '../../styled-components/ModalContainer';
 import Modal from '../../styled-components/Modal';
 import CentralDiv from '../../styled-components/CentralDiv';
+import { CelticHeader2 } from '../../styled-components/CelticHeaders';
 
 // context api
 import { ModalConsumer } from './ModalContext';
@@ -27,7 +28,7 @@ const RegisterModal = ({ onRequestClose, onSubmitRegister }) => (
   >
     <ModalContainer>
       <TitleContainer>
-        <h2>Join our community</h2>
+        <CelticHeader2>Join our community</CelticHeader2>
         <h5>Get deals found, shared and rated by real people.</h5>
       </TitleContainer>
       <Formik
