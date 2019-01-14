@@ -6,6 +6,7 @@ import createHistory from 'history/createBrowserHistory';
 import HomePage from '../components/HomePage';
 import DealPage from '../components/DealPage';
 import SubmitDealPage from '../components/SubmitDealPage';
+import NoMatch from '../components/NoMatch.js';
 import Header from '../components/Header';
 import ProfilePage from '../components/ProfilePage';
 import EmailVerificationRequestPage from '../components/login-register/EmailVerificationRequestPage';
@@ -71,18 +72,28 @@ class AppRouter extends React.Component {
                   {backdrop}
 
                   <Switch>
-                    <PublicRoute exact path="/" component={HomePage} />
-                    <PublicRoute path="/deals/:deal_id" component={DealPage} />
+                    <PublicRoute exact path="/" component={HomePage} userState={userState} />
+                    <PublicRoute
+                      exact
+                      path="/deals/:deal_id"
+                      component={DealPage}
+                      userState={userState}
+                    />
                     <PublicRoute path="/profile/:username" component={ProfilePage} />
                     <PublicRoute
                       path="/complete-signup-request"
                       component={EmailVerificationRequestPage}
                     />
                     <PublicRoute path="/complete-signup/" component={EmailVerificationPage} />
-
                     <PublicRoute path="/password-request" component={RequestPasswordChangePage} />
                     <PublicRoute path="/reset-password" component={PasswordChangePage} />
-                    <PrivateRoute path="/deals" component={SubmitDealPage} userState={userState} />
+                    <PrivateRoute
+                      exact
+                      path="/deals"
+                      component={SubmitDealPage}
+                      userState={userState}
+                    />
+                    <PublicRoute component={NoMatch} />
                   </Switch>
                 </ModalProvider>
               </Fragment>
@@ -93,6 +104,24 @@ class AppRouter extends React.Component {
     );
   }
 }
+
+// <PublicRoute exact path="/" component={HomePage} />
+// <PublicRoute exact path="/deals/:deal_id" component={DealPage} />
+// <PublicRoute path="/profile/:username" component={ProfilePage} />
+// <PublicRoute
+//   path="/complete-signup-request"
+//   component={EmailVerificationRequestPage}
+// />
+// <PublicRoute path="/complete-signup/" component={EmailVerificationPage} />
+// <PublicRoute path="/password-request" component={RequestPasswordChangePage} />
+// <PublicRoute path="/reset-password" component={PasswordChangePage} />
+// <PrivateRoute
+//   exact
+//   path="/deals"
+//   component={SubmitDealPage}
+//   userState={userState}
+// />
+// <PublicRoute component={NoMatch} />
 
 export default AppRouter;
 

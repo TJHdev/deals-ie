@@ -19,7 +19,8 @@ class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dealsArray: null
+      dealsArray: null,
+      isLoading: true
     };
 
     this.onSubmitChangeDealLikeHot = this.onSubmitChangeDealLikeHot.bind(this);
@@ -30,6 +31,8 @@ class HomePage extends React.Component {
   }
 
   componentDidMount() {
+    console.log('Component mounting');
+    this.setState({ isLoading: true });
     const token = window.sessionStorage.getItem('token');
 
     const { location } = this.props;
@@ -46,7 +49,7 @@ class HomePage extends React.Component {
       .then(data => {
         if (data && data.constructor === Array && data[0].deal_title) {
           // const stateIsDifferent = isEqual(newData, this.state);
-          this.setState({ dealsArray: data });
+          this.setState({ dealsArray: data, isLoading: false });
         }
       })
       .catch(console.log);
@@ -65,20 +68,22 @@ class HomePage extends React.Component {
   //   // return false;
   // }
 
-  shouldComponentUpdate() {
-    // this.setState(prevState => {
-    //   const newData = { dealsArray: data };
-    //   const stateIsDifferent = isEqual(newData, prevState);
-    //   console.log('stateIsDifferent:', stateIsDifferent);
-    //   console.log('newData:', newData);
-    //   console.log('oldData:', prevState);
-    //   if (stateIsDifferent) {
-    //     return prevState;
-    //   }
-    //   return newData;
-    // });
-    return true;
-  }
+  // shouldComponentUpdate() {
+  //   // this.setState(prevState => {
+  //   //   const newData = { dealsArray: data };
+  //   //   const stateIsDifferent = isEqual(newData, prevState);
+  //   //   console.log('stateIsDifferent:', stateIsDifferent);
+  //   //   console.log('newData:', newData);
+  //   //   console.log('oldData:', prevState);
+  //   //   if (stateIsDifferent) {
+  //   //     return prevState;
+  //   //   }
+  //   //   return newData;
+  //   // });
+  //   const shouldUpdate = this.state.dealsArray === null;
+  //   console.log('shouldUpdate: ', shouldUpdate);
+  //   return true;
+  // }
 
   onSubmitChangeDealLikeHot(dealId, isLike) {
     const token = window.sessionStorage.getItem('token');
@@ -211,7 +216,7 @@ class HomePage extends React.Component {
 
   render() {
     // console.log('renderState: ', this.state);
-    const { dealsArray } = this.state;
+    const { dealsArray, isLoading } = this.state;
 
     const dealsElement =
       dealsArray && dealsArray[0]
@@ -332,17 +337,46 @@ class HomePage extends React.Component {
 
     return (
       <DealsContainer>
-        <DealsGridContainer>{dealsElement}</DealsGridContainer>
+        {isLoading ? (
+          <LoadingContainer>
+            <LoadingImage src="/images/loader.gif" alt="Loading animation" />
+          </LoadingContainer>
+        ) : (
+          <DealsGridContainer>{dealsElement}</DealsGridContainer>
+        )}
       </DealsContainer>
     );
   }
 }
+
+// *****************
+// loading component
+// *****************
+
+const LoadingContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -20;
+`;
+
+const LoadingImage = styled.img`
+  width: 100px;
+  height: auto;
+  /* z-index: -20; */
+`;
+
+// ***************
+// deals container
+// ***************
 
 const DealsContainer = styled.div`
   font-weight: 400;
   margin: 1rem auto;
   max-width: 124rem;
   border-radius: 5px;
+  min-height: 40vh;
 `;
 
 const DealsGridContainer = styled.div`
