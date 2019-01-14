@@ -52,6 +52,19 @@ class HomePage extends React.Component {
       .catch(console.log);
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // const newData = { dealsArray: this.state.dealsArray };
+  //   // const stateIsDifferent = isEqual(this.state, nextState);
+
+  //   console.log('current state:', this.state);
+  //   console.log('next state:', nextState);
+
+  //   // if (stateIsDifferent) {
+  //   //   return true;
+  //   // }
+  //   // return false;
+  // }
+
   shouldComponentUpdate() {
     // this.setState(prevState => {
     //   const newData = { dealsArray: data };
