@@ -10,6 +10,10 @@ const UserContext = createContext({
 });
 
 export class UserProvider extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   // shows the modal
   loadUser = ({ id, username, email, admin, trusted, email_verified }) => {
     this.setState({
@@ -35,6 +39,7 @@ export class UserProvider extends Component {
   };
 
   signOut = () => {
+    const { history } = this.props;
     const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/signout`, {
@@ -48,6 +53,8 @@ export class UserProvider extends Component {
       .then(data => {
         if (data !== 'unauthorized' && this.state.id !== null) {
           this.unloadUser();
+          history.push('/no-route/');
+          history.goBack();
         } else {
           console.log('Something went wrong signing out');
         }

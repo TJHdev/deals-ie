@@ -116,7 +116,8 @@ export class ModalProvider extends Component {
             if (user && user.email) {
               loadUser({ ...user });
               this.hideModal(); // if login succesful close the modal
-              history.push('/');
+              history.push('/no-route/');
+              history.goBack();
             } else {
             }
           })

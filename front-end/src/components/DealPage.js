@@ -53,7 +53,6 @@ class DealPage extends React.Component {
         if (data && data.deal_title) {
           const newData = { dealsArray: [data] };
           this.setState(newData);
-
           // console.log(this.props);
           // console.log(data);
           // this.setState({ dealsArray: [data] });
@@ -68,9 +67,8 @@ class DealPage extends React.Component {
 
   onSubmitChangeDealLikeHot(dealId, isLike) {
     const token = window.sessionStorage.getItem('token');
-    if (!token) {
-      console.log('No token, therefore redirect to signin modal');
-      return;
+    if (token === 'undefined' || !token) {
+      return console.log('No token, therefore redirect to signin modal');
     }
     if (isLike === null) {
       // submit isLike: true
@@ -88,9 +86,8 @@ class DealPage extends React.Component {
 
   onSubmitChangeDealLikeCold(dealId, isLike) {
     const token = window.sessionStorage.getItem('token');
-    if (!token) {
-      console.log('No token, therefore redirect to signin modal');
-      return;
+    if (token === 'undefined' || !token) {
+      return console.log('No token, therefore redirect to signin modal');
     }
     if (isLike === null) {
       // submit isLike: false
@@ -121,16 +118,18 @@ class DealPage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        const clonedState = cloneDeep(this.state);
-        const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
-        clonedState.dealsArray[index].is_like = data.is_like;
-        if (isHot) {
-          clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) + 1;
-        } else {
-          clonedState.dealsArray[index].dislikes =
-            Number(clonedState.dealsArray[index].dislikes) + 1;
+        if (typeof data.is_like === 'boolean') {
+          const clonedState = cloneDeep(this.state);
+          const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
+          clonedState.dealsArray[index].is_like = data.is_like;
+          if (isHot) {
+            clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) + 1;
+          } else {
+            clonedState.dealsArray[index].dislikes =
+              Number(clonedState.dealsArray[index].dislikes) + 1;
+          }
+          this.setState(clonedState);
         }
-        this.setState(clonedState);
       })
       .catch(console.log);
   }
@@ -150,17 +149,19 @@ class DealPage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        const clonedState = cloneDeep(this.state);
-        const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
+        if (typeof data.is_like === 'boolean') {
+          const clonedState = cloneDeep(this.state);
+          const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
 
-        clonedState.dealsArray[index].is_like = data.is_like;
-        if (isHot) {
-          clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) + 2;
-        } else {
-          clonedState.dealsArray[index].dislikes =
-            Number(clonedState.dealsArray[index].dislikes) + 2;
+          clonedState.dealsArray[index].is_like = data.is_like;
+          if (isHot) {
+            clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) + 2;
+          } else {
+            clonedState.dealsArray[index].dislikes =
+              Number(clonedState.dealsArray[index].dislikes) + 2;
+          }
+          this.setState(clonedState);
         }
-        this.setState(clonedState);
       })
       .catch(console.log);
   }
@@ -177,17 +178,18 @@ class DealPage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        const clonedState = cloneDeep(this.state);
-        const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
-        clonedState.dealsArray[index].is_like = data.is_like;
-        if (hot) {
-          clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) - 1;
-        } else {
-          clonedState.dealsArray[index].dislikes =
-            Number(clonedState.dealsArray[index].dislikes) - 1;
+        if (data.is_like === null) {
+          const clonedState = cloneDeep(this.state);
+          const index = clonedState.dealsArray.findIndex(deal => deal.id === dealId);
+          clonedState.dealsArray[index].is_like = data.is_like;
+          if (hot) {
+            clonedState.dealsArray[index].likes = Number(clonedState.dealsArray[index].likes) - 1;
+          } else {
+            clonedState.dealsArray[index].dislikes =
+              Number(clonedState.dealsArray[index].dislikes) - 1;
+          }
+          this.setState(clonedState);
         }
-
-        this.setState(clonedState);
       })
       .catch(console.log);
   }

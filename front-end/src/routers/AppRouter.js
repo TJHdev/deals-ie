@@ -58,7 +58,7 @@ class AppRouter extends React.Component {
 
     return (
       <Router history={history}>
-        <UserProvider>
+        <UserProvider history={history}>
           <UserConsumer>
             {userState => (
               <Fragment>
@@ -72,28 +72,28 @@ class AppRouter extends React.Component {
                   {backdrop}
 
                   <Switch>
-                    <PublicRoute exact path="/" component={HomePage} userState={userState} />
-                    <PublicRoute
+                    <Route exact path="/" component={HomePage} userState={userState} />
+                    <Route
                       exact
                       path="/deals/:deal_id"
                       component={DealPage}
                       userState={userState}
                     />
-                    <PublicRoute path="/profile/:username" component={ProfilePage} />
-                    <PublicRoute
+                    <Route path="/profile/:username" component={ProfilePage} />
+                    <Route
                       path="/complete-signup-request"
                       component={EmailVerificationRequestPage}
                     />
-                    <PublicRoute path="/complete-signup/" component={EmailVerificationPage} />
-                    <PublicRoute path="/password-request" component={RequestPasswordChangePage} />
-                    <PublicRoute path="/reset-password" component={PasswordChangePage} />
+                    <Route path="/complete-signup/" component={EmailVerificationPage} />
+                    <Route path="/password-request" component={RequestPasswordChangePage} />
+                    <Route path="/reset-password" component={PasswordChangePage} />
                     <PrivateRoute
                       exact
                       path="/deals"
                       component={SubmitDealPage}
                       userState={userState}
                     />
-                    <PublicRoute component={NoMatch} />
+                    <Route component={NoMatch} />
                   </Switch>
                 </ModalProvider>
               </Fragment>
