@@ -36,17 +36,25 @@ class Header extends React.Component {
             <DrawerToggleButton click={drawerClickHandler} />
             <NavContent>
               <SearchContainer>
-                <SearchField placeholder="Search for brands, models, products etc" />
-                <HeaderButton>Search</HeaderButton>
+                <SearchField placeholder="I'm looking for..." />
+                <SVGObjectIcon
+                  type="image/svg+xml"
+                  data="/images/magnifying-glass.svg"
+                  class="search_icon"
+                />
               </SearchContainer>
               <NavAnchor to="/deals">
-                <HeaderButton type="button">Submit Deal</HeaderButton>
+                <HeaderButton type="button">
+                  <HeaderButtonSpan>Share Deal</HeaderButtonSpan>
+                  <HeaderButtonImg src="/images/icons8-plus-math-34.png" />
+                </HeaderButton>
               </NavAnchor>
               <ModalConsumer>
                 {({ showModal }) => {
                   return userState.id ? null : (
                     <HeaderButton type="button" onClick={() => showModal(RegisterModal)}>
-                      Register
+                      <HeaderButtonSpan>Join</HeaderButtonSpan>
+                      <HeaderButtonImg src="/images/icons8-user-48.png" />
                     </HeaderButton>
                   );
                 }}
@@ -115,12 +123,19 @@ const SearchField = styled.input`
   padding: 0.7rem;
   border-radius: 15px;
   outline: none;
-  width: 330px;
+  width: 180px;
   transition: all 0.4s;
 
   &:active,
   &:focus {
     border: 4px solid var(--red);
+  }
+
+  &:active + svg g path,
+  &:hover ~ svg p path {
+    fill: black;
+    stroke: black;
+    transition: all 0.3s;
   }
 `;
 
@@ -155,6 +170,31 @@ const HeaderButton = styled.button`
     transform: translateY(2px);
   }
 `;
+
+const HeaderButtonSpan = styled.span`
+  margin-right: 5px;
+`;
+
+const HeaderButtonImg = styled.img`
+  height: 15px;
+`;
+
+const HeaderButtonSvg = styled.img`
+  height: 20px;
+`;
+
+const SVGObjectIcon = styled.object`
+  height: 25px;
+`;
+
+// const SearchBackgroundImage = styled.a`
+//   display: block;
+//   text-indent: -9999px;
+//   width: 100px;
+//   height: 82px;
+//   background: url('../res/images/test.svg');
+//   background-size: 100px 82px;
+// `;
 
 export default withRouter(Header);
 

@@ -40,6 +40,18 @@ module.exports = env => {
           ]
         },
         {
+          test: /\.(svg|png|jpg|gif)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: 'images/'
+              }
+            }
+          ]
+        },
+        {
           test: /\.s?css$/,
           use: [
             MiniCssExtractPlugin.loader,

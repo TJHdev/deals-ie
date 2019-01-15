@@ -1,16 +1,16 @@
 /* @font-face {
   font-family: 'sherwood';
-  src: url('../res/SHERWOOD.ttf');
+  src: url('../res/fonts/SHERWOOD.ttf');
 } */
 
 @font-face {
   font-family: 'Dalelands';
-  src: url('../res/DalelandsUncial.otf');
+  src: url('../res/fonts/DalelandsUncial.otf');
 }
 
 @font-face {
   font-family: 'UncialAntiqua';
-  src: url('../res/UncialAntiqua-Regular.ttf');
+  src: url('../res/fonts/UncialAntiqua-Regular.ttf');
 }
 
 * {
@@ -113,4 +113,16 @@ button:disabled {
 }
 .ReactModalPortal .ReactModal__Overlay--before-close {
   opacity: 0;
+}
+
+#test1 {
+  fill: grey;
+  stroke: black;
+}
+
+#test1:hover {
+  fill: black;
+  stroke: black;
+  transition: all 0.3s;
+  cursor: pointer;
 }
