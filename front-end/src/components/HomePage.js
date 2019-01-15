@@ -14,6 +14,7 @@ import {
   DealHeat,
   VoteDivHot
 } from '../styled-components/deals-components/DealsHeatContainer';
+import { LoadingContainer, LoadingImage } from '../styled-components/LoadingIcon';
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -31,8 +32,6 @@ class HomePage extends React.Component {
   }
 
   componentDidMount() {
-    console.log('Component mounting');
-    this.setState({ isLoading: true });
     const token = window.sessionStorage.getItem('token');
 
     const { location } = this.props;
@@ -52,38 +51,11 @@ class HomePage extends React.Component {
           this.setState({ dealsArray: data, isLoading: false });
         }
       })
-      .catch(console.log);
+      .catch(err => {
+        this.setState({ isLoading: false });
+        console.log(err);
+      });
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   // const newData = { dealsArray: this.state.dealsArray };
-  //   // const stateIsDifferent = isEqual(this.state, nextState);
-
-  //   console.log('current state:', this.state);
-  //   console.log('next state:', nextState);
-
-  //   // if (stateIsDifferent) {
-  //   //   return true;
-  //   // }
-  //   // return false;
-  // }
-
-  // shouldComponentUpdate() {
-  //   // this.setState(prevState => {
-  //   //   const newData = { dealsArray: data };
-  //   //   const stateIsDifferent = isEqual(newData, prevState);
-  //   //   console.log('stateIsDifferent:', stateIsDifferent);
-  //   //   console.log('newData:', newData);
-  //   //   console.log('oldData:', prevState);
-  //   //   if (stateIsDifferent) {
-  //   //     return prevState;
-  //   //   }
-  //   //   return newData;
-  //   // });
-  //   const shouldUpdate = this.state.dealsArray === null;
-  //   console.log('shouldUpdate: ', shouldUpdate);
-  //   return true;
-  // }
 
   onSubmitChangeDealLikeHot(dealId, isLike) {
     const token = window.sessionStorage.getItem('token');
@@ -219,121 +191,119 @@ class HomePage extends React.Component {
     const { dealsArray, isLoading } = this.state;
 
     const dealsElement =
-      dealsArray && dealsArray[0]
-        ? dealsArray.map(deal => {
-            const {
-              id: dealId,
-              image_url: imageUrl,
-              is_like: isLike,
-              likes: dealLikes,
-              dislikes: dealDislikes,
-              deal_title: dealTitle,
-              price,
-              next_best_price: nextBestPrice,
-              username: userName,
-              deal_link: dealLink,
-              deal_starts: dealStarts,
-              deal_ends: dealEnds,
-              deal_text: dealText,
-              created_at: createdAt,
-              edited_at: editedAt,
-              currency_pound: currencyPound,
-              deal_expired: dealExpired
-            } = deal;
+      dealsArray && dealsArray[0] ? (
+        dealsArray.map(deal => {
+          const {
+            id: dealId,
+            image_url: imageUrl,
+            is_like: isLike,
+            likes: dealLikes,
+            dislikes: dealDislikes,
+            deal_title: dealTitle,
+            price,
+            next_best_price: nextBestPrice,
+            username: userName,
+            deal_link: dealLink,
+            deal_starts: dealStarts,
+            deal_ends: dealEnds,
+            deal_text: dealText,
+            created_at: createdAt,
+            edited_at: editedAt,
+            currency_pound: currencyPound,
+            deal_expired: dealExpired
+          } = deal;
 
-            const fixedPrice = price ? Math.round(price * 100) / 100 : null;
-            const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
+          const fixedPrice = price ? Math.round(price * 100) / 100 : null;
+          const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
 
-            const userNameUrl = `/profile/${userName}`;
-            const dealPageUrl = `/deals/${dealId}`;
-            const foundDate = format(createdAt, 'Do MMM');
-            const dealLikesTotal = dealLikes - dealDislikes;
+          const userNameUrl = `/profile/${userName}`;
+          const dealPageUrl = `/deals/${dealId}`;
+          const foundDate = format(createdAt, 'Do MMM');
+          const dealLikesTotal = dealLikes - dealDislikes;
 
-            return (
-              <DealsCardContainer key={dealId}>
-                <DealsDealContainer>
-                  <DealsTopFlexContainer>
-                    <DealsHeatContainer>
-                      <VoteDivCold
-                        isLike={isLike}
-                        onClick={() => this.onSubmitChangeDealLikeCold(dealId, isLike)}
-                      >
-                        -
-                      </VoteDivCold>
-                      <DealHeat dealLikesTotal={dealLikesTotal}>
-                        {dealLikesTotal}
-                        &#186;
-                      </DealHeat>
-                      <VoteDivHot
-                        isLike={isLike}
-                        onClick={() => this.onSubmitChangeDealLikeHot(dealId, isLike)}
-                      >
-                        +
-                      </VoteDivHot>
-                    </DealsHeatContainer>
+          return (
+            <DealsCardContainer key={dealId}>
+              <DealsDealContainer>
+                <DealsTopFlexContainer>
+                  <DealsHeatContainer>
+                    <VoteDivCold
+                      isLike={isLike}
+                      onClick={() => this.onSubmitChangeDealLikeCold(dealId, isLike)}
+                    >
+                      -
+                    </VoteDivCold>
+                    <DealHeat dealLikesTotal={dealLikesTotal}>
+                      {dealLikesTotal}
+                      &#186;
+                    </DealHeat>
+                    <VoteDivHot
+                      isLike={isLike}
+                      onClick={() => this.onSubmitChangeDealLikeHot(dealId, isLike)}
+                    >
+                      +
+                    </VoteDivHot>
+                  </DealsHeatContainer>
 
-                    <OptionsContainer>
-                      <OptionsCircle />
-                      <OptionsCircle />
-                      <OptionsCircle />
-                    </OptionsContainer>
-                  </DealsTopFlexContainer>
+                  <OptionsContainer>
+                    <OptionsCircle />
+                    <OptionsCircle />
+                    <OptionsCircle />
+                  </OptionsContainer>
+                </DealsTopFlexContainer>
 
-                  <DealsImageContainer to={dealPageUrl}>
-                    <DealsImageStretchContainer>
-                      <DealsImage src={imageUrl} />
-                    </DealsImageStretchContainer>
-                  </DealsImageContainer>
+                <DealsImageContainer to={dealPageUrl}>
+                  <DealsImageStretchContainer>
+                    <DealsImage src={imageUrl} />
+                  </DealsImageStretchContainer>
+                </DealsImageContainer>
 
-                  <DealsDetailsMiddleContainer>
-                    <DealsTitleContainer>{dealTitle}</DealsTitleContainer>
-                    <DealsText>{dealText}</DealsText>
-                  </DealsDetailsMiddleContainer>
+                <DealsDetailsMiddleContainer>
+                  <DealsTitleContainer>{dealTitle}</DealsTitleContainer>
+                  <DealsText>{dealText}</DealsText>
+                </DealsDetailsMiddleContainer>
 
-                  <DealsDetailsBottomContainer>
-                    <UserAndReadMoreFlexContainer>
-                      <DealsUsernameLink to={userNameUrl}>
-                        <UsernameImg src="/images/icons8-user-50.png" alt="username logo" />
-                        <DealsUsernameSpan>{userName}</DealsUsernameSpan>
-                      </DealsUsernameLink>
-                      <ReadMoreAnchor to={dealPageUrl}>Read more</ReadMoreAnchor>
-                    </UserAndReadMoreFlexContainer>
+                <DealsDetailsBottomContainer>
+                  <UserAndReadMoreFlexContainer>
+                    <DealsUsernameLink to={userNameUrl}>
+                      <UsernameImg src="/images/icons8-user-50.png" alt="username logo" />
+                      <DealsUsernameSpan>{userName}</DealsUsernameSpan>
+                    </DealsUsernameLink>
+                    <ReadMoreAnchor to={dealPageUrl}>Read more</ReadMoreAnchor>
+                  </UserAndReadMoreFlexContainer>
 
-                    <PriceDateFoundFlexContainer>
-                      {fixedPrice ? (
-                        <DealsPriceContainer>
-                          <DealsPrice>
-                            {currencyPound && fixedPrice ? (
-                              <span>&pound;</span>
-                            ) : (
-                              <span>&euro;</span>
-                            )}
-                            {fixedPrice}
-                          </DealsPrice>
+                  <PriceDateFoundFlexContainer>
+                    {fixedPrice ? (
+                      <DealsPriceContainer>
+                        <DealsPrice>
+                          {currencyPound && fixedPrice ? <span>&pound;</span> : <span>&euro;</span>}
+                          {fixedPrice}
+                        </DealsPrice>
 
-                          {fixedNextBestPrice ? (
-                            <DealsNextBestPrice>
-                              {currencyPound ? <span>&pound;</span> : <span>&euro;</span>}
-                              {fixedNextBestPrice}
-                            </DealsNextBestPrice>
-                          ) : null}
-                        </DealsPriceContainer>
-                      ) : null}
-                      <DealFoundDateContainer>
-                        <DealFoundImg src="/images/icons8-search-48.png" alt="dealfound logo" />
-                        <DealsFoundTextSpan>{foundDate}</DealsFoundTextSpan>
-                      </DealFoundDateContainer>
-                    </PriceDateFoundFlexContainer>
+                        {fixedNextBestPrice ? (
+                          <DealsNextBestPrice>
+                            {currencyPound ? <span>&pound;</span> : <span>&euro;</span>}
+                            {fixedNextBestPrice}
+                          </DealsNextBestPrice>
+                        ) : null}
+                      </DealsPriceContainer>
+                    ) : null}
+                    <DealFoundDateContainer>
+                      <DealFoundImg src="/images/icons8-search-48.png" alt="dealfound logo" />
+                      <DealsFoundTextSpan>{foundDate}</DealsFoundTextSpan>
+                    </DealFoundDateContainer>
+                  </PriceDateFoundFlexContainer>
 
-                    <GoToDealAnchorTag href={dealLink} target="_blank" rel="noopener noreferrer">
-                      <GoToDealButton>Go to deal &#10148;</GoToDealButton>
-                    </GoToDealAnchorTag>
-                  </DealsDetailsBottomContainer>
-                </DealsDealContainer>
-              </DealsCardContainer>
-            );
-          })
-        : null;
+                  <GoToDealAnchorTag href={dealLink} target="_blank" rel="noopener noreferrer">
+                    <GoToDealButton>Go to deal &#10148;</GoToDealButton>
+                  </GoToDealAnchorTag>
+                </DealsDetailsBottomContainer>
+              </DealsDealContainer>
+            </DealsCardContainer>
+          );
+        })
+      ) : (
+        <h2>Error loading deals..</h2>
+      );
 
     return (
       <DealsContainer>
@@ -348,24 +318,6 @@ class HomePage extends React.Component {
     );
   }
 }
-
-// *****************
-// loading component
-// *****************
-
-const LoadingContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: -20;
-`;
-
-const LoadingImage = styled.img`
-  width: 100px;
-  height: auto;
-  /* z-index: -20; */
-`;
 
 // ***************
 // deals container

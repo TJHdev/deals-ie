@@ -19,11 +19,14 @@ import {
   FacebookPostButton,
   TwitterPostButton
 } from '../styled-components/SocialMediaPosts';
+import { LoadingContainer, LoadingImage } from '../styled-components/LoadingIcon';
 
 class DealPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isLoading: true
+    };
 
     this.onSubmitComment = this.onSubmitComment.bind(this);
     this.onVisitDeal = this.onVisitDeal.bind(this);
@@ -51,14 +54,17 @@ class DealPage extends React.Component {
       .then(resp => resp.json())
       .then(data => {
         if (data && data.deal_title) {
-          const newData = { dealsArray: [data] };
+          const newData = { dealsArray: [data], isLoading: false };
           this.setState(newData);
           // console.log(this.props);
           // console.log(data);
           // this.setState({ dealsArray: [data] });
         }
       })
-      .catch(console.log);
+      .catch(err => {
+        this.setState({ isLoading: false });
+        console.log(err);
+      });
   }
 
   onSubmitComment() {}
@@ -196,166 +202,162 @@ class DealPage extends React.Component {
 
   render() {
     // console.log('renderState: ', this.state);
-    const { dealsArray } = this.state;
+    const { dealsArray, isLoading } = this.state;
 
     const dealsElement =
-      dealsArray && dealsArray[0]
-        ? dealsArray.map(deal => {
-            const {
-              id: dealId,
-              image_url: imageUrl,
-              is_like: isLike,
-              likes: dealLikes,
-              dislikes: dealDislikes,
-              deal_title: dealTitle,
-              price,
-              next_best_price: nextBestPrice,
-              username: userName,
-              deal_link: dealLink,
-              deal_starts: dealStarts,
-              deal_ends: dealEnds,
-              deal_text: dealText,
-              created_at: createdAt,
-              edited_at: editedAt,
-              currency_pound: currencyPound,
-              deal_expired: dealExpired
-            } = deal;
+      dealsArray && dealsArray[0] ? (
+        dealsArray.map(deal => {
+          const {
+            id: dealId,
+            image_url: imageUrl,
+            is_like: isLike,
+            likes: dealLikes,
+            dislikes: dealDislikes,
+            deal_title: dealTitle,
+            price,
+            next_best_price: nextBestPrice,
+            username: userName,
+            deal_link: dealLink,
+            deal_starts: dealStarts,
+            deal_ends: dealEnds,
+            deal_text: dealText,
+            created_at: createdAt,
+            edited_at: editedAt,
+            currency_pound: currencyPound,
+            deal_expired: dealExpired
+          } = deal;
 
-            const fixedPrice = price ? Math.round(price * 100) / 100 : null;
-            const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
+          const fixedPrice = price ? Math.round(price * 100) / 100 : null;
+          const fixedNextBestPrice = nextBestPrice ? Math.round(nextBestPrice * 100) / 100 : null;
 
-            const userNameUrl = `/profile/${userName}`;
-            const dealPageUrl = `/deals/${dealId}`;
-            const foundDate = format(createdAt, 'Do MMM');
-            const dealLikesTotal = dealLikes - dealDislikes;
+          const userNameUrl = `/profile/${userName}`;
+          const dealPageUrl = `/deals/${dealId}`;
+          const foundDate = format(createdAt, 'Do MMM');
+          const dealLikesTotal = dealLikes - dealDislikes;
 
-            const facebookShareUri = `https://www.facebook.com/share.php?u=${encodeURIComponent(
-              dealLink
-            )}&title=${encodeURIComponent(dealTitle)}`;
-            const twitterShareUri = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-              dealLink
-            )}&text=${encodeURIComponent(dealTitle)}&via=deals-ie`;
+          const facebookShareUri = `https://www.facebook.com/share.php?u=${encodeURIComponent(
+            dealLink
+          )}&title=${encodeURIComponent(dealTitle)}`;
+          const twitterShareUri = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+            dealLink
+          )}&text=${encodeURIComponent(dealTitle)}&via=deals-ie`;
 
-            return (
-              <DealPageContainer key={dealId}>
-                <DealPageDealContainer>
-                  <DealPageImageContainer href={dealLink} target="_blank">
-                    <DealPageImageStretchContainer>
-                      <DealPageImage src={imageUrl} />
-                    </DealPageImageStretchContainer>
-                  </DealPageImageContainer>
-                  <DealPageDetailsContainer>
-                    <DealPageDetailsTopContainer>
-                      <DealsHeatContainer>
-                        <VoteDivCold
-                          isLike={isLike}
-                          onClick={() => this.onSubmitChangeDealLikeCold(dealId, isLike)}
-                        >
-                          -
-                        </VoteDivCold>
-                        <DealHeat dealLikesTotal={dealLikesTotal}>
-                          {dealLikesTotal}
-                          &#186;
-                        </DealHeat>
-                        <VoteDivHot
-                          isLike={isLike}
-                          onClick={() => this.onSubmitChangeDealLikeHot(dealId, isLike)}
-                        >
-                          +
-                        </VoteDivHot>
-                      </DealsHeatContainer>
+          return (
+            <DealPageContainer key={dealId}>
+              <DealPageDealContainer>
+                <DealPageImageContainer href={dealLink} target="_blank">
+                  <DealPageImageStretchContainer>
+                    <DealPageImage src={imageUrl} />
+                  </DealPageImageStretchContainer>
+                </DealPageImageContainer>
+                <DealPageDetailsContainer>
+                  <DealPageDetailsTopContainer>
+                    <DealsHeatContainer>
+                      <VoteDivCold
+                        isLike={isLike}
+                        onClick={() => this.onSubmitChangeDealLikeCold(dealId, isLike)}
+                      >
+                        -
+                      </VoteDivCold>
+                      <DealHeat dealLikesTotal={dealLikesTotal}>
+                        {dealLikesTotal}
+                        &#186;
+                      </DealHeat>
+                      <VoteDivHot
+                        isLike={isLike}
+                        onClick={() => this.onSubmitChangeDealLikeHot(dealId, isLike)}
+                      >
+                        +
+                      </VoteDivHot>
+                    </DealsHeatContainer>
 
-                      <DealPageTitleContainer>{dealTitle}</DealPageTitleContainer>
-                    </DealPageDetailsTopContainer>
+                    <DealPageTitleContainer>{dealTitle}</DealPageTitleContainer>
+                  </DealPageDetailsTopContainer>
 
-                    <DealPageDetailsBottomContainer>
-                      {fixedPrice ? (
-                        <DealPagePriceContainer>
-                          <DealPagePrice>
-                            {currencyPound && fixedPrice ? (
-                              <span>&pound;</span>
-                            ) : (
-                              <span>&euro;</span>
-                            )}
-                            {fixedPrice}
-                          </DealPagePrice>
-                          {fixedNextBestPrice ? (
-                            <DealPageNextBestPrice>
-                              {currencyPound ? <span>&pound;</span> : <span>&euro;</span>}
-                              {fixedNextBestPrice}
-                            </DealPageNextBestPrice>
-                          ) : null}
-                        </DealPagePriceContainer>
-                      ) : null}
+                  <DealPageDetailsBottomContainer>
+                    {fixedPrice ? (
+                      <DealPagePriceContainer>
+                        <DealPagePrice>
+                          {currencyPound && fixedPrice ? <span>&pound;</span> : <span>&euro;</span>}
+                          {fixedPrice}
+                        </DealPagePrice>
+                        {fixedNextBestPrice ? (
+                          <DealPageNextBestPrice>
+                            {currencyPound ? <span>&pound;</span> : <span>&euro;</span>}
+                            {fixedNextBestPrice}
+                          </DealPageNextBestPrice>
+                        ) : null}
+                      </DealPagePriceContainer>
+                    ) : null}
 
-                      <DealPageUserAndDealButtonContainer>
-                        <DealPageUsernameLink to={userNameUrl}>
-                          <UsernameImg src="/images/icons8-user-50.png" alt="username logo" />
-                          <DealPageUsernameSpan>{userName}</DealPageUsernameSpan>
-                        </DealPageUsernameLink>
-                        <a href={dealLink} target="_blank" rel="noopener noreferrer">
-                          <GoToDealButton>Go to deal &#10148;</GoToDealButton>
-                        </a>
-                      </DealPageUserAndDealButtonContainer>
-                    </DealPageDetailsBottomContainer>
-                  </DealPageDetailsContainer>
-                </DealPageDealContainer>
+                    <DealPageUserAndDealButtonContainer>
+                      <DealPageUsernameLink to={userNameUrl}>
+                        <UsernameImg src="/images/icons8-user-50.png" alt="username logo" />
+                        <DealPageUsernameSpan>{userName}</DealPageUsernameSpan>
+                      </DealPageUsernameLink>
+                      <a href={dealLink} target="_blank" rel="noopener noreferrer">
+                        <GoToDealButton>Go to deal &#10148;</GoToDealButton>
+                      </a>
+                    </DealPageUserAndDealButtonContainer>
+                  </DealPageDetailsBottomContainer>
+                </DealPageDetailsContainer>
+              </DealPageDealContainer>
 
-                <DealPageTextContainer>
-                  <DealPageText>{dealText}</DealPageText>
-                </DealPageTextContainer>
+              <DealPageTextContainer>
+                <DealPageText>{dealText}</DealPageText>
+              </DealPageTextContainer>
 
-                <SocialMediaAnchorTag
-                  href={facebookShareUri}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FacebookPostButton>
-                    <SocialMediaImg src="/images/facebook-icon-white-50px.png" />
-                    <span>Post</span>
-                  </FacebookPostButton>
-                </SocialMediaAnchorTag>
+              <SocialMediaAnchorTag
+                href={facebookShareUri}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FacebookPostButton>
+                  <SocialMediaImg src="/images/facebook-icon-white-50px.png" />
+                  <span>Post</span>
+                </FacebookPostButton>
+              </SocialMediaAnchorTag>
 
-                <SocialMediaAnchorTag
-                  href={twitterShareUri}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <TwitterPostButton>
-                    <SocialMediaImg src="/images/twitter-icon-white-50px.png" />
-                    <span>Tweet</span>
-                  </TwitterPostButton>
-                </SocialMediaAnchorTag>
-              </DealPageContainer>
-            );
-          })
-        : null;
+              <SocialMediaAnchorTag
+                href={twitterShareUri}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <TwitterPostButton>
+                  <SocialMediaImg src="/images/twitter-icon-white-50px.png" />
+                  <span>Tweet</span>
+                </TwitterPostButton>
+              </SocialMediaAnchorTag>
+            </DealPageContainer>
+          );
+        })
+      ) : (
+        <ErrorContainer>
+          <h2>Error loading deal..</h2>
+        </ErrorContainer>
+      );
 
-    return <div>{dealsElement}</div>;
+    return (
+      <div>
+        {isLoading ? (
+          <LoadingContainer>
+            <LoadingImage src="/images/loader.gif" />
+          </LoadingContainer>
+        ) : (
+          dealsElement
+        )}
+      </div>
+    );
   }
 }
 
-// <a href={facebookShareUri} target="_blank" rel="noopener noreferrer">
-// <FacebookPostButton>
-//   <SocialMediaImg src="/images/facebook-icon-white-50px.png" />
-//   <span>Post</span>
-// </FacebookPostButton>
-// </a>
-
-// <a href={twitterShareUri} target="_blank" rel="noopener noreferrer">
-// <TwitterPostButton>
-//   <SocialMediaImg src="/images/twitter-icon-white-50px.png" />
-//   <span>Tweet</span>
-// </TwitterPostButton>
-// </a>
-
-// <DealPageContainer>
-//   <DealPageCommentsContainer>
-//     <div>
-//       <p>Placeholder comment</p>
-//     </div>
-//   </DealPageCommentsContainer>
-// </DealPageContainer>
+const ErrorContainer = styled.div`
+  font-weight: 400;
+  margin: 1rem auto;
+  max-width: 124rem;
+  border-radius: 5px;
+  min-height: 40vh;
+`;
 
 const DealPageContainer = styled.div`
   font-weight: 400;
@@ -369,20 +371,6 @@ const DealPageContainer = styled.div`
 const DealPageDealContainer = styled.div`
   display: flex;
 `;
-
-// const DealPageImage = styled.img`
-//   display: inline-block;
-//   width: 200px;
-//   height: 200px;
-//   border-radius: 5px;
-
-//   transition: all 0.2s;
-
-//   &:hover {
-//     transform: scale(1.03);
-//     box-shadow: 1px 2px 8px 0 rgba(0, 0, 0, 0.7);
-//   }
-// `;
 
 const DealPageImageContainer = styled.a`
   margin: 0;
