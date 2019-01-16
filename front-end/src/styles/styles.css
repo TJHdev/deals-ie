@@ -118,6 +118,8 @@ button:disabled {
 #test1 {
   fill: grey;
   stroke: black;
+  padding: 1rem;
+  height: 200px;
 }
 
 #test1:hover {

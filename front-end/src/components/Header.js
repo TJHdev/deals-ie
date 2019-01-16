@@ -37,11 +37,7 @@ class Header extends React.Component {
             <NavContent>
               <SearchContainer>
                 <SearchField placeholder="I'm looking for..." />
-                <SVGObjectIcon
-                  type="image/svg+xml"
-                  data="/images/magnifying-glass.svg"
-                  class="search_icon"
-                />
+                <SVGObjectIcon type="image/svg+xml" data="/images/magnifying-glass.svg" />
               </SearchContainer>
               <NavAnchor to="/deals">
                 <HeaderButton type="button">
@@ -184,7 +180,9 @@ const HeaderButtonSvg = styled.img`
 `;
 
 const SVGObjectIcon = styled.object`
-  height: 25px;
+  height: 200px;
+  padding: 1rem;
+  cursor: pointer;
 `;
 
 // const SearchBackgroundImage = styled.a`
