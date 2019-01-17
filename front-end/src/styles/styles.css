@@ -20,13 +20,13 @@
 }
 
 html {
-  overflow-x: hidden;
-  margin-right: calc(-1 * (100vw - 100%));
+  /* overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%)); */
   font-size: 62.5%; /* converts 1rem into 10px which is easy for fast calcs 8 */
 }
 body {
-  overflow-x: hidden;
-  margin-right: calc(-1 * (100vw - 100%));
+  /* overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%)); */
   /* color: $dark-grey; */
 
   font-family: Bookman, Helvetica, Arial, sans-serif;

@@ -37,7 +37,7 @@ class Header extends React.Component {
             <NavContent>
               <SearchContainer>
                 <SearchField placeholder="I'm looking for..." />
-                <SVGObjectIcon type="image/svg+xml" data="/images/magnifying-glass.svg" />
+                {/* <SVGObjectIcon type="image/svg+xml" data="/images/magnifying-glass.svg" /> */}
               </SearchContainer>
               <NavAnchor to="/deals">
                 <HeaderButton type="button">
