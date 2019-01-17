@@ -20,15 +20,9 @@
 }
 
 html {
-  /* overflow-x: hidden;
-  margin-right: calc(-1 * (100vw - 100%)); */
   font-size: 62.5%; /* converts 1rem into 10px which is easy for fast calcs 8 */
 }
 body {
-  /* overflow-x: hidden;
-  margin-right: calc(-1 * (100vw - 100%)); */
-  /* color: $dark-grey; */
-
   font-family: Bookman, Helvetica, Arial, sans-serif;
   font-size: var(--m-size);
   line-height: 1.6;
@@ -114,12 +108,12 @@ button:disabled {
 .ReactModalPortal .ReactModal__Overlay--before-close {
   opacity: 0;
 }
-
+/* 
 #test1 {
   fill: grey;
   stroke: black;
-  padding: 1rem;
   height: 200px;
+  padding: 1rem;
 }
 
 #test1:hover {
@@ -127,4 +121,4 @@ button:disabled {
   stroke: black;
   transition: all 0.3s;
   cursor: pointer;
-}
+} */

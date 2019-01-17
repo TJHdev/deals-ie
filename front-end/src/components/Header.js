@@ -37,8 +37,12 @@ class Header extends React.Component {
             <NavContent>
               <SearchContainer>
                 <SearchField placeholder="I'm looking for..." />
-                {/* <SVGObjectIcon type="image/svg+xml" data="/images/magnifying-glass.svg" /> */}
+                {/*<SVGObjectIcon type="image/svg+xml" data="/images/magnifying-glass.svg" />*/}
               </SearchContainer>
+              <SVGicon viewBox="0 0 200 200">
+                <CircleSVGComponent d="M 100 50 a 50 50 0 1 0 0.001 0" />
+                <LineSVGPath d="M135.355 135.355 L180 180" />
+              </SVGicon>
               <NavAnchor to="/deals">
                 <HeaderButton type="button">
                   <HeaderButtonSpan>Share Deal</HeaderButtonSpan>
@@ -67,6 +71,61 @@ class Header extends React.Component {
     );
   }
 }
+
+const SVGicon = styled.svg`
+  width: 500px;
+
+  &:hover path {
+    stroke: black;
+    stroke-dasharray: 270 1;
+    opacity: 1;
+  }
+`;
+
+const CircleSVGComponent = styled.path`
+  transition: stroke 0.7s, stroke-dasharray 0.7s;
+  stroke: black;
+  stroke-width: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 270;
+  stroke-dashoffset: 70;
+  opacity: 0;
+`;
+
+const LineSVGPath = styled.path`
+  transition: stroke 1.5s, stroke-dasharray 1.5s;
+  stroke: black;
+  stroke-width: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 150;
+  stroke-dashoffset: 70;
+  opacity: 0;
+`;
+
+const HeaderButtonSpan = styled.span`
+  margin-right: 5px;
+`;
+
+const HeaderButtonImg = styled.img`
+  height: 15px;
+`;
+
+const HeaderButtonSvg = styled.img`
+  height: 20px;
+`;
+
+const SVGObjectIcon = styled.object`
+  height: 200px;
+  /* padding: 1rem; */
+  /* cursor: pointer; */
+
+  & path {
+  }
+`;
 
 const NavbarHeader = styled.header`
   background-color: var(--green);
@@ -165,24 +224,6 @@ const HeaderButton = styled.button`
     box-shadow: none;
     transform: translateY(2px);
   }
-`;
-
-const HeaderButtonSpan = styled.span`
-  margin-right: 5px;
-`;
-
-const HeaderButtonImg = styled.img`
-  height: 15px;
-`;
-
-const HeaderButtonSvg = styled.img`
-  height: 20px;
-`;
-
-const SVGObjectIcon = styled.object`
-  height: 200px;
-  padding: 1rem;
-  cursor: pointer;
 `;
 
 // const SearchBackgroundImage = styled.a`
