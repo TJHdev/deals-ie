@@ -76,7 +76,7 @@ const SVGicon = styled.svg`
   width: 500px;
 
   &:hover path {
-    stroke: black;
+    stroke: blue;
     stroke-dasharray: 270 1;
     opacity: 1;
   }
@@ -95,7 +95,7 @@ const CircleSVGComponent = styled.path`
 `;
 
 const LineSVGPath = styled.path`
-  transition: stroke 1.5s, stroke-dasharray 1.5s;
+  transition: stroke 0.7s, stroke-dasharray 0.7s;
   stroke: black;
   stroke-width: 10px;
   fill: none;
@@ -105,6 +105,40 @@ const LineSVGPath = styled.path`
   stroke-dashoffset: 70;
   opacity: 0;
 `;
+
+// const SVGicon = styled.svg`
+//   width: 500px;
+
+//   &:hover path {
+//     stroke: blue;
+//     stroke-dasharray: 270 1;
+//     opacity: 1;
+//   }
+// `;
+
+// const CircleSVGComponent = styled.path`
+//   transition: stroke 0.7s, stroke-dasharray 0.7s;
+//   stroke: black;
+//   stroke-width: 10px;
+//   fill: none;
+//   stroke-linecap: round;
+//   stroke-linejoin: round;
+//   stroke-dasharray: 1 270;
+//   stroke-dashoffset: 70;
+//   opacity: 0;
+// `;
+
+// const LineSVGPath = styled.path`
+//   transition: stroke 0.7s, stroke-dasharray 0.7s;
+//   stroke: black;
+//   stroke-width: 10px;
+//   fill: none;
+//   stroke-linecap: round;
+//   stroke-linejoin: round;
+//   stroke-dasharray: 1 150;
+//   stroke-dashoffset: 70;
+//   opacity: 0;
+// `;
 
 const HeaderButtonSpan = styled.span`
   margin-right: 5px;
