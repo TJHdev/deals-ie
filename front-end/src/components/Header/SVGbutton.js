@@ -23,7 +23,7 @@ const SVGbutton = styled.button`
   }
 
   &:focus {
-    background-color: black;
+    background-color: white;
   }
 
   &:active {
@@ -34,7 +34,11 @@ const SVGbutton = styled.button`
   &:focus path:nth-child(even) {
     stroke-dashoffset: 0;
     opacity: 1;
-    fill: white;
+  }
+
+  &:focus path:nth-child(odd) {
+    /* fill: white; */
+    opacity: 0;
   }
 `;
 

@@ -22,13 +22,44 @@ class Header extends React.Component {
 
   constructor(props, context) {
     super(props, context);
+    this.state = { width: window.innerWidth };
   }
 
+  componentWillMount() {
+    window.addEventListener('resize', this.handleWindowSizeChange);
+  }
+
+  // make sure to remove the listener
+  // when the component is not mounted anymore
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowSizeChange);
+  }
+
+  handleWindowSizeChange = () => {
+    this.setState({ width: window.innerWidth });
+  };
+
   render() {
-    // console.log(this.props);
+    const { width } = this.state;
+    const isMobile = width <= 500;
     const { drawerClickHandler, userState } = this.props;
 
-    return (
+    return isMobile ? (
+      <NavbarHeader>
+        <ContentContainer>
+          <HeaderContent>
+            <DrawerToggleButton click={drawerClickHandler} />
+            <ButtonSearch />
+            <HeaderTitle to="/">
+              <LogoImg src="/images/EireDealsLogo.png" alt="Eiredeals logo" />
+              <HeaderText>Éire Deals</HeaderText>
+            </HeaderTitle>
+            <ButtonShare />
+            <ButtonUser />
+          </HeaderContent>
+        </ContentContainer>
+      </NavbarHeader>
+    ) : (
       <NavbarHeader>
         <ContentContainer>
           <HeaderContent>
@@ -124,7 +155,6 @@ const HeaderText = styled.h1`
   @media (max-width: 1000px) {
     /* background: palevioletred; */
     font-size: 2.5rem;
-    width: 110px;
     line-height: 120%;
   }
 `;

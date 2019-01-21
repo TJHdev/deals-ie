@@ -6,7 +6,7 @@ import SVGbutton from '../SVGbutton';
 import SVGicon from '../SVGicon';
 
 const LineSVGPath = styled.path`
-  transition: stroke 0.7s, stroke-dashoffset 0.7s, opacity 0.5s;
+  transition: stroke 0.7s, stroke-dashoffset 0.7s, opacity 0.3s;
   stroke-width: 20px;
   fill: none;
   stroke-linecap: round;

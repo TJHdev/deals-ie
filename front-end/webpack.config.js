@@ -1,6 +1,7 @@
 const path = require('path'); // require is a built in node function
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -71,7 +72,8 @@ module.exports = env => {
         'process.env.DEPLOYED_ENV': JSON.stringify(process.env.DEPLOYED_ENV),
         'process.env.mode': JSON.stringify(process.env.mode),
         'process.env.NGINX_PRODUCTION': JSON.stringify(process.env.NGINX_PRODUCTION)
-      })
+      }),
+      new BundleAnalyzerPlugin()
     ],
     devtool: isProduction ? 'source-map' : 'inline-source-map',
     devServer: {
