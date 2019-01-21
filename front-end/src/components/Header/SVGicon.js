@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const SVGicon = styled.svg`
-  height: 32px;
+  height: 22px;
 
   path:nth-child(even) {
     stroke: var(--red);

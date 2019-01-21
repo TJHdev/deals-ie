@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import SVGbutton from '../SVGbutton';
 import SVGicon from '../SVGicon';
+import ButtonText from '../ButtonText';
 
 const LineSVGPath = styled.path`
   transition: stroke 0.7s, stroke-dashoffset 0.7s, opacity 0.3s;
@@ -16,9 +17,11 @@ const LineSVGPath = styled.path`
 `;
 
 const drawerToggleButton = props => {
-  const { click } = props;
+  const { click, isMobile } = props;
   return (
     <SVGbutton onClick={click}>
+      {isMobile ? null : <ButtonText>Menu</ButtonText>}
+
       <SVGicon viewBox="0 0 160 160">
         <LineSVGPath d="M10 30 L150 30" />
         <LineSVGPath d="M10 30 L150 30" />

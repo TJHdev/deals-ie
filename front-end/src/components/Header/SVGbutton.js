@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
 const SVGbutton = styled.button`
+  display: flex;
+  align-items: center;
+
   background-color: var(--red);
   color: white;
   font-size: var(--font-size-large);
@@ -8,11 +11,10 @@ const SVGbutton = styled.button`
   outline: none;
   border: none;
   border-radius: 5px;
-  padding: 4px;
+  padding: 0.7rem;
   /* margin: var(--xs-size) 0; */
   margin-left: var(--xs-size);
 
-  display: inline-block;
   text-decoration: none;
   line-height: 0; // dictates the height of a button
   transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, opacity 0.5s;
@@ -24,6 +26,10 @@ const SVGbutton = styled.button`
 
   &:focus {
     background-color: white;
+
+    & p {
+      color: var(--red);
+    }
   }
 
   &:active {
