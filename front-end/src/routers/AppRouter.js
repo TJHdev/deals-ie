@@ -14,8 +14,8 @@ import EmailVerificationPage from '../components/login-register/EmailVerificatio
 import PasswordChangePage from '../components/login-register/ChangePasswordPage';
 import RequestPasswordChangePage from '../components/login-register/RequestPasswordChangePage';
 
-import SideDrawer from '../components/Burger-Menu/SideDrawer';
-import Backdrop from '../components/Burger-Menu/Backdrop';
+import SideDrawer from '../components/Header/Burger-Menu/SideDrawer';
+import Backdrop from '../components/Header/Burger-Menu/Backdrop';
 
 // import DashboardPage from '../components/DashboardPage';
 // import NotFoundPage from '../components/NotFoundPage';

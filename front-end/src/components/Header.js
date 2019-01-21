@@ -10,7 +10,10 @@ import { ModalConsumer } from './Modal/ModalContext';
 import ContentContainer from '../styled-components/ContentContainer';
 
 // burger menu
-import DrawerToggleButton from './Burger-Menu/DrawToggleButton';
+import DrawerToggleButton from './Header/Burger-Menu/DrawToggleButton';
+import ButtonSearch from './Header/ButtonSearch';
+import ButtonShare from './Header/ButtonShare';
+import ButtonUser from './Header/ButtonUser';
 
 class Header extends React.Component {
   static propTypes = {
@@ -34,15 +37,10 @@ class Header extends React.Component {
               <HeaderText>Éire Deals</HeaderText>
             </HeaderTitle>
             <DrawerToggleButton click={drawerClickHandler} />
+            <ButtonSearch />
+            <ButtonShare />
+            <ButtonUser />
             <NavContent>
-              <SearchContainer>
-                <SearchField placeholder="I'm looking for..." />
-                {/*<SVGObjectIcon type="image/svg+xml" data="/images/magnifying-glass.svg" />*/}
-              </SearchContainer>
-              <SVGicon viewBox="0 0 200 200">
-                <CircleSVGComponent d="M 100 50 a 50 50 0 1 0 0.001 0" />
-                <LineSVGPath d="M135.355 135.355 L180 180" />
-              </SVGicon>
               <NavAnchor to="/deals">
                 <HeaderButton type="button">
                   <HeaderButtonSpan>Share Deal</HeaderButtonSpan>
@@ -71,74 +69,6 @@ class Header extends React.Component {
     );
   }
 }
-
-const SVGicon = styled.svg`
-  width: 500px;
-
-  &:hover path {
-    stroke: blue;
-    stroke-dasharray: 270 1;
-    opacity: 1;
-  }
-`;
-
-const CircleSVGComponent = styled.path`
-  transition: stroke 0.7s, stroke-dasharray 0.7s;
-  stroke: black;
-  stroke-width: 10px;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1 270;
-  stroke-dashoffset: 70;
-  opacity: 0;
-`;
-
-const LineSVGPath = styled.path`
-  transition: stroke 0.7s, stroke-dasharray 0.7s;
-  stroke: black;
-  stroke-width: 10px;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1 150;
-  stroke-dashoffset: 70;
-  opacity: 0;
-`;
-
-// const SVGicon = styled.svg`
-//   width: 500px;
-
-//   &:hover path {
-//     stroke: blue;
-//     stroke-dasharray: 270 1;
-//     opacity: 1;
-//   }
-// `;
-
-// const CircleSVGComponent = styled.path`
-//   transition: stroke 0.7s, stroke-dasharray 0.7s;
-//   stroke: black;
-//   stroke-width: 10px;
-//   fill: none;
-//   stroke-linecap: round;
-//   stroke-linejoin: round;
-//   stroke-dasharray: 1 270;
-//   stroke-dashoffset: 70;
-//   opacity: 0;
-// `;
-
-// const LineSVGPath = styled.path`
-//   transition: stroke 0.7s, stroke-dasharray 0.7s;
-//   stroke: black;
-//   stroke-width: 10px;
-//   fill: none;
-//   stroke-linecap: round;
-//   stroke-linejoin: round;
-//   stroke-dasharray: 1 150;
-//   stroke-dashoffset: 70;
-//   opacity: 0;
-// `;
 
 const HeaderButtonSpan = styled.span`
   margin-right: 5px;
