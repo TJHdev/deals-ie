@@ -15,10 +15,6 @@ import { ContentContainerPasswordForm } from '../../styled-components/ContentCon
 import { Button } from '../../styled-components/Button';
 
 class EmailVerificationPage extends React.Component {
-  static propTypes = {
-    history: PropTypes.object.isRequired
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +23,7 @@ class EmailVerificationPage extends React.Component {
   }
 
   componentDidMount() {
-    const { location, history } = this.props;
+    const { location } = this.props;
 
     const index = location.search.indexOf('=');
 
@@ -39,7 +35,7 @@ class EmailVerificationPage extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ token: token })
+      body: JSON.stringify({ token })
     })
       .then(response => response.json())
       .then(data => {
@@ -106,33 +102,3 @@ const SmallListText = styled.p`
 `;
 
 export default withRouter(EmailVerificationPage);
-
-// <NavLink to="/create" activeClassName="is-active">Create expense</NavLink>
-// <NavLink to="/help" activeClassName="is-active">Help</NavLink>
-
-// <Label htmlFor="camel_url">
-//   camelcamelcamel graph Url
-//   <StyledErrorMessage name="camel_url" component="span" />
-//   <StyledField type="text" name="camel_url" />
-// </Label>
-
-// <CheckEmailContainer>
-// <h2>Please check your email</h2>
-// <SmallList>
-//   <li>
-//     <SmallListText> Click on the verify link provided in that email</SmallListText>
-//   </li>
-//   <li>
-//     <SmallListText>
-//       {' '}
-//       If you did not recieve an email please make sure to check your spam folder
-//     </SmallListText>
-//   </li>
-//   <li>
-//     <SmallListText>
-//       If there is still no sign of the email, you can request another using the form
-//       below
-//     </SmallListText>
-//   </li>
-// </SmallList>
-// </CheckEmailContainer>

@@ -17,10 +17,6 @@ import RequestPasswordChangePage from '../components/login-register/RequestPassw
 import SideDrawer from '../components/Header/Burger-Menu/SideDrawer';
 import Backdrop from '../components/Header/Burger-Menu/Backdrop';
 
-// import DashboardPage from '../components/DashboardPage';
-// import NotFoundPage from '../components/NotFoundPage';
-// import LoginPage from '../components/LoginPage';
-import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 
 // modal context imports
@@ -104,24 +100,6 @@ class AppRouter extends React.Component {
     );
   }
 }
-
-// <PublicRoute exact path="/" component={HomePage} />
-// <PublicRoute exact path="/deals/:deal_id" component={DealPage} />
-// <PublicRoute path="/profile/:username" component={ProfilePage} />
-// <PublicRoute
-//   path="/complete-signup-request"
-//   component={EmailVerificationRequestPage}
-// />
-// <PublicRoute path="/complete-signup/" component={EmailVerificationPage} />
-// <PublicRoute path="/password-request" component={RequestPasswordChangePage} />
-// <PublicRoute path="/reset-password" component={PasswordChangePage} />
-// <PrivateRoute
-//   exact
-//   path="/deals"
-//   component={SubmitDealPage}
-//   userState={userState}
-// />
-// <PublicRoute component={NoMatch} />
 
 export default AppRouter;
 

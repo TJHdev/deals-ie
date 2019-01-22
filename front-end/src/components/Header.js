@@ -16,10 +16,6 @@ import ButtonShare from './Header/ButtonShare';
 import ButtonUser from './Header/ButtonUser';
 
 class Header extends React.Component {
-  static propTypes = {
-    history: PropTypes.object.isRequired
-  };
-
   constructor(props, context) {
     super(props, context);
     this.state = { width: window.innerWidth };
@@ -133,16 +129,21 @@ const HeaderContent = styled.div`
   padding: 0.5rem 0; /* was $s-sizeS */
 `;
 
-const LogoImg = styled.img`
-  margin-right: 1rem;
-  height: 55px;
-`;
+//***********
+// Logo block
+//***********
 
 const HeaderTitle = styled(Link)`
   display: flex;
+  justify-content: center;
   align-items: center;
   color: white;
   text-decoration: none;
+`;
+
+const LogoImg = styled.img`
+  margin-right: 1rem;
+  height: 55px;
 `;
 
 const HeaderText = styled.h1`

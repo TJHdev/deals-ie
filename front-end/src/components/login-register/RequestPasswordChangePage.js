@@ -26,18 +26,12 @@ import { ContentContainerPasswordForm } from '../../styled-components/ContentCon
 import { Button } from '../../styled-components/Button';
 
 class RequestPasswordChangePage extends React.Component {
-  static propTypes = {
-    history: PropTypes.object.isRequired
-  };
-
   constructor(props) {
     super(props);
     this.onSubmitEmail = this.onSubmitEmail.bind(this);
   }
 
   onSubmitEmail(values, setSubmitting, resetForm, setFieldValue, setStatus) {
-    // const token = window.sessionStorage.getItem('token');
-
     setSubmitting(true);
     fetch(`${window.BACKEND_PATH}/profile/request-password`, {
       method: 'POST',

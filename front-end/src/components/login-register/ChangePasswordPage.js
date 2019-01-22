@@ -16,10 +16,6 @@ import { ModalConsumer } from '../Modal/ModalContext';
 import LoginModal from '../Modal/LoginModal';
 
 class PasswordChangePage extends React.Component {
-  static propTypes = {
-    history: PropTypes.object.isRequired
-  };
-
   constructor(props) {
     super(props);
     this.onSubmitPassword = this.onSubmitPassword.bind(this);
@@ -31,7 +27,7 @@ class PasswordChangePage extends React.Component {
 
   onSubmitPassword(values, setSubmitting, setErrors) {
     setSubmitting(true);
-    const { location, history } = this.props;
+    const { location } = this.props;
 
     const index = location.search.indexOf('=');
 
@@ -44,7 +40,7 @@ class PasswordChangePage extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        token: token,
+        token,
         new_password: values.new_password,
         repeat_password: values.repeat_password
       })

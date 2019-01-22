@@ -26,17 +26,11 @@ import { ContentContainerPasswordForm } from '../../styled-components/ContentCon
 import { Button } from '../../styled-components/Button';
 
 class EmailVerificationRequestPage extends React.Component {
-  static propTypes = {
-    history: PropTypes.object.isRequired
-  };
-
   constructor(props) {
     super(props);
-    this.onSubmitEmail = this.onSubmitEmail.bind(this);
   }
 
-  onSubmitEmail(values, setSubmitting, resetForm, setFieldValue, setStatus) {
-    // const token = window.sessionStorage.getItem('token');
+  onSubmitEmail = (values, setSubmitting, resetForm, setFieldValue, setStatus) => {
     setSubmitting(true);
     fetch(`${window.BACKEND_PATH}/profile/request-verify-email`, {
       method: 'POST',
@@ -47,12 +41,7 @@ class EmailVerificationRequestPage extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log('data: ', data);
         console.log('values: ', values);
-        // if (data && data.deal_title) {
-        //   // loadUser(user);
-        //   history.push(`/deals/${data.id}`);
-        // }
         resetForm();
         setSubmitting(false);
         setStatus({ success: 'Success: Check your inbox for a reset link!' });
@@ -64,7 +53,7 @@ class EmailVerificationRequestPage extends React.Component {
         setStatus({ success: 'Success: Check your inbox for a reset link!' });
         setFieldValue('email', '', false);
       });
-  }
+  };
 
   render() {
     return (
@@ -109,31 +98,26 @@ class EmailVerificationRequestPage extends React.Component {
             );
           }}
         >
-          {props => {
-            console.log(props.errors);
-            console.log(props.touched);
-            console.log(props.status);
-            return (
-              <Form>
-                <Label htmlFor="email">
-                  Email
-                  <StyledErrorMessage name="email" component="span" />
-                  <TextField
-                    autoComplete="off"
-                    type="text"
-                    name="email"
-                    placeholder="Please enter your email address"
-                  />
-                </Label>
-                {props.status && props.status.success ? (
-                  <SuccessNotification>{props.status.success}</SuccessNotification>
-                ) : null}
-                <Button type="submit" disabled={props.isSubmitting}>
-                  Submit
-                </Button>
-              </Form>
-            );
-          }}
+          {props => (
+            <Form>
+              <Label htmlFor="email">
+                Email
+                <StyledErrorMessage name="email" component="span" />
+                <TextField
+                  autoComplete="off"
+                  type="text"
+                  name="email"
+                  placeholder="Please enter your email address"
+                />
+              </Label>
+              {props.status && props.status.success ? (
+                <SuccessNotification>{props.status.success}</SuccessNotification>
+              ) : null}
+              <Button type="submit" disabled={props.isSubmitting}>
+                Submit
+              </Button>
+            </Form>
+          )}
         </Formik>
       </ContentContainerPasswordForm>
     );
@@ -159,12 +143,3 @@ const SuccessNotification = styled.div`
 `;
 
 export default withRouter(EmailVerificationRequestPage);
-
-// <NavLink to="/create" activeClassName="is-active">Create expense</NavLink>
-// <NavLink to="/help" activeClassName="is-active">Help</NavLink>
-
-// <Label htmlFor="camel_url">
-//   camelcamelcamel graph Url
-//   <StyledErrorMessage name="camel_url" component="span" />
-//   <StyledField type="text" name="camel_url" />
-// </Label>
