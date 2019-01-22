@@ -24,12 +24,12 @@ const CircleSVGComponent = styled.path`
   stroke-dashoffset: 314.1593;
 `;
 
-const ButtonSearch = props => {
-  const { isMobile } = props;
+const ButtonAccount = props => {
+  const { isMobile, userState } = props;
 
   return (
-    <SVGbutton>
-      {isMobile ? null : <ButtonText>Join</ButtonText>}
+    <SVGbutton type="button" onClick={() => userState.signOut()}>
+      {isMobile ? null : <ButtonText>Account</ButtonText>}
       <SVGicon viewBox="0 0 160 160">
         <LineSVGPath
           shape-rendering="geometricPrecision"
@@ -52,4 +52,4 @@ const ButtonSearch = props => {
   );
 };
 
-export default ButtonSearch;
+export default ButtonAccount;

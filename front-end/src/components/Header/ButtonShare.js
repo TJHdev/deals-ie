@@ -7,7 +7,7 @@ import SVGicon from './SVGicon';
 import ButtonText from './ButtonText';
 
 const LineSVGPath = styled.path`
-  transition: stroke 1.5s, stroke-dashoffset 1.5s, opacity 0.3s;
+  transition: stroke 0.9s, stroke-dashoffset 0.9s, opacity 0.3s;
   stroke-width: 24px;
   fill: none;
   stroke-linecap: square;

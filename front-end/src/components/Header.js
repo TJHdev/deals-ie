@@ -13,7 +13,8 @@ import ContentContainer from '../styled-components/ContentContainer';
 import DrawerToggleButton from './Header/Burger-Menu/DrawToggleButton';
 import ButtonSearch from './Header/ButtonSearch';
 import ButtonShare from './Header/ButtonShare';
-import ButtonUser from './Header/ButtonUser';
+import ButtonJoin from './Header/ButtonJoin';
+import ButtonAccount from './Header/ButtonAccount';
 
 class Header extends React.Component {
   constructor(props, context) {
@@ -37,7 +38,7 @@ class Header extends React.Component {
 
   render() {
     const { width } = this.state;
-    const isMobile = width <= 500;
+    const isMobile = width <= 800;
     const { drawerClickHandler, userState } = this.props;
 
     return isMobile ? (
@@ -50,8 +51,16 @@ class Header extends React.Component {
               <LogoImg src="/images/EireDealsLogo.png" alt="Eiredeals logo" />
               <HeaderText>Éire Deals</HeaderText>
             </HeaderTitle>
-            <ButtonShare isMobile={isMobile} />
-            <ButtonUser isMobile={isMobile} />
+            <ButtonShare isMobile={isMobile} title="Share Deal" />
+            <ModalConsumer>
+              {({ showModal }) => {
+                return userState.id ? (
+                  <ButtonAccount isMobile={isMobile} userState={userState} />
+                ) : (
+                  <ButtonJoin isMobile={isMobile} showModal={showModal} />
+                );
+              }}
+            </ModalConsumer>
           </HeaderContent>
         </ContentContainer>
       </NavbarHeader>
@@ -63,32 +72,22 @@ class Header extends React.Component {
               <LogoImg src="/images/EireDealsLogo.png" alt="Eiredeals logo" />
               <HeaderText>Éire Deals</HeaderText>
             </HeaderTitle>
-            <DrawerToggleButton click={drawerClickHandler} />
-            <ButtonSearch />
-            <ButtonShare />
-            <ButtonUser />
             <NavContent>
-              <NavAnchor to="/deals">
-                <HeaderButton type="button">
-                  <HeaderButtonSpan>Share Deal</HeaderButtonSpan>
-                  <HeaderButtonImg src="/images/icons8-plus-math-34.png" />
-                </HeaderButton>
-              </NavAnchor>
+              <DrawerToggleButton click={drawerClickHandler} />
+              <ButtonSearch />
+              <ButtonShare />
+
               <ModalConsumer>
                 {({ showModal }) => {
-                  return userState.id ? null : (
-                    <HeaderButton type="button" onClick={() => showModal(RegisterModal)}>
-                      <HeaderButtonSpan>Join</HeaderButtonSpan>
-                      <HeaderButtonImg src="/images/icons8-user-48.png" />
-                    </HeaderButton>
+                  return userState.id ? (
+                    <ButtonAccount userState={userState} />
+                  ) : (
+                    <div>
+                      <ButtonJoin showModal={showModal} />
+                    </div>
                   );
                 }}
               </ModalConsumer>
-              {userState.id ? (
-                <HeaderButton type="button" onClick={() => userState.signOut()}>
-                  Sign out
-                </HeaderButton>
-              ) : null}
             </NavContent>
           </HeaderContent>
         </ContentContainer>
@@ -96,6 +95,11 @@ class Header extends React.Component {
     );
   }
 }
+
+// <HeaderButton type="button" onClick={() => showModal(RegisterModal)}>
+// <HeaderButtonSpan>Join</HeaderButtonSpan>
+// <HeaderButtonImg src="/images/icons8-user-48.png" />
+// </HeaderButton>
 
 const HeaderButtonSpan = styled.span`
   margin-right: 5px;
