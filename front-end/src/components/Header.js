@@ -153,11 +153,10 @@ const HeaderTitle = styled(Link)`
 
 const LogoImg = styled.img`
   margin-right: 1rem;
-  height: 55px;
+  height: 45px;
 
   @media (max-width: 500px) {
     margin-right: 0.5rem;
-    height: 45px;
   }
 `;
 
@@ -165,7 +164,8 @@ const HeaderText = styled.h1`
   font-family: UncialAntiqua;
   letter-spacing: 1px;
   margin: 0;
-  font-size: 3.2rem;
+  font-size: 3.1rem;
+  line-height: 2rem;
   flex: 0 0 auto;
   width: auto;
 
