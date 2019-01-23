@@ -1,91 +1,137 @@
-import React from 'react';
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
-  root: {
-    display: 'flex'
-  },
-  paper: {
-    marginRight: theme.spacing.unit * 2
+import SVGbutton from './SVGbutton';
+import SVGicon from './SVGicon';
+import ButtonText from './ButtonText';
+
+const MenuList = styled.div`
+  position: relative;
+  z-index: 10;
+`;
+
+const ButtonList = styled.div`
+  position: absolute;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+
+  background-color: white;
+  border: 1px solid black;
+`;
+
+const LineSVGPath = styled.path`
+  transition: stroke 1.5s, stroke-dashoffset 1.5s, opacity 0.3s;
+  stroke-width: 20px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 192 192;
+  stroke-dashoffset: 192;
+`;
+
+const CircleSVGComponent = styled.path`
+  transition: stroke 1.5s, stroke-dashoffset 1.5s, opacity 0.3s;
+  stroke-width: 16px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 314.1593 314.1593;
+  stroke-dashoffset: 314.1593;
+`;
+
+const Title = styled.h2`
+  padding: 0.5rem;
+  margin: 0;
+  line-height: 2rem;
+`;
+
+class Card extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      showMenu: false
+    };
+
+    this.showMenu = this.showMenu.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
   }
-});
 
-class MenuListComposition extends React.Component {
-  state = {
-    open: false
-  };
+  showMenu(event) {
+    event.preventDefault();
 
-  handleToggle = () => {
-    this.setState(state => ({ open: !state.open }));
-  };
+    this.setState({ showMenu: true }, () => {
+      document.addEventListener('click', this.closeMenu);
+    });
+  }
 
-  handleClose = event => {
-    if (this.anchorEl.contains(event.target)) {
-      return;
+  closeMenu(event) {
+    if (!this.dropdownMenu.contains(event.target)) {
+      this.setState({ showMenu: false }, () => {
+        document.removeEventListener('click', this.closeMenu);
+      });
     }
-
-    this.setState({ open: false });
-  };
+  }
 
   render() {
-    const { classes } = this.props;
-    const { open } = this.state;
+    const { userState, isMobile, history } = this.props;
 
     return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <MenuList>
-            <MenuItem>Profile</MenuItem>
-            <MenuItem>My account</MenuItem>
-            <MenuItem>Logout</MenuItem>
-          </MenuList>
-        </Paper>
-        <div>
-          <Button
-            buttonRef={node => {
-              this.anchorEl = node;
+      <div>
+        <SVGbutton onClick={this.showMenu}>
+          {isMobile ? null : <ButtonText>{userState.username}</ButtonText>}
+          <SVGicon viewBox="0 0 160 160">
+            <LineSVGPath
+              shape-rendering="geometricPrecision"
+              d="M15,160 C20,135 40,110 50,110 C70,123 90,123 110,110 C120,110 140,135 145,160"
+            />
+            <LineSVGPath
+              shape-rendering="geometricPrecision"
+              d="M15,160 C20,135 40,110 50,110 C70,123 90,123 110,110 C120,110 140,135 145,160"
+            />
+            <CircleSVGComponent
+              shape-rendering="geometricPrecision"
+              d="M 80 10 a 50 50 0 1 0 0.001 0"
+            />
+            <CircleSVGComponent
+              shape-rendering="geometricPrecision"
+              d="M 80 10 a 50 50 0 1 0 0.001 0"
+            />
+          </SVGicon>
+        </SVGbutton>
+        {this.state.showMenu ? (
+          <MenuList
+            className="menu"
+            ref={element => {
+              this.dropdownMenu = element;
             }}
-            aria-owns={open ? 'menu-list-grow' : undefined}
-            aria-haspopup="true"
-            onClick={this.handleToggle}
           >
-            Toggle Menu Grow
-          </Button>
-          <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                id="menu-list-grow"
-                style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+            <ButtonList>
+              {isMobile ? <Title>{userState.username}</Title> : null}
+              <button
+                type="button"
+                onClick={() => {
+                  history.push(`/profile/${userState.username}`);
+                }}
               >
-                <Paper>
-                  <ClickAwayListener onClickAway={this.handleClose}>
-                    <MenuList>
-                      <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                      <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                      <MenuItem onClick={this.handleClose}>Logout</MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
-        </div>
+                Profile
+              </button>
+              <button type="button" onClick={() => userState.signOut()}>
+                Sign out
+              </button>
+            </ButtonList>
+          </MenuList>
+        ) : null}
       </div>
     );
   }
 }
 
-MenuListComposition.propTypes = {
-  classes: PropTypes.object.isRequired
+Card.propTypes = {
+  userState: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(MenuListComposition);
+export default withRouter(Card);

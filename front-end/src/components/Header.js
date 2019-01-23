@@ -15,6 +15,7 @@ import ButtonSearch from './Header/ButtonSearch';
 import ButtonShare from './Header/ButtonShare';
 import ButtonJoin from './Header/ButtonJoin';
 import ButtonAccount from './Header/ButtonAccount';
+import AccountList from './Header/AccountList';
 
 class Header extends React.Component {
   constructor(props, context) {
@@ -55,7 +56,7 @@ class Header extends React.Component {
             <ModalConsumer>
               {({ showModal }) => {
                 return userState.id ? (
-                  <ButtonAccount isMobile={isMobile} userState={userState} />
+                  <AccountList isMobile={isMobile} userState={userState} />
                 ) : (
                   <ButtonJoin isMobile={isMobile} showModal={showModal} />
                 );
@@ -76,15 +77,12 @@ class Header extends React.Component {
               <DrawerToggleButton click={drawerClickHandler} />
               <ButtonSearch />
               <ButtonShare />
-
               <ModalConsumer>
                 {({ showModal }) => {
                   return userState.id ? (
-                    <ButtonAccount userState={userState} />
+                    <AccountList userState={userState} />
                   ) : (
-                    <div>
-                      <ButtonJoin showModal={showModal} />
-                    </div>
+                    <ButtonJoin showModal={showModal} />
                   );
                 }}
               </ModalConsumer>
@@ -138,11 +136,19 @@ const HeaderContent = styled.div`
 //***********
 
 const HeaderTitle = styled(Link)`
+  /* border: 1px solid black; */
+  border-radius: 10px;
+  padding: 0.5rem;
+
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   text-decoration: none;
+
+  &:hover {
+    background-color: var(--green-dark);
+  }
 `;
 
 const LogoImg = styled.img`

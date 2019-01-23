@@ -28,8 +28,8 @@ const ButtonAccount = props => {
   const { isMobile, userState } = props;
 
   return (
-    <SVGbutton type="button" onClick={() => userState.signOut()}>
-      {isMobile ? null : <ButtonText>Account</ButtonText>}
+    <SVGbutton>
+      {isMobile ? null : <ButtonText>{userState.username}</ButtonText>}
       <SVGicon viewBox="0 0 160 160">
         <LineSVGPath
           shape-rendering="geometricPrecision"
@@ -53,3 +53,31 @@ const ButtonAccount = props => {
 };
 
 export default ButtonAccount;
+
+// const ButtonAccount = props => {
+//   const { isMobile, userState } = props;
+
+//   return (
+//     <SVGbutton type="button" onClick={() => userState.signOut()}>
+//       {isMobile ? null : <ButtonText>{userState.username}</ButtonText>}
+//       <SVGicon viewBox="0 0 160 160">
+//         <LineSVGPath
+//           shape-rendering="geometricPrecision"
+//           d="M15,160 C20,135 40,110 50,110 C70,123 90,123 110,110 C120,110 140,135 145,160"
+//         />
+//         <LineSVGPath
+//           shape-rendering="geometricPrecision"
+//           d="M15,160 C20,135 40,110 50,110 C70,123 90,123 110,110 C120,110 140,135 145,160"
+//         />
+//         <CircleSVGComponent
+//           shape-rendering="geometricPrecision"
+//           d="M 80 10 a 50 50 0 1 0 0.001 0"
+//         />
+//         <CircleSVGComponent
+//           shape-rendering="geometricPrecision"
+//           d="M 80 10 a 50 50 0 1 0 0.001 0"
+//         />
+//       </SVGicon>
+//     </SVGbutton>
+//   );
+// };

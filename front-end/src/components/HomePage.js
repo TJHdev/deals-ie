@@ -465,9 +465,7 @@ const DealsImage = styled.img`
   max-height: 100%;
   max-width: 100%;
   /* transform: translate(50%, 50%); */
-
   overflow: hidden;
-
   border-radius: 5px;
 `;
 
