@@ -95,6 +95,7 @@ button:disabled {
 /* modal styling */
 
 .ReactModalPortal > div {
+  z-index: 2;
   opacity: 0;
 }
 .ReactModalPortal .ReactModal__Overlay {

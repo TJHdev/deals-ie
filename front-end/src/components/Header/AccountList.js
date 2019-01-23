@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import styled from 'styled-components';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import SVGbutton from './SVGbutton';
@@ -13,13 +13,47 @@ const MenuList = styled.div`
 `;
 
 const ButtonList = styled.div`
+  max-width: 250px;
   position: absolute;
   right: 0;
+
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 
   background-color: white;
-  border: 1px solid black;
+  border: 1px solid var(--red);
+  border-radius: 5px;
+  margin-top: 2px;
+  padding: 0.5rem;
+  box-shadow: 0px 3px 7px 0 rgba(0, 0, 0, 0.7);
+`;
+
+const Title = styled.h2`
+  font-size: 1.7rem;
+  padding: 0.5rem;
+  margin: 0;
+  line-height: 2rem;
+`;
+
+const TitleRule = styled.hr`
+  width: 100%;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to left, #eee, var(--red), #eee);
+  margin-bottom: 0.5rem;
+`;
+
+const MenuItem = styled.button`
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  margin: 0.3rem;
+  padding: 0.5rem;
+
+  &:hover {
+    background-color: #ddd;
+  }
 `;
 
 const LineSVGPath = styled.path`
@@ -39,12 +73,6 @@ const CircleSVGComponent = styled.path`
   stroke-linejoin: round;
   stroke-dasharray: 314.1593 314.1593;
   stroke-dashoffset: 314.1593;
-`;
-
-const Title = styled.h2`
-  padding: 0.5rem;
-  margin: 0;
-  line-height: 2rem;
 `;
 
 class Card extends Component {
@@ -103,24 +131,28 @@ class Card extends Component {
         </SVGbutton>
         {this.state.showMenu ? (
           <MenuList
-            className="menu"
             ref={element => {
               this.dropdownMenu = element;
             }}
           >
             <ButtonList>
-              {isMobile ? <Title>{userState.username}</Title> : null}
-              <button
+              {isMobile ? (
+                <Fragment>
+                  <Title>{userState.username}</Title>
+                  <TitleRule />
+                </Fragment>
+              ) : null}
+              <MenuItem
                 type="button"
                 onClick={() => {
                   history.push(`/profile/${userState.username}`);
                 }}
               >
                 Profile
-              </button>
-              <button type="button" onClick={() => userState.signOut()}>
+              </MenuItem>
+              <MenuItem type="button" onClick={() => userState.signOut()}>
                 Sign out
-              </button>
+              </MenuItem>
             </ButtonList>
           </MenuList>
         ) : null}

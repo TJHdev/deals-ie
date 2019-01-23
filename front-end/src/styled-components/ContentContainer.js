@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export default styled.div`
   font-weight: 600;
   margin: 0 auto;
-  padding: 0 2rem 0 1rem; /* m-size */
+  padding: 0 1rem 0 1rem; /* m-size */
   max-width: 124rem;
 `;
 

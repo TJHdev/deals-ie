@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const SVGbutton = styled.button`
   display: flex;
   align-items: center;
+  z-index: 1;
 
   background-color: var(--red);
   color: white;
@@ -12,8 +13,11 @@ const SVGbutton = styled.button`
   border: none;
   border-radius: 5px;
   padding: 0.7rem;
-  /* margin: var(--xs-size) 0; */
   margin-left: var(--xs-size);
+
+  @media (max-width: 500px) {
+    margin-left: 0;
+  }
 
   text-decoration: none;
   line-height: 0; // dictates the height of a button

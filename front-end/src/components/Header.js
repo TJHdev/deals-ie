@@ -136,11 +136,11 @@ const HeaderContent = styled.div`
 //***********
 
 const HeaderTitle = styled(Link)`
-  /* border: 1px solid black; */
   border-radius: 10px;
   padding: 0.5rem;
 
   display: flex;
+  flex: 0 1 auto;
   justify-content: center;
   align-items: center;
   color: white;
@@ -154,19 +154,30 @@ const HeaderTitle = styled(Link)`
 const LogoImg = styled.img`
   margin-right: 1rem;
   height: 55px;
+
+  @media (max-width: 500px) {
+    margin-right: 0.5rem;
+    height: 45px;
+  }
 `;
 
 const HeaderText = styled.h1`
   font-family: UncialAntiqua;
   letter-spacing: 1px;
-  display: inline-block;
   margin: 0;
   font-size: 3.2rem;
+  flex: 0 0 auto;
+  width: auto;
 
-  @media (max-width: 1000px) {
-    /* background: palevioletred; */
+  @media (max-width: 850px) {
     font-size: 2.5rem;
     line-height: 120%;
+  }
+
+  @media (max-width: 500px) {
+    font-size: 1.8rem;
+    line-height: 120%;
+    width: 63px;
   }
 `;
 
@@ -230,15 +241,6 @@ const HeaderButton = styled.button`
     transform: translateY(2px);
   }
 `;
-
-// const SearchBackgroundImage = styled.a`
-//   display: block;
-//   text-indent: -9999px;
-//   width: 100px;
-//   height: 82px;
-//   background: url('../res/images/test.svg');
-//   background-size: 100px 82px;
-// `;
 
 export default withRouter(Header);
 
