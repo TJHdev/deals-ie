@@ -50,6 +50,7 @@ body {
   --twitter-blue: rgb(29, 161, 242);
   --twitter-blue-hover: rgb(55, 187, 255);
   --yellow: rgb(255, 235, 87);
+  --red-light: rgb(200, 70, 70);
   --red: rgb(180, 50, 50);
   --purple: rgb(179, 49, 168);
 }

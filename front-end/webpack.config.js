@@ -2,7 +2,7 @@ const path = require('path'); // require is a built in node function
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const BrotliPlugin = require('brotli-webpack-plugin');
+// const BrotliPlugin = require('brotli-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -81,13 +81,13 @@ module.exports = env => {
         test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
         threshold: 10240,
         minRatio: 0.8
-      }),
-      new BrotliPlugin({
-        asset: '[path].br[query]',
-        test: /\.(js|css|html|svg)$/,
-        threshold: 10240,
-        minRatio: 0.8
       })
+      // new BrotliPlugin({
+      //   asset: '[path].br[query]',
+      //   test: /\.(js|css|html|svg)$/,
+      //   threshold: 10240,
+      //   minRatio: 0.8
+      // })
       // new BundleAnalyzerPlugin()
     ],
     devtool: isProduction ? 'source-map' : 'inline-source-map',

@@ -12,9 +12,10 @@ import ContentContainer from '../styled-components/ContentContainer';
 // burger menu
 import DrawerToggleButton from './Header/Burger-Menu/DrawToggleButton';
 import ButtonSearch from './Header/ButtonSearch';
+import SearchComponent from './Header/SearchComponent';
 import ButtonShare from './Header/ButtonShare';
 import ButtonJoin from './Header/ButtonJoin';
-import ButtonAccount from './Header/ButtonAccount';
+// import ButtonAccount from './Header/ButtonAccount'; replaced with dropdown
 import AccountList from './Header/AccountList';
 
 class Header extends React.Component {
@@ -47,7 +48,7 @@ class Header extends React.Component {
         <ContentContainer>
           <HeaderContent>
             <DrawerToggleButton isMobile={isMobile} click={drawerClickHandler} />
-            <ButtonSearch isMobile={isMobile} />
+            <SearchComponent isMobile={isMobile} />
             <HeaderTitle to="/">
               <LogoImg src="/images/EireDealsLogo.png" alt="Eiredeals logo" />
               <HeaderText>Éire Deals</HeaderText>
@@ -75,7 +76,8 @@ class Header extends React.Component {
             </HeaderTitle>
             <NavContent>
               <DrawerToggleButton click={drawerClickHandler} />
-              <ButtonSearch />
+
+              <SearchComponent />
               <ButtonShare />
               <ModalConsumer>
                 {({ showModal }) => {

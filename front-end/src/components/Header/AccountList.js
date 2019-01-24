@@ -75,7 +75,7 @@ const CircleSVGComponent = styled.path`
   stroke-dashoffset: 314.1593;
 `;
 
-class Card extends Component {
+class AccountList extends Component {
   constructor() {
     super();
 
@@ -161,9 +161,9 @@ class Card extends Component {
   }
 }
 
-Card.propTypes = {
+AccountList.propTypes = {
   userState: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired
 };
 
-export default withRouter(Card);
+export default withRouter(AccountList);
