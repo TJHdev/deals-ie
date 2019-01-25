@@ -11,7 +11,7 @@ const SearchSVGbutton = styled.button`
   /* font-size: 2.2rem; */
   font-weight: 300;
   outline: none;
-  border: 2px solid red;
+  border: 2px solid var(--red-dark);
   border-radius: 0 10px 10px 0;
   padding: 0.7rem;
 

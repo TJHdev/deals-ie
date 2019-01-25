@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import SVGbutton from './SVGbutton';
-import SearchSVGbutton from './SearchSVGbutton';
+import SearchSVGbutton from './SearchSVGButton';
 import SVGicon from './SVGicon';
 import ButtonText from './ButtonText';
 
@@ -62,19 +62,40 @@ const CircleSVGComponent = styled.path`
   stroke-dashoffset: 314.1593;
 `;
 
-const CrossSVGPath = styled.path`
-  stroke-width: 20px;
-  fill: none;
-`;
-
 const CloseSVGbutton = styled.button`
+  outline: none;
   border: none;
   margin-left: 3rem;
   background-color: transparent;
   background-repeat: no-repeat;
 
-  &:focus {
+  &:hover path:nth-child(odd),
+  &:focus path:nth-child(odd) {
+    stroke: var(--red);
   }
+`;
+
+const CrossSVGicon = styled.svg`
+  height: 22px;
+
+  path:nth-child(odd) {
+    transition: stroke 0.5s;
+    stroke: white;
+    stroke-dashoffset: 0;
+  }
+
+  &:hover path:nth-child(odd) {
+    stroke: grey;
+  }
+
+  &:hover {
+    background-color: red;
+  }
+`;
+
+const CrossSVGPath = styled.path`
+  stroke-width: 20px;
+  fill: none;
 `;
 
 class SearchComponent extends Component {
@@ -87,7 +108,7 @@ class SearchComponent extends Component {
 
     this.showMenu = this.showMenu.bind(this);
     this.closeMenu = this.closeMenu.bind(this);
-    // this.closeMenuCross = this.closeMenuCross.bind(this);
+    this.closeMenuCross = this.closeMenuCross.bind(this);
   }
 
   showMenu(event) {
@@ -106,11 +127,16 @@ class SearchComponent extends Component {
     }
   }
 
-  // closeMenuCross(event) {
-  //   this.setState({ showMenu: false }, () => {
-  //     document.removeEventListener('click', this.closeMenuCross);
-  //   });
-  // }
+  closeMenuCross(event) {
+    event.preventDefault();
+
+    this.setState({ showMenu: false }, () => {
+      document.removeEventListener('click', this.closeMenu);
+    });
+    // this.setState({ showMenu: false }, () => {
+    //   document.removeEventListener('click', this.closeMenuCross);
+    // });
+  }
 
   render() {
     const { isMobile, history } = this.props;
@@ -174,13 +200,13 @@ class SearchComponent extends Component {
                   />
                 </SVGicon>
               </SearchSVGbutton>
-              <CloseSVGbutton>
-                <SVGicon viewBox="0 0 160 160">
+              <CloseSVGbutton onClick={this.closeMenuCross}>
+                <CrossSVGicon viewBox="0 0 160 160">
                   <CrossSVGPath shape-rendering="geometricPrecision" d="M0 0 L160 160" />
                   <path />
                   <CrossSVGPath shape-rendering="geometricPrecision" d="M160 0 L0 160" />
                   <path />
-                </SVGicon>
+                </CrossSVGicon>
               </CloseSVGbutton>
             </InputContainer>
           </SearchContainer>

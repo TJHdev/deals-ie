@@ -52,6 +52,7 @@ body {
   --yellow: rgb(255, 235, 87);
   --red-light: rgb(200, 70, 70);
   --red: rgb(180, 50, 50);
+  --red-dark: rgb(160, 30, 30);
   --purple: rgb(179, 49, 168);
 }
 
