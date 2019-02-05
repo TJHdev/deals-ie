@@ -205,6 +205,9 @@ const handleGetAllDeals = db => (req, res) => {
   const numberPerPage = 40;
   const offset = pageNumber * numberPerPage;
 
+  const searchField = req.query.search ? req.query.search.toLowerCase() : "";
+  const sanitisedSearchField = searchField.replace(/[^\wèéòàùì\s]/gi, "");
+
   db.select(
     "deals.id",
     "image_url",
@@ -226,6 +229,8 @@ const handleGetAllDeals = db => (req, res) => {
   )
     .from("deals")
     .innerJoin("users", "users.id", "=", "deals.user_id")
+    .where(db.raw("LOWER(deal_title) LIKE ?", `%${sanitisedSearchField}%`))
+    .orWhere(db.raw("LOWER(deal_text) LIKE ?", `%${sanitisedSearchField}%`))
     .limit(numberPerPage)
     .offset(offset)
     .then(

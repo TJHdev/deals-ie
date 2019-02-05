@@ -33,6 +33,7 @@ const SearchInput = styled.input`
   outline: none;
   font-size: 2.2rem;
   height: 4rem;
+  min-width: 170px;
   margin: 1rem 0;
   padding: 0.5rem;
   border: 2px solid grey;
@@ -85,11 +86,7 @@ const CrossSVGicon = styled.svg`
   }
 
   &:hover path:nth-child(odd) {
-    stroke: grey;
-  }
-
-  &:hover {
-    background-color: red;
+    stroke: red;
   }
 `;
 
