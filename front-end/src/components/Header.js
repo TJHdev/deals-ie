@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import RegisterModal from './Modal/RegisterModal';
 
@@ -41,7 +41,7 @@ class Header extends React.Component {
   render() {
     const { width } = this.state;
     const isMobile = width <= 800;
-    const { drawerClickHandler, userState } = this.props;
+    const { drawerClickHandler, userState, history } = this.props;
 
     return isMobile ? (
       <NavbarHeader>

@@ -66,7 +66,7 @@ const CircleSVGComponent = styled.path`
 const CloseSVGbutton = styled.button`
   outline: none;
   border: none;
-  margin-left: 3rem;
+  margin-left: 2rem;
   background-color: transparent;
   background-repeat: no-repeat;
 
@@ -96,21 +96,31 @@ const CrossSVGPath = styled.path`
 `;
 
 class SearchComponent extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      showMenu: false
+      showMenu: false,
+      searchField: ''
     };
 
+    this.abstractedCloseMenu = this.abstractedCloseMenu.bind(this);
     this.showMenu = this.showMenu.bind(this);
     this.closeMenu = this.closeMenu.bind(this);
     this.closeMenuCross = this.closeMenuCross.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+    this.keyPress = this.keyPress.bind(this);
+  }
+
+  abstractedCloseMenu() {
+    this.setState({ showMenu: false }, () => {
+      document.removeEventListener('click', this.closeMenu);
+    });
   }
 
   showMenu(event) {
     event.preventDefault();
-
     this.setState({ showMenu: true }, () => {
       document.addEventListener('click', this.closeMenu);
     });
@@ -118,25 +128,40 @@ class SearchComponent extends Component {
 
   closeMenu(event) {
     if (!this.dropdownMenu.contains(event.target)) {
-      this.setState({ showMenu: false }, () => {
-        document.removeEventListener('click', this.closeMenu);
-      });
+      this.abstractedCloseMenu();
     }
   }
 
   closeMenuCross(event) {
     event.preventDefault();
+    this.abstractedCloseMenu();
+  }
 
-    this.setState({ showMenu: false }, () => {
-      document.removeEventListener('click', this.closeMenu);
-    });
-    // this.setState({ showMenu: false }, () => {
-    //   document.removeEventListener('click', this.closeMenuCross);
-    // });
+  handleSearchChange(event) {
+    this.setState({ searchField: event.target.value });
+  }
+
+  handleSearchSubmit(event) {
+    event.preventDefault();
+    const { history } = this.props;
+    const { searchField } = this.state;
+    console.log(encodeURIComponent(searchField));
+    const encodedSearchField = encodeURIComponent(searchField);
+    history.push(`/?search=${encodeURIComponent(encodedSearchField)}`); // history.push automatically decodes once.
+    this.setState({ searchField: '' });
+  }
+
+  keyPress(event) {
+    if (event.keyCode === 27) {
+      this.abstractedCloseMenu();
+    } else if (event.keyCode === 13) {
+      this.handleSearchSubmit(event);
+    }
   }
 
   render() {
-    const { isMobile, history } = this.props;
+    const { isMobile } = this.props;
+    const { searchField } = this.state;
 
     return (
       <div>
@@ -172,8 +197,14 @@ class SearchComponent extends Component {
             }}
           >
             <InputContainer>
-              <SearchInput autoFocus placeholder="I'm looking for..." />
-              <SearchSVGbutton onClick={this.showMenu}>
+              <SearchInput
+                autoFocus
+                placeholder="I'm looking for..."
+                value={searchField}
+                onChange={this.handleSearchChange}
+                onKeyDown={this.keyPress}
+              />
+              <SearchSVGbutton type="button" onClick={this.handleSearchSubmit}>
                 <SVGicon viewBox="0 0 136 136">
                   <CircleSVGComponent
                     shape-rendering="geometricPrecision"
@@ -197,6 +228,7 @@ class SearchComponent extends Component {
                   />
                 </SVGicon>
               </SearchSVGbutton>
+
               <CloseSVGbutton onClick={this.closeMenuCross}>
                 <CrossSVGicon viewBox="0 0 160 160">
                   <CrossSVGPath shape-rendering="geometricPrecision" d="M0 0 L160 160" />

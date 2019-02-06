@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import format from 'date-fns/format';
 import cloneDeep from 'lodash/cloneDeep';
-import isEqual from 'lodash/isEqual';
 
 // import ContentContainer from '../styled-components/ContentContainer';
 import { Button } from '../styled-components/Button';
@@ -21,7 +20,9 @@ class HomePage extends React.Component {
     super(props);
     this.state = {
       dealsArray: null,
-      isLoading: true
+      route: null,
+      isLoading: true,
+      error: false
     };
 
     this.onSubmitChangeDealLikeHot = this.onSubmitChangeDealLikeHot.bind(this);
@@ -34,8 +35,9 @@ class HomePage extends React.Component {
   componentDidMount() {
     const token = window.sessionStorage.getItem('token');
 
-    const { location } = this.props;
+    const { location } = this.props; // used to pass query to backend
     const { search } = location;
+
     // console.log('props: ', this.props);
     fetch(`${window.BACKEND_PATH}/deals${search}`, {
       method: 'GET',
@@ -48,13 +50,57 @@ class HomePage extends React.Component {
       .then(data => {
         if (data && data.constructor === Array && data[0].deal_title) {
           // const stateIsDifferent = isEqual(newData, this.state);
-          this.setState({ dealsArray: data, isLoading: false });
+          this.setState({ dealsArray: data, route: search, isLoading: false });
         }
       })
       .catch(err => {
-        this.setState({ isLoading: false });
+        this.setState({
+          isLoading: false,
+          error: true
+        });
         console.log(err);
       });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { route } = this.state;
+    const { location } = this.props;
+    const { search } = location;
+    console.log('update');
+    console.log('prevState:', prevState);
+    if (prevState.dealsArray === null) {
+      console.log('componentDidUpdate: prevState undefined');
+      return false;
+    }
+    console.log(this.props);
+
+    if (route !== search) {
+      console.log('triggering fetch for new data');
+      const token = window.sessionStorage.getItem('token');
+
+      // console.log('props: ', this.props);
+      fetch(`${window.BACKEND_PATH}/deals${search}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token
+        }
+      })
+        .then(resp => resp.json())
+        .then(data => {
+          if (data && data.constructor === Array && data[0].deal_title) {
+            // const stateIsDifferent = isEqual(newData, this.state);
+            this.setState({ dealsArray: data, route: search, isLoading: false });
+          }
+        })
+        .catch(err => {
+          this.setState({
+            isLoading: false,
+            error: true
+          });
+          console.log(err);
+        });
+    }
   }
 
   onSubmitChangeDealLikeHot(dealId, isLike) {
