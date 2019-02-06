@@ -143,11 +143,15 @@ class SearchComponent extends Component {
 
   handleSearchSubmit(event) {
     event.preventDefault();
-    const { history } = this.props;
+    const { history, location } = this.props;
+    const { search } = location;
+    console.log('search: ', search);
     const { searchField } = this.state;
     console.log(encodeURIComponent(searchField));
-    const encodedSearchField = encodeURIComponent(searchField);
-    history.push(`/?search=${encodeURIComponent(encodedSearchField)}`); // history.push automatically decodes once.
+    const params = new URLSearchParams(search);
+    const searchParam = params.get('search');
+    console.log('Search Params: ', searchParam);
+    history.push(`/?search=${searchField}`); // history.push automatically decodes once.
     this.setState({ searchField: '' });
   }
 
