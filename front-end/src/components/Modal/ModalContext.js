@@ -1,5 +1,6 @@
 import React, { Component, createContext } from 'react';
 // import { UserConsumer } from '../User/UserContext';
+import { navigate } from '@reach/router';
 
 const ModalContext = createContext({
   component: null,
@@ -40,7 +41,7 @@ export class ModalProvider extends Component {
   // register
   onSubmitRegister = (values, setErrors, setSubmitting) => {
     setSubmitting(true);
-    const { history } = this.props;
+    // const { history } = this.props;
 
     fetch(`${window.BACKEND_PATH}/register`, {
       method: 'POST',
@@ -71,7 +72,8 @@ export class ModalProvider extends Component {
               return;
             });
 
-          history.push('/complete-signup-request');
+          navigate('/complete-signup-request');
+          // history.push('/complete-signup-request');
         } else {
           setErrors(data.error);
         }
@@ -86,7 +88,7 @@ export class ModalProvider extends Component {
   onSubmitLogin = (values, setErrors, setSubmitting) => {
     setSubmitting(true);
     const { loadUser } = this.props.userState;
-    const { history } = this.props;
+    // const { history } = this.props;
 
     fetch(`${window.BACKEND_PATH}/signin`, {
       method: 'POST',
@@ -116,9 +118,13 @@ export class ModalProvider extends Component {
             if (user && user.email) {
               loadUser({ ...user });
               this.hideModal(); // if login succesful close the modal
-              history.push('/no-route/');
-              history.goBack();
-            } else {
+              // history.push('/no-route/');
+              // history.goBack();
+              navigate('/no-route/');
+              // remountes the homePage to ensure that data is refetched
+              setTimeout(() => {
+                navigate('/');
+              }, 500);
             }
           })
           .catch(err => {

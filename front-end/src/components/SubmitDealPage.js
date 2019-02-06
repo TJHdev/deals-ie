@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
+import { navigate } from '@reach/router';
+
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -26,9 +28,9 @@ import { ContentContainerForm } from '../styled-components/ContentContainer';
 import { Button } from '../styled-components/Button';
 
 class SubmitDeal extends React.Component {
-  static propTypes = {
-    history: PropTypes.object.isRequired
-  };
+  // static propTypes = {
+  //   history: PropTypes.object.isRequired
+  // };
 
   constructor(props) {
     super(props);
@@ -37,7 +39,7 @@ class SubmitDeal extends React.Component {
 
   onSubmitDeal(values, setSubmitting) {
     setSubmitting(true);
-    const { history } = this.props;
+    // const { history } = this.props;
     // console.log(history);
     const token = window.sessionStorage.getItem('token');
 
@@ -55,7 +57,7 @@ class SubmitDeal extends React.Component {
         console.log(data);
         if (data && data.deal_title) {
           // loadUser(user);
-          history.push(`/deals/${data.id}`); // .push is not a function?
+          navigate(`/deals/${data.id}`); // .push is not a function?
         }
       })
       .catch(err => {
@@ -237,7 +239,7 @@ class SubmitDeal extends React.Component {
   }
 }
 
-export default withRouter(SubmitDeal);
+export default SubmitDeal;
 
 // <NavLink to="/create" activeClassName="is-active">Create expense</NavLink>
 // <NavLink to="/help" activeClassName="is-active">Help</NavLink>

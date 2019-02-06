@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import styled from 'styled-components';
 import format from 'date-fns/format';
 import cloneDeep from 'lodash/cloneDeep';
@@ -63,16 +63,17 @@ class HomePage extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // console.log('update');
+    // console.log('prevState:', prevState);
+    // console.log(this.props);
     const { route } = this.state;
     const { location } = this.props;
     const { search } = location;
-    console.log('update');
-    console.log('prevState:', prevState);
+
     if (prevState.dealsArray === null) {
       console.log('componentDidUpdate: prevState undefined');
       return false;
     }
-    console.log(this.props);
 
     if (route !== search) {
       console.log('triggering fetch for new data');
@@ -757,10 +758,10 @@ const GoToDealButton = styled(Button)`
   width: 100%;
 `;
 
-HomePage.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired
-  }).isRequired
-};
+// HomePage.propTypes = {
+//   location: PropTypes.shape({
+//     pathname: PropTypes.string.isRequired
+//   }).isRequired
+// };
 
 export default HomePage;

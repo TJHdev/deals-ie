@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
+import { navigate } from '@reach/router';
 import PropTypes from 'prop-types';
 
 import SVGbutton from './SVGbutton';
@@ -151,7 +152,7 @@ class SearchComponent extends Component {
     const params = new URLSearchParams(search);
     const searchParam = params.get('search');
     console.log('Search Params: ', searchParam);
-    history.push(`/?search=${searchField}`); // history.push automatically decodes once.
+    navigate(`/?search=${searchField}`); // history.push automatically decodes once.
     this.setState({ searchField: '' });
   }
 
@@ -249,8 +250,4 @@ class SearchComponent extends Component {
   }
 }
 
-SearchComponent.propTypes = {
-  history: PropTypes.object.isRequired
-};
-
-export default withRouter(SearchComponent);
+export default SearchComponent;

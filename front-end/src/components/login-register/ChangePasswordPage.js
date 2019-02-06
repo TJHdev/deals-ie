@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
+// import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -151,7 +152,7 @@ const SmallListText = styled.p`
   margin-bottom: 1rem;
 `;
 
-export default withRouter(PasswordChangePage);
+export default PasswordChangePage;
 
 // <NavLink to="/create" activeClassName="is-active">Create expense</NavLink>
 // <NavLink to="/help" activeClassName="is-active">Help</NavLink>

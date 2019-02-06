@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+// import { withRouter, Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import styled from 'styled-components';
 // import { Formik, Form } from 'formik';
 // import * as yup from 'yup';
@@ -101,4 +102,4 @@ const SmallListText = styled.p`
   margin-bottom: 1rem;
 `;
 
-export default withRouter(EmailVerificationPage);
+export default EmailVerificationPage;

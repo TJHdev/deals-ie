@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom;
+import { Link } from '@reach/router';
 import styled from 'styled-components';
 import format from 'date-fns/format';
 import cloneDeep from 'lodash/cloneDeep';
@@ -533,10 +534,10 @@ const DealPageText = styled.p`
 
 const DealPageCommentsContainer = styled.div``;
 
-DealPage.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired
-  }).isRequired
-};
+// DealPage.propTypes = {
+//   location: PropTypes.shape({
+//     pathname: PropTypes.string.isRequired
+//   }).isRequired
+// };
 
 export default DealPage;

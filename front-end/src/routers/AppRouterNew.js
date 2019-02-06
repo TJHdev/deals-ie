@@ -29,7 +29,7 @@ import { UserProvider, UserConsumer } from '../components/User/UserContext';
 // const history = createHistory();
 const history = '';
 
-class AppRouter extends React.Component {
+class AppRouterNew extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,6 +49,14 @@ class AppRouter extends React.Component {
 
   render() {
     let backdrop;
+    // const userState = {
+    //   id: 15,
+    //   username: 'thomasjhannaTest',
+    //   email: 'thomasjhannatest@gmail.com',
+    //   admin: true,
+    //   trusted: true,
+    //   email_verified: true
+    // };
 
     if (this.state.sideDrawerOpen) {
       backdrop = <Backdrop click={this.backdropClickHandler} />;
@@ -68,29 +76,16 @@ class AppRouter extends React.Component {
                   <ModalRoot />
                   <SideDrawer show={this.state.sideDrawerOpen} />
                   {backdrop}
-                  <Router history={history}>
-                    <Route exact path="/" component={HomePage} userState={userState} />
-                    <Route
-                      exact
-                      path="/deals/:deal_id"
-                      component={DealPage}
-                      userState={userState}
-                    />
-                    <Route path="/profile/:username" component={ProfilePage} />
-                    <Route
-                      path="/complete-signup-request"
-                      component={EmailVerificationRequestPage}
-                    />
-                    <Route path="/complete-signup/" component={EmailVerificationPage} />
-                    <Route path="/password-request" component={RequestPasswordChangePage} />
-                    <Route path="/reset-password" component={PasswordChangePage} />
-                    <PrivateRoute
-                      exact
-                      path="/deals"
-                      component={SubmitDealPage}
-                      userState={userState}
-                    />
-                    <Route component={NoMatch} />
+                  <Router>
+                    <HomePage path="/" userState={userState} />
+                    <DealPage path="/deals/:deal_id" userState={userState} />
+                    <ProfilePage path="/profile/:username" />
+                    <EmailVerificationRequestPage path="/complete-signup-request" />
+                    <EmailVerificationPage path="/complete-signup/" />
+                    <RequestPasswordChangePage path="/password-request" />
+                    <PasswordChangePage path="/reset-password" />
+                    <PrivateRoute path="/deals" userState={userState} component={SubmitDealPage} />
+                    <NoMatch default />
                   </Router>
                 </ModalProvider>
               </Fragment>
@@ -102,7 +97,7 @@ class AppRouter extends React.Component {
   }
 }
 
-export default AppRouter;
+export default AppRouterNew;
 
 // <Route path="/login" component={LoginPage} />
 // <Route path="/register" component={RegisterPage} />

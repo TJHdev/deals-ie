@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 
 export const Button = styled.button`
   background-color: var(--green);

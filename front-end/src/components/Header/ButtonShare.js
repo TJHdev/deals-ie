@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
+import { navigate } from '@reach/router';
 
 import SVGbutton from './SVGbutton';
 import SVGicon from './SVGicon';
@@ -16,12 +17,12 @@ const LineSVGPath = styled.path`
 `;
 
 const ButtonShare = props => {
-  const { isMobile, history } = props;
+  const { isMobile } = props;
   return (
     <SVGbutton
       type="button"
       onClick={() => {
-        history.push('/deals');
+        navigate('/deals');
       }}
     >
       {isMobile ? null : <ButtonText>Share Deal</ButtonText>}
@@ -39,4 +40,4 @@ const ButtonShare = props => {
   );
 };
 
-export default withRouter(ButtonShare);
+export default ButtonShare;

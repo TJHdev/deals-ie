@@ -1,4 +1,5 @@
 import React, { Component, createContext } from 'react';
+import { navigate } from '@reach/router';
 
 const UserContext = createContext({
   id: null,
@@ -39,7 +40,6 @@ export class UserProvider extends Component {
   };
 
   signOut = () => {
-    const { history } = this.props;
     const token = window.sessionStorage.getItem('token');
 
     fetch(`${window.BACKEND_PATH}/signout`, {
@@ -53,8 +53,11 @@ export class UserProvider extends Component {
       .then(data => {
         if (data !== 'unauthorized' && this.state.id !== null) {
           this.unloadUser();
-          history.push('/no-route/');
-          history.goBack();
+          navigate('/no-route/');
+          // remountes the homePage to ensure that data is refetched
+          setTimeout(() => {
+            navigate('/');
+          }, 500);
         } else {
           console.log('Something went wrong signing out');
         }

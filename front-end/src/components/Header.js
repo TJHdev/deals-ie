@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link, Redirect, withRouter } from 'react-router-dom';
+// import { Link, Redirect, withRouter } from 'react-router-dom';
+import { Link } from '@reach/router';
 import styled from 'styled-components';
 import RegisterModal from './Modal/RegisterModal';
 
@@ -41,7 +42,7 @@ class Header extends React.Component {
   render() {
     const { width } = this.state;
     const isMobile = width <= 800;
-    const { drawerClickHandler, userState, history } = this.props;
+    const { drawerClickHandler, userState } = this.props;
 
     return isMobile ? (
       <NavbarHeader>
@@ -244,7 +245,7 @@ const HeaderButton = styled.button`
   }
 `;
 
-export default withRouter(Header);
+export default Header;
 
 // <NavLink to="/create" activeClassName="is-active">Create expense</NavLink>
 // <NavLink to="/help" activeClassName="is-active">Help</NavLink>

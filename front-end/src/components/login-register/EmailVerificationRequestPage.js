@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom'; }
 import styled from 'styled-components';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -142,4 +142,4 @@ const SuccessNotification = styled.div`
   font-size: 1.3rem;
 `;
 
-export default withRouter(EmailVerificationRequestPage);
+export default EmailVerificationRequestPage;

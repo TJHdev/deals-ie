@@ -1,13 +1,14 @@
 import React, { Fragment, Component } from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
+import { navigate } from '@reach/router';
 import PropTypes from 'prop-types';
 
 import SVGbutton from './SVGbutton';
 import SVGicon from './SVGicon';
 import ButtonText from './ButtonText';
 
-const MenuList = styled.div`
+const AccountMenuContainer = styled.div`
   position: relative;
   z-index: 10;
 `;
@@ -80,31 +81,36 @@ class AccountList extends Component {
     super();
 
     this.state = {
-      showMenu: false
+      showAccountMenu: false
     };
 
     this.showMenu = this.showMenu.bind(this);
     this.closeMenu = this.closeMenu.bind(this);
   }
 
+  componentWillUnmount() {
+    // makes sure to remove the event listener when the dropdown is no longer rendered
+    document.removeEventListener('click', this.closeMenu);
+  }
+
   showMenu(event) {
     event.preventDefault();
-
-    this.setState({ showMenu: true }, () => {
+    this.setState({ showAccountMenu: true }, () => {
       document.addEventListener('click', this.closeMenu);
     });
   }
 
   closeMenu(event) {
     if (!this.dropdownMenu.contains(event.target)) {
-      this.setState({ showMenu: false }, () => {
+      this.setState({ showAccountMenu: false }, () => {
         document.removeEventListener('click', this.closeMenu);
       });
     }
   }
 
   render() {
-    const { userState, isMobile, history } = this.props;
+    const { userState, isMobile } = this.props;
+    const { showAccountMenu: showMenu } = this.state;
 
     return (
       <div>
@@ -129,8 +135,8 @@ class AccountList extends Component {
             />
           </SVGicon>
         </SVGbutton>
-        {this.state.showMenu ? (
-          <MenuList
+        {showMenu ? (
+          <AccountMenuContainer
             ref={element => {
               this.dropdownMenu = element;
             }}
@@ -145,7 +151,7 @@ class AccountList extends Component {
               <MenuItem
                 type="button"
                 onClick={() => {
-                  history.push(`/profile/${userState.username}`);
+                  navigate(`/profile/${userState.username}`);
                 }}
               >
                 Profile
@@ -154,7 +160,7 @@ class AccountList extends Component {
                 Sign out
               </MenuItem>
             </ButtonList>
-          </MenuList>
+          </AccountMenuContainer>
         ) : null}
       </div>
     );
@@ -162,8 +168,8 @@ class AccountList extends Component {
 }
 
 AccountList.propTypes = {
-  userState: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  userState: PropTypes.object.isRequired
+  // history: PropTypes.object.isRequired
 };
 
-export default withRouter(AccountList);
+export default AccountList;

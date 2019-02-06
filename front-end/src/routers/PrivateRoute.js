@@ -1,21 +1,10 @@
-import React, { Fragment } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React from 'react';
+// import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect } from '@reach/router';
 
-export default ({ userState, component: Component, ...rest }) => {
-  console.log('userState: ', userState);
+export default ({ userState, component: Component, ...rest }) =>
+  // console.log('userState: ', userState);
+  // console.log('Component: ', Component);
+  // console.log('rest: ', rest);
 
-  return (
-    <Route
-      {...rest}
-      component={props =>
-        userState.email ? (
-          <Fragment>
-            <Component {...props} />
-          </Fragment>
-        ) : (
-          <Redirect to="/" />
-        )
-      }
-    />
-  );
-};
+  userState.email ? <Component /> : <Redirect to="/" />;
