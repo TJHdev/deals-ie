@@ -519,17 +519,18 @@ const DealsImageStretchContainer = styled.div`
 
   transition: all 0.2s;
 
+  overflow: hidden;
+
   &:hover {
     box-shadow: 1px 2px 8px 0 rgba(0, 0, 0, 0.7);
   }
 `;
 
 const DealsImage = styled.img`
-  margin: auto;
-  display: flex;
-  max-height: 100%;
+  object-fit: contain;
+  width: 100%;
   max-width: 100%;
-  /* transform: translate(50%, 50%); */
+  max-height: 100%;
   overflow: hidden;
   border-radius: 5px;
 `;
