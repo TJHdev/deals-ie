@@ -41,7 +41,6 @@ export class ModalProvider extends Component {
   // register
   onSubmitRegister = (values, setErrors, setSubmitting) => {
     setSubmitting(true);
-    // const { history } = this.props;
 
     fetch(`${window.BACKEND_PATH}/register`, {
       method: 'POST',
@@ -73,7 +72,6 @@ export class ModalProvider extends Component {
             });
 
           navigate('/complete-signup-request');
-          // history.push('/complete-signup-request');
         } else {
           setErrors(data.error);
         }
@@ -88,7 +86,6 @@ export class ModalProvider extends Component {
   onSubmitLogin = (values, setErrors, setSubmitting) => {
     setSubmitting(true);
     const { loadUser } = this.props.userState;
-    // const { history } = this.props;
 
     fetch(`${window.BACKEND_PATH}/signin`, {
       method: 'POST',

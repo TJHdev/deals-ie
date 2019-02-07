@@ -16,10 +16,15 @@ const LineSVGPath = styled.path`
   stroke-dashoffset: 140;
 `;
 
+const DisabledSVGbutton = styled(SVGbutton)`
+  background-color: grey;
+  color: lightgray;
+`;
+
 const drawerToggleButton = props => {
   const { click, isMobile } = props;
   return (
-    <SVGbutton onClick={click}>
+    <DisabledSVGbutton onClick={click}>
       {isMobile ? null : <ButtonText>Menu</ButtonText>}
 
       <SVGicon viewBox="0 0 160 160">
@@ -32,7 +37,7 @@ const drawerToggleButton = props => {
         <LineSVGPath d="M10 130 L150 130" />
         <LineSVGPath d="M10 130 L150 130" />
       </SVGicon>
-    </SVGbutton>
+    </DisabledSVGbutton>
   );
 };
 

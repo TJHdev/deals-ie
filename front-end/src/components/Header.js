@@ -48,7 +48,7 @@ class Header extends React.Component {
       <NavbarHeader>
         <ContentContainer>
           <HeaderContent>
-            <DrawerToggleButton isMobile={isMobile} click={drawerClickHandler} />
+            <DrawerToggleButton disabled isMobile={isMobile} />
             <SearchComponent isMobile={isMobile} />
             <HeaderTitle to="/">
               <LogoImg src="/images/EireDealsLogo.png" alt="Eiredeals logo" />
@@ -76,7 +76,7 @@ class Header extends React.Component {
               <HeaderText>Éire Deals</HeaderText>
             </HeaderTitle>
             <NavContent>
-              <DrawerToggleButton click={drawerClickHandler} />
+              <DrawerToggleButton disabled />
 
               <SearchComponent />
               <ButtonShare />

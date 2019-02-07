@@ -296,9 +296,9 @@ class DealPage extends React.Component {
                         <UsernameImg src="/images/icons8-user-50.png" alt="username logo" />
                         <DealPageUsernameSpan>{userName}</DealPageUsernameSpan>
                       </DealPageUsernameLink>
-                      <a href={dealLink} target="_blank" rel="noopener noreferrer">
+                      <GoToDealAnchor href={dealLink} target="_blank" rel="noopener noreferrer">
                         <GoToDealButton>Go to deal &#10148;</GoToDealButton>
-                      </a>
+                      </GoToDealAnchor>
                     </DealPageUserAndDealButtonContainer>
                   </DealPageDetailsBottomContainer>
                 </DealPageDetailsContainer>
@@ -371,6 +371,11 @@ const DealPageContainer = styled.div`
 
 const DealPageDealContainer = styled.div`
   display: flex;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const DealPageImageContainer = styled.a`
@@ -382,6 +387,10 @@ const DealPageImageContainer = styled.a`
     content: '';
     display: block;
     padding: 50%;
+  }
+
+  @media (max-width: 700px) {
+    width: 300px;
   }
 `;
 
@@ -420,8 +429,14 @@ const DealPageDetailsContainer = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   flex-grow: 1;
-  height: 200px;
+  max-height: 200px;
+  width: 100%;
   padding: 0 1rem;
+
+  @media (max-width: 700px) {
+    padding: 1.5rem 0;
+    max-height: 300px;
+  }
 `;
 
 const DealPageDetailsTopContainer = styled.div`
@@ -475,6 +490,12 @@ const DealPageUserAndDealButtonContainer = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   width: 100%;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1rem 0;
+  }
 `;
 
 const DealPageUsernameLink = styled(Link)`
@@ -499,6 +520,10 @@ const DealPageUsernameLink = styled(Link)`
     transform: translateY(-2px);
     box-shadow: 1px 2px 8px 0 rgba(0, 0, 0, 0.7);
   }
+
+  @media (max-width: 700px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const UsernameImg = styled.img`
@@ -513,8 +538,18 @@ const DealPageUsernameSpan = styled.span`
   }
 `;
 
+const GoToDealAnchor = styled.a`
+  @media (max-width: 700px) {
+    width: 100%;
+  }
+`;
+
 const GoToDealButton = styled(Button)`
   margin: 0;
+
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 
 const DealPageDealButton = styled(Button)``;
