@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import styled from 'styled-components';
@@ -48,13 +48,16 @@ class HomePage extends React.Component {
     })
       .then(resp => resp.json())
       .then(data => {
-        if (data && data.constructor === Array && data[0].deal_title) {
+        if (data && data.constructor === Array && data[0] && data[0].deal_title) {
           // const stateIsDifferent = isEqual(newData, this.state);
           this.setState({ dealsArray: data, route: search, isLoading: false });
+        } else {
+          this.setState({ dealsArray: null, route: search, isLoading: false });
         }
       })
       .catch(err => {
         this.setState({
+          dealsArray: null,
           isLoading: false,
           error: true
         });
@@ -65,21 +68,25 @@ class HomePage extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     // console.log('update');
     // console.log('prevState:', prevState);
-    // console.log(this.props);
+    // console.log('props: ', this.props);
+
     const { route } = this.state;
     const { location } = this.props;
     const { search } = location;
 
-    if (prevState.dealsArray === null) {
-      console.log('componentDidUpdate: prevState undefined');
-      return false;
-    }
+    // console.log('search backend query:', search);
+
+    // console.log('dealsArray: ', prevState.dealsArray);
+    // console.log('err: ', prevState.error);
+    // if (prevState.dealsArray === null) {
+    //   // console.log('componentDidUpdate: prevState undefined');
+    //   return false;
+    // }
 
     if (route !== search) {
-      console.log('triggering fetch for new data');
+      // console.log('triggering fetch for new data');
       const token = window.sessionStorage.getItem('token');
 
-      // console.log('props: ', this.props);
       fetch(`${window.BACKEND_PATH}/deals${search}`, {
         method: 'GET',
         headers: {
@@ -89,13 +96,16 @@ class HomePage extends React.Component {
       })
         .then(resp => resp.json())
         .then(data => {
-          if (data && data.constructor === Array && data[0].deal_title) {
+          if (data && data.constructor === Array && data[0] && data[0].deal_title) {
             // const stateIsDifferent = isEqual(newData, this.state);
             this.setState({ dealsArray: data, route: search, isLoading: false });
+          } else {
+            this.setState({ dealsArray: null, route: search, isLoading: false });
           }
         })
         .catch(err => {
           this.setState({
+            dealsArray: null,
             isLoading: false,
             error: true
           });
@@ -235,7 +245,7 @@ class HomePage extends React.Component {
 
   render() {
     // console.log('renderState: ', this.state);
-    const { dealsArray, isLoading } = this.state;
+    const { dealsArray, isLoading, error } = this.state;
 
     const dealsElement =
       dealsArray && dealsArray[0] ? (
@@ -349,7 +359,7 @@ class HomePage extends React.Component {
           );
         })
       ) : (
-        <h2>Error loading deals..</h2>
+        <h2>No deals found.</h2>
       );
 
     return (
@@ -359,12 +369,20 @@ class HomePage extends React.Component {
             <LoadingImage src="/images/loader.gif" alt="Loading animation" />
           </LoadingContainer>
         ) : (
-          <DealsGridContainer>{dealsElement}</DealsGridContainer>
+          <Fragment>
+            {error ? (
+              <h2>Error loading deals...</h2>
+            ) : (
+              <DealsGridContainer>{dealsElement}</DealsGridContainer>
+            )}
+          </Fragment>
         )}
       </DealsContainer>
     );
   }
 }
+
+// <DealsGridContainer>{dealsElement}</DealsGridContainer>
 
 // ***************
 // deals container

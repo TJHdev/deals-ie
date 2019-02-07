@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // import { withRouter } from 'react-router-dom';
 import { navigate } from '@reach/router';
-import PropTypes from 'prop-types';
 
 import SVGbutton from './SVGbutton';
 import SearchSVGbutton from './SearchSVGButton';
@@ -144,15 +143,16 @@ class SearchComponent extends Component {
 
   handleSearchSubmit(event) {
     event.preventDefault();
-    const { history, location } = this.props;
-    const { search } = location;
-    console.log('search: ', search);
+    // const { history, location } = this.props;
+    // const { search } = location;
+    // console.log('search: ', search);
     const { searchField } = this.state;
-    console.log(encodeURIComponent(searchField));
-    const params = new URLSearchParams(search);
-    const searchParam = params.get('search');
-    console.log('Search Params: ', searchParam);
-    navigate(`/?search=${searchField}`); // history.push automatically decodes once.
+    const encodedSearchParam = encodeURIComponent(searchField);
+    // console.log(encodeURIComponent(searchField));
+    // const params = new URLSearchParams(search);
+    // const searchParam = params.get('search');
+    // console.log('Search Params: ', searchParam);
+    navigate(`/?search=${encodedSearchParam}`); // history.push automatically decodes once.
     this.setState({ searchField: '' });
   }
 

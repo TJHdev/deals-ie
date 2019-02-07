@@ -112,11 +112,11 @@ class SubmitDeal extends React.Component {
             this.onSubmitDeal(values, setSubmitting);
           }}
         >
-          {({ errors, touched, isSubmitting }) => {
-            console.log(errors);
-            console.log(touched);
-            console.log('isSubmitting:', isSubmitting);
-            return (
+          {({ errors, touched, isSubmitting }) => 
+            // console.log(errors);
+            // console.log(touched);
+            // console.log('isSubmitting:', isSubmitting);
+             (
               <Form>
                 <Label htmlFor="deal_link">
                   Deal Link
@@ -231,8 +231,8 @@ class SubmitDeal extends React.Component {
                   Submit
                 </Button>
               </Form>
-            );
-          }}
+            )
+          }
         </Formik>
       </ContentContainerForm>
     );

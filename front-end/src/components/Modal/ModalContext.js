@@ -124,7 +124,7 @@ export class ModalProvider extends Component {
               // remountes the homePage to ensure that data is refetched
               setTimeout(() => {
                 navigate('/');
-              }, 500);
+              }, 100);
             }
           })
           .catch(err => {

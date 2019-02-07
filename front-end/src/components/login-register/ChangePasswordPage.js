@@ -99,37 +99,35 @@ class PasswordChangePage extends React.Component {
                 this.onSubmitPassword(values, setSubmitting, setErrors);
               }}
             >
-              {({ errors, touched, isSubmitting }) => {
-                console.log(errors);
-                console.log(touched);
-                return (
-                  <Form>
-                    <Label htmlFor="new_password">
-                      New Password
-                      <TextField
-                        autoComplete="off"
-                        type="password"
-                        name="new_password"
-                        placeholder="Please enter new password"
-                      />
-                      <StyledErrorMessage name="new_password" component="span" />
-                    </Label>
-                    <Label htmlFor="repeat_password">
-                      Confirm Password
-                      <TextField
-                        autoComplete="off"
-                        type="password"
-                        name="repeat_password"
-                        placeholder="Please repeat new password"
-                      />
-                      <StyledErrorMessage name="repeat_password" component="span" />
-                    </Label>
-                    <Button type="submit" disabled={isSubmitting}>
-                      Submit
-                    </Button>
-                  </Form>
-                );
-              }}
+              {({ errors, touched, isSubmitting }) => (
+                // console.log(errors);
+                // console.log(touched);
+                <Form>
+                  <Label htmlFor="new_password">
+                    New Password
+                    <TextField
+                      autoComplete="off"
+                      type="password"
+                      name="new_password"
+                      placeholder="Please enter new password"
+                    />
+                    <StyledErrorMessage name="new_password" component="span" />
+                  </Label>
+                  <Label htmlFor="repeat_password">
+                    Confirm Password
+                    <TextField
+                      autoComplete="off"
+                      type="password"
+                      name="repeat_password"
+                      placeholder="Please repeat new password"
+                    />
+                    <StyledErrorMessage name="repeat_password" component="span" />
+                  </Label>
+                  <Button type="submit" disabled={isSubmitting}>
+                    Submit
+                  </Button>
+                </Form>
+              )}
             </Formik>
           </ContentContainerPasswordForm>
         )}

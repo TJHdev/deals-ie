@@ -205,8 +205,15 @@ const handleGetAllDeals = db => (req, res) => {
   const numberPerPage = 40;
   const offset = pageNumber * numberPerPage;
 
-  const searchField = req.query.search ? req.query.search.toLowerCase() : "";
-  const sanitisedSearchField = searchField.replace(/[^\wèéòàùì\s]/gi, "");
+  const searchField = req.query.search
+    ? decodeURIComponent(req.query.search.toLowerCase())
+    : "";
+  const sanitisedSearchField = searchField.replace(/[^\wèéòàùì\s]/gi, ""); // makes safe for raw SQL query
+
+  console.log(
+    "************** SANITISED SEARCH FIELD **************",
+    sanitisedSearchField
+  );
 
   db.select(
     "deals.id",

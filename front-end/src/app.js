@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 // import { BrowserRouter } from 'react-router-dom';
 import { Router } from '@reach/router';
-import AppRouter from './routers/AppRouter';
+// import AppRouter from './routers/AppRouter';
 import AppRouterNew from './routers/AppRouterNew';
 import 'normalize.css/normalize.css';
 import './styles/styles.css';
