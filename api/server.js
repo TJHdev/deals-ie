@@ -90,18 +90,18 @@ app.get("/", (req, res) => {
 //     );
 // });
 
-app.get("/test", (req, res) => {
-  db.select("*")
-    .from("users")
-    .then(
-      users => {
-        res.json(users);
-      },
-      err => {
-        res.json(err);
-      }
-    );
-});
+// app.get("/test", (req, res) => {
+//   db.select("*")
+//     .from("users")
+//     .then(
+//       users => {
+//         res.json(users);
+//       },
+//       err => {
+//         res.json(err);
+//       }
+//     );
+// });
 
 // *************
 // signup routes
