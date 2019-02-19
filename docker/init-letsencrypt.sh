@@ -35,6 +35,8 @@ echo
 
 echo "### Starting nginx ..."
 docker-compose up --force-recreate -d deals-ie-frontend
+# brittle implementation
+sleep 60
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
