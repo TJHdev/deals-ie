@@ -1,9 +1,9 @@
 #!/bin/bash
 
-domains=(eiredeals.com www.eiredeals.com)
+domains=(eiredeals.com www.eiredeals.com test.eiredeals.com)
 rsa_key_size=4096
 data_path="./data/certbot"
-email="" # Adding a valid address is strongly recommended
+email="thomasjhanna@gmail.com" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
@@ -34,9 +34,10 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d deals-ie-frontend
+# docker-compose up --force-recreate -d deals-ie-frontend
+docker-compose up --build -d
 # brittle implementation
-sleep 60
+sleep 10
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
